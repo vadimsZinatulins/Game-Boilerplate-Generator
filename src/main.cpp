@@ -4,6 +4,7 @@
 #include "keymanager.h"
 #include "game.h"
 #include "projectnameclass.h"
+#include "mainfile.h"
 
 #include <iostream>
 
@@ -25,6 +26,7 @@ int main(int argc, char *argv[])
 	generateKeyManager();
 	generateGameClass();
 	generateProjectNameClass(projectName);
+	generateMain(projectName);
 
 	return 0;
 }

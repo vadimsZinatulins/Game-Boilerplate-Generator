@@ -8,7 +8,7 @@ void generateProjectNameClassHeader(const std::string &projectName)
 
 	header << "#pragma once\n\n";
 	header << "#include \"Game.h\"\n\n";
-	header << "class " << projectName << " final : Game\n{\n";
+	header << "class " << projectName << " final : public Game\n{\n";
 	header << "public:\n";
 	header << "\t" << projectName << "() = default;\n";
 	header << "\t~" << projectName << "() = default;\n\n";
