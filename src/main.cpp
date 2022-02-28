@@ -2,6 +2,7 @@
 #include "workspace.h"
 #include "cmakelists.h"
 #include "keymanager.h"
+#include "game.h"
 
 #include <iostream>
 
@@ -21,6 +22,7 @@ int main(int argc, char *argv[])
 	generateWorkspace(projectName);
 	generateCMakeLists(projectName);
 	generateKeyManager();
+	generateGameClass();
 
 	return 0;
 }

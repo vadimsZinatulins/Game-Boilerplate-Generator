@@ -15,6 +15,7 @@ add_executable(
 	${PROJECT_SOURCE_DIR}/src/workspace.cpp
 	${PROJECT_SOURCE_DIR}/src/cmakelists.cpp
 	${PROJECT_SOURCE_DIR}/src/keymanager.cpp
+	${PROJECT_SOURCE_DIR}/src/game.cpp
 )
 
 target_include_directories(

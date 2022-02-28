@@ -2,7 +2,7 @@
 
 #include <fstream>
 
-void generateHeader()
+void generateKeyManagerHeader()
 {
 	std::ofstream header("include/KeyManager.h");
 
@@ -41,7 +41,7 @@ void generateHeader()
 	header.close();
 }
 
-void generateSource()
+void generateKeyManagerSource()
 {
 	std::ofstream src("src/KeyManager.cpp");
 
@@ -64,6 +64,6 @@ void generateSource()
 
 void generateKeyManager()
 {
-	generateHeader();
-	generateSource();
+	generateKeyManagerHeader();
+	generateKeyManagerSource();
 }
