@@ -1,0 +1,4 @@
+#pragma once
+
+#define MAJOR_VERSION @gbgen_VERSION_MAJOR@
+#define MINOR_VERSION @gbgen_VERSION_MINOR@
