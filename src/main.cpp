@@ -3,6 +3,7 @@
 #include "cmakelists.h"
 #include "keymanager.h"
 #include "game.h"
+#include "projectnameclass.h"
 
 #include <iostream>
 
@@ -23,6 +24,7 @@ int main(int argc, char *argv[])
 	generateCMakeLists(projectName);
 	generateKeyManager();
 	generateGameClass();
+	generateProjectNameClass(projectName);
 
 	return 0;
 }

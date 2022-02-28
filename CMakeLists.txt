@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
 # Game Boilerplate Generator
-project(gbgen VERSION 0.3)
+project(gbgen VERSION 0.5)
 
 configure_file(${PROJECT_SOURCE_DIR}/config/config.h.in ${PROJECT_SOURCE_DIR}/include/config.h)
 
@@ -16,6 +16,7 @@ add_executable(
 	${PROJECT_SOURCE_DIR}/src/cmakelists.cpp
 	${PROJECT_SOURCE_DIR}/src/keymanager.cpp
 	${PROJECT_SOURCE_DIR}/src/game.cpp
+	${PROJECT_SOURCE_DIR}/src/projectnameclass.cpp
 )
 
 target_include_directories(
