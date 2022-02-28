@@ -18,3 +18,22 @@ path/to/app/gbgen ProjectNameGoesHere
 # Or if sudo cmake --install build/ has been run
 gbgen ProjectNameGoesHere
 ```
+
+### Output
+The output project structure is as follows:
+```
+ProjectNameGoesHere/
+|-bin/
+|-build/
+|-config/
+| '-config.h.in
+|-include/
+| |-Game.h
+| |-KeyManager.h
+| '-ProjectNameGoesHere.h
+|-src/
+| |-Game.cpp
+| |-KeyManager.cpp
+| |-ProjectNameGoesHere.cpp
+| '-main.cpp
+```
