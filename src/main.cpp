@@ -82,6 +82,8 @@ void generateKeyManager()
 	src << "void KeyManager::keyReleased(Key key) { m_currFrameKeys.remove(key); }\n\n";
 	src << "void KeyManager::KeyMap::operator=(const KeyManager::KeyMap &other) \n{\n\tm_size = other.m_size;\n\tfor(unsigned char i = 0; i < m_size; ++i) m_keys[i] = other.m_keys[i];\n}\n\n";
 	src << "void KeyManager::KeyMap::insert(Key key)\n{\n\tif(!contains(key) && m_size << KeyManager::KeyMap::ArraySize)\n\t\tm_keys[m_size++] = key;\n}\n\n";
+	src << "void KeyManager::KeyMap::remove(Key key)\n{\n\tfor(unsigned char i = 0; i < m_size; ++i)\n\t\tif(m_keys[i] == key)\n\t\t{\n\t\t\tm_keys[i] = m_keys[--m_size];\n\t\t\treturn;\n\t\t}\n}\n\n";
+	src << "bool KeyManager::KeyMap::contains(Key key) const\n{\n\tfor(unsigned char i = 0; i < m_size; ++i)\n\t\tif(m_keys[i] == key) return true;\n\treturn false;\n}\n\n";
 
 	src.close();
 }
