@@ -31,6 +31,45 @@ void generateCMakeLists(const std::string &projectName)
 	file.close();
 }
 
+void generateKeyManager()
+{
+	std::ofstream header("include/KeyManager.h");
+
+	header << "#pragma once\n\n";
+	header << "using Key = unsigned int;\n\n";
+	header << "class KeyManager\n{\n";
+	header << "public:\n";
+	header << "\tstatic KeyManager &getInstance();\n\n";
+	header << "\tbool isKeyPressed(Key key) const;\n";
+	header << "\tbool isKeyDown(Key key) const;\n";
+	header << "\tbool isKeyReleased(Key key) const;\n";
+	header << "private:\n";
+	header << "\tfriend class Game;\n\n";
+	header << "\tclass KeyMap\n\t{\n";
+	header << "\tpublic:\n";
+	header << "\t\tstatic constexpr int CacheLineSize { 64 };\n";
+	header << "\t\tstatic constexpr int ArraySize { (CacheLineSize - sizeof(unsigned char)) / sizeof(Key) / 2 };\n\n";
+	header << "\t\tvoid operator=(const KeyMap &other);\n\n";
+	header << "\t\tvoid insert(Key key);\n";
+	header << "\t\tbool contains(Key key);\n";
+	header << "\t\tvoid remove(Key key);\n\n";
+	header << "\tprivate:\n";
+	header << "\t\tKey m_keys[ArraySize];\n";
+	header << "\t\tunsigned char m_size { 0 };\n";
+	header << "\t};\n\n";
+	header << "\tKeyManager() = default;\n";
+	header << "\t~KeyManager() = default;\n\n";
+	header << "\tvoid update();\n\n";
+	header << "\tvoid keyPressed(Key key);\n";
+	header << "\tvoid keyReleased(Key key);\n\n";
+	header << "\tstatic KeyManager m_instance;\n\n";
+	header << "\tKeyMap m_currFrameKeys;\n";
+	header << "\tKeyMap m_oldFrameKeys;\n";
+	header << "};\n";
+
+	header.close();
+}
+
 int main(int argc, char *argv[])
 {
 	std::cout << "Running gbgen version: " << MAJOR_VERSION << "." << MINOR_VERSION << std::endl;
@@ -46,6 +85,7 @@ int main(int argc, char *argv[])
 
 	generateWorkspace(projectName);
 	generateCMakeLists(projectName);
+	generateKeyManager();
 
 	return 0;
 }
