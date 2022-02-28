@@ -5,6 +5,7 @@
 #include "game.h"
 #include "projectnameclass.h"
 #include "mainfile.h"
+#include "configfile.h"
 
 #include <iostream>
 
@@ -27,6 +28,7 @@ int main(int argc, char *argv[])
 	generateGameClass();
 	generateProjectNameClass(projectName);
 	generateMain(projectName);
+	generateConfigFile(projectName);
 
 	return 0;
 }

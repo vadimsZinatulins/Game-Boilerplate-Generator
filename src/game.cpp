@@ -36,12 +36,12 @@ void generateGameSource()
 
 	// Add inclues
 	src << "#include \"Game.h\"\n";
+	src << "#include \"config.h\"\n";
 	src << "#include \"KeyManager.h\"\n\n";
 	src << "#include <SDL2/SDL.h>\n\n";
 
 	// Add "defines"
-	src << "#define MAX_FPS 60\n";
-	src << "#define MIN_TICKS_PER_FRAME 1000 / MAX_FPS\n\n";
+	src << "#define MIN_TICKS_PER_FRAME 1000 / FRAME_CAP\n\n";
 
 	// Add "run" method
 	src << "void Game::run()\n{\n";
@@ -53,7 +53,7 @@ void generateGameSource()
 	// Add "init" method
 	src << "void Game::init()\n{\n";
 	src << "\tSDL_Init(SDL_INIT_VIDEO);\n\n";
-	src << "\tm_window = SDL_CreateWindow(\"gbgen\", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN);\n";
+	src << "\tm_window = SDL_CreateWindow(SCREEN_TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);\n";
 	src << "\tm_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED);\n\n";
 	src << "\tSDL_SetRenderDrawColor(m_renderer, 0x00f, 0x00f, 0x00f, 0xff);\n\n";
 	src << "\tinitialize();\n";
