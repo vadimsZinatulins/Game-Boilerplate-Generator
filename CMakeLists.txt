@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
 # Game Boilerplate Generator
-project(gbgen VERSION 0.8)
+project(gbgen VERSION 1.0)
 
 configure_file(${PROJECT_SOURCE_DIR}/config/config.h.in ${PROJECT_SOURCE_DIR}/include/config.h)
 
@@ -27,3 +27,5 @@ target_include_directories(
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
+
+install(TARGETS ${PROJECT_NAME} DESTINATION bin)
