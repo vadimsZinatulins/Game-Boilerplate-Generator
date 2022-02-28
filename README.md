@@ -36,4 +36,5 @@ ProjectNameGoesHere/
 | |-KeyManager.cpp
 | |-ProjectNameGoesHere.cpp
 | '-main.cpp
+'-CMakeLists.txt
 ```
