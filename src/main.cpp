@@ -23,7 +23,7 @@ void generateCMakeLists(const std::string &projectName)
 	file << "set(CMAKE_EXPORT_COMPILE_COMMANDS On)\n\n"; 
 	file << "find_package(SDL2 REQUIRED)\n\n"; 
 	file << "configure_file(${PROJECT_SOURCE_DIR}/config/config.h.in ${PROJECT_SOURCE_DIR}/include/config.h)\n\n"; 
-	file << "add_executable(\n\t${PROJECT_NAME} \n\t${PROJECT_SOURCE_DIR}/src/main.cpp\n)\n\n"; 
+	file << "add_executable(\n\t${PROJECT_NAME} \n\t${PROJECT_SOURCE_DIR}/src/main.cpp\n\t${PROJECT_SOURCE_DIR}/src/KeyManager.cpp\n)\n\n"; 
 	file << "target_include_directories(\n\t${PROJECT_NAME}\n\tPUBLIC ${PROJECT_SOURCE_DIR}/include\n\tPUBLIC ${SDL2_INCLUDE_DIRS}\n)\n\n"; 
 	file << "target_link_libraries(\n\t${PROJECT_NAME}\n\tPUBLIC ${SDL2_LIBRARIES}\n)\n\n"; 
 	file << "set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)\n"; 
@@ -51,7 +51,7 @@ void generateKeyManager()
 	header << "\t\tstatic constexpr int ArraySize { (CacheLineSize - sizeof(unsigned char)) / sizeof(Key) / 2 };\n\n";
 	header << "\t\tvoid operator=(const KeyMap &other);\n\n";
 	header << "\t\tvoid insert(Key key);\n";
-	header << "\t\tbool contains(Key key);\n";
+	header << "\t\tbool contains(Key key) const;\n";
 	header << "\t\tvoid remove(Key key);\n\n";
 	header << "\tprivate:\n";
 	header << "\t\tKey m_keys[ArraySize];\n";
@@ -68,6 +68,22 @@ void generateKeyManager()
 	header << "};\n";
 
 	header.close();
+
+	std::ofstream src("src/KeyManager.cpp");
+
+	src << "#include \"KeyManager.h\"\n\n";
+	src << "KeyManager KeyManager::m_instance;\n\n";
+	src << "KeyManager &KeyManager::getInstance() { return m_instance; }\n\n";
+	src << "bool KeyManager::isKeyPressed(Key key) const { return m_currFrameKeys.contains(key) && !m_oldFrameKeys.contains(key); }\n";
+	src << "bool KeyManager::isKeyDown(Key key) const { return m_currFrameKeys.contains(key); }\n";
+	src << "bool KeyManager::isKeyReleased(Key key) const { return !m_currFrameKeys.contains(key) && m_oldFrameKeys.contains(key); }\n\n";
+	src << "void KeyManager::update() { m_oldFrameKeys = m_currFrameKeys; }\n\n";
+	src << "void KeyManager::keyPressed(Key key) { m_currFrameKeys.insert(key); }\n";
+	src << "void KeyManager::keyReleased(Key key) { m_currFrameKeys.remove(key); }\n\n";
+	src << "void KeyManager::KeyMap::operator=(const KeyManager::KeyMap &other) \n{\n\tm_size = other.m_size;\n\tfor(unsigned char i = 0; i < m_size; ++i) m_keys[i] = other.m_keys[i];\n}\n\n";
+	src << "void KeyManager::KeyMap::insert(Key key)\n{\n\tif(!contains(key) && m_size << KeyManager::KeyMap::ArraySize)\n\t\tm_keys[m_size++] = key;\n}\n\n";
+
+	src.close();
 }
 
 int main(int argc, char *argv[])
