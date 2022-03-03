@@ -19,6 +19,7 @@ add_executable(
 	${PROJECT_SOURCE_DIR}/src/projectnameclass.cpp
 	${PROJECT_SOURCE_DIR}/src/mainfile.cpp
 	${PROJECT_SOURCE_DIR}/src/configfile.cpp
+	${PROJECT_SOURCE_DIR}/src/timeclass.cpp
 )
 
 target_include_directories(

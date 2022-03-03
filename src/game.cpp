@@ -17,7 +17,7 @@ void generateGameHeader()
 	header << "protected:\n";
 	header << "\tvirtual void initialize() = 0;\n";
 	header << "\tvirtual void shutdown() = 0;\n";
-	header << "\tvirtual void update(float deltaTime) = 0;\n";
+	header << "\tvirtual void update() = 0;\n";
 	header << "\tvirtual void render(SDL_Renderer *renderer) = 0;\n";
 	header << "private:\n";
 	header << "\tvoid init();\n";
@@ -36,12 +36,10 @@ void generateGameSource()
 
 	// Add inclues
 	src << "#include \"Game.h\"\n";
-	src << "#include \"config.h\"\n";
-	src << "#include \"KeyManager.h\"\n\n";
+	src << "#include \"Time.h\"\n";
+	src << "#include \"KeyManager.h\"\n";
+	src << "#include \"config.h\"\n\n";
 	src << "#include <SDL2/SDL.h>\n\n";
-
-	// Add "defines"
-	src << "#define MIN_TICKS_PER_FRAME 1000 / FRAME_CAP\n\n";
 
 	// Add "run" method
 	src << "void Game::run()\n{\n";
@@ -67,9 +65,7 @@ void generateGameSource()
 	src << "\tUint32 startFrame = SDL_GetTicks();\n";
 	src << "\tUint32 startPreviousFrame = SDL_GetTicks();\n\n";
 	src << "\twhile(isRunning)\n\t{\n";
-	src << "\t\tstartFrame = SDL_GetTicks();\n";
-	src << "\t\tfloat deltaTime = (startFrame - startPreviousFrame) / 1000.0f;\n";
-	src << "\t\tstartPreviousFrame = startFrame;\n\n";
+	src << "\t\tTime frameTimer;\n\n";
 	src << "\t\tkeys.update();\n\n";
 	src << "\t\twhile(SDL_PollEvent(&e))\n\t\t{\n";
 	src << "\t\t\tswitch(e.type)\n\t\t\t{\n";
@@ -84,12 +80,10 @@ void generateGameSource()
 	src << "\t\t\t\tbreak;\n";
 	src << "\t\t\t}\n";
 	src << "\t\t}\n\n";
-	src << "\t\tupdate(deltaTime);\n\n";
+	src << "\t\tupdate();\n\n";
 	src << "\t\tSDL_RenderClear(m_renderer);\n";
 	src << "\t\trender(m_renderer);\n";
 	src << "\t\tSDL_RenderPresent(m_renderer);\n\n";
-	src << "\t\tUint32 frameDuration = SDL_GetTicks() - startFrame;\n";
-	src << "\t\tif(frameDuration < MIN_TICKS_PER_FRAME) SDL_Delay(MIN_TICKS_PER_FRAME - frameDuration);\n";
 	src << "\t}\n";
 	src << "}\n\n";
 	

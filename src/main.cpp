@@ -6,8 +6,24 @@
 #include "projectnameclass.h"
 #include "mainfile.h"
 #include "configfile.h"
+#include "timeclass.h"
 
 #include <iostream>
+#include <functional>
+#include <utility>
+#include <vector>
+
+using Task = std::pair<std::string, std::function<void()>>;
+constexpr auto MakeTask = std::make_pair<std::string, std::function<void()>>;
+
+void execute(std::vector<Task> &tasks)
+{
+	for(std::size_t i = 0; i < tasks.size(); ++i)
+	{
+		std::cout << "[" << (i + 1) << "/" << tasks.size() << "] " << tasks[i].first << std::endl;
+		tasks[i].second();
+	}
+}
 
 int main(int argc, char *argv[])
 {
@@ -22,20 +38,18 @@ int main(int argc, char *argv[])
 
 	std::string projectName(argv[1]);
 
-	std::cout << "[1/7] Generating workspace" << std::endl;
-	generateWorkspace(projectName);
-	std::cout << "[2/7] Generating CMakeLists.txt" << std::endl;
-	generateCMakeLists(projectName);
-	std::cout << "[3/7] Generating KeyManager class" << std::endl;
-	generateKeyManager();
-	std::cout << "[4/7] Generating Game class" << std::endl;
-	generateGameClass();
-	std::cout << "[5/7] Generating " << projectName << " class" << std::endl;
-	generateProjectNameClass(projectName);
-	std::cout << "[6/7] Generating src/main.cpp" << std::endl;
-	generateMain(projectName);
-	std::cout << "[7/7] Generating config/config.h.in" << std::endl;
-	generateConfigFile(projectName);
+	std::vector<Task> tasks = {
+		MakeTask("Generating workspace", [&]{ generateWorkspace(projectName); }),
+		MakeTask("Generating CMakeLists.txt", [&]{ generateCMakeLists(projectName); }),
+		MakeTask("Generating KeyManager class", []{ generateKeyManager(); }),
+		MakeTask("Generating Game class", []{ generateGameClass(); }),
+		MakeTask("Generating Time class", []{ generateTimeClass(); }),
+		MakeTask("Generating " + projectName + " class", [&]{ generateProjectNameClass(projectName); }),
+		MakeTask("Generating src/main.cpp", [&]{ generateMain(projectName); }),
+		MakeTask("Generating config/config.h.in", [&]{ generateConfigFile(projectName); })
+	};
+
+	execute(tasks);
 
 	std::cout << "Done! You can now run the following commands:" << std::endl;
 	std::cout << "\tcd " << projectName << std::endl;
