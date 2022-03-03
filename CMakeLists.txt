@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
 # Game Boilerplate Generator
-project(gbgen VERSION 1.0)
+project(gbgen VERSION 1.2)
 
 configure_file(${PROJECT_SOURCE_DIR}/config/config.h.in ${PROJECT_SOURCE_DIR}/include/config.h)
 
@@ -20,6 +20,7 @@ add_executable(
 	${PROJECT_SOURCE_DIR}/src/mainfile.cpp
 	${PROJECT_SOURCE_DIR}/src/configfile.cpp
 	${PROJECT_SOURCE_DIR}/src/timeclass.cpp
+	${PROJECT_SOURCE_DIR}/src/cronometerclass.cpp
 )
 
 target_include_directories(

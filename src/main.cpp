@@ -2,11 +2,12 @@
 #include "workspace.h"
 #include "cmakelists.h"
 #include "keymanager.h"
+#include "timeclass.h"
+#include "cronometerclass.h"
 #include "game.h"
 #include "projectnameclass.h"
 #include "mainfile.h"
 #include "configfile.h"
-#include "timeclass.h"
 
 #include <iostream>
 #include <functional>
@@ -44,6 +45,7 @@ int main(int argc, char *argv[])
 		MakeTask("Generating KeyManager class", []{ generateKeyManager(); }),
 		MakeTask("Generating Game class", []{ generateGameClass(); }),
 		MakeTask("Generating Time class", []{ generateTimeClass(); }),
+		MakeTask("Generating Cronometer class", []{ generateCronometerClass(); }),
 		MakeTask("Generating " + projectName + " class", [&]{ generateProjectNameClass(projectName); }),
 		MakeTask("Generating src/main.cpp", [&]{ generateMain(projectName); }),
 		MakeTask("Generating config/config.h.in", [&]{ generateConfigFile(projectName); })
