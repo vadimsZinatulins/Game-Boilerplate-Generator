@@ -8,6 +8,7 @@
 #include "projectnameclass.h"
 #include "mainfile.h"
 #include "configfile.h"
+#include "randomclass.h"
 
 #include <iostream>
 #include <functional>
@@ -46,6 +47,7 @@ int main(int argc, char *argv[])
 		MakeTask("Generating Game class", []{ generateGameClass(); }),
 		MakeTask("Generating Time class", []{ generateTimeClass(); }),
 		MakeTask("Generating Cronometer class", []{ generateCronometerClass(); }),
+		MakeTask("Generating Random class", []{ generateRandomClass(); }),
 		MakeTask("Generating " + projectName + " class", [&]{ generateProjectNameClass(projectName); }),
 		MakeTask("Generating src/main.cpp", [&]{ generateMain(projectName); }),
 		MakeTask("Generating config/config.h.in", [&]{ generateConfigFile(projectName); })

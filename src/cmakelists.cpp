@@ -27,7 +27,7 @@ void generateCMakeLists(const std::string &projectName)
 	file << "set(CMAKE_EXPORT_COMPILE_COMMANDS On)\n\n"; 
 	file << "find_package(SDL2 REQUIRED)\n\n"; 
 	file << "configure_file(${PROJECT_SOURCE_DIR}/config/config.h.in ${PROJECT_SOURCE_DIR}/include/config.h)\n\n"; 
-	file << addExecutable({ "main.cpp", "Game.cpp", "KeyManager.cpp", "Time.cpp", "Cronometer.cpp", projectName + ".cpp" });
+	file << addExecutable({ "main.cpp", "Game.cpp", "KeyManager.cpp", "Time.cpp", "Cronometer.cpp", "Random.cpp", projectName + ".cpp" });
 	file << "target_include_directories(\n\t${PROJECT_NAME}\n\tPUBLIC ${PROJECT_SOURCE_DIR}/include\n\tPUBLIC ${SDL2_INCLUDE_DIRS}\n)\n\n"; 
 	file << "target_link_libraries(\n\t${PROJECT_NAME}\n\tPUBLIC ${SDL2_LIBRARIES}\n)\n\n"; 
 	file << "set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)\n"; 
