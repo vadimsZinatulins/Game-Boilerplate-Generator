@@ -13,7 +13,8 @@ void generateCronoHeader()
 	header << "\t~Cronometer() = default;\n\n";
 	header << "\tvoid start();\n";
 	header << "\tvoid stop();\n";
-	header << "\tvoid resume();\n\n";
+	header << "\tvoid resume();\n";
+	header << "\tvoid restart();\n\n";
 	header << "\tunsigned int getSeconds() const;\n";
 	header << "\tunsigned int getMilliseconds() const;\n\n";
 	header << "\tbool isRunning() const;\n";
@@ -35,7 +36,6 @@ void generateCronoSource()
 	src << "void Cronometer::start()\n{\n";
 	src << "\tif(!m_isRunning)\n{\n";
 	src << "\t\tm_isRunning = true;\n";
-	src << "\t\tm_stopTime = 0;\n\n";
 	src << "\t\tm_startTime = SDL_GetTicks();\n";
 	src << "\t}\n";
 	src << "}\n\n";
@@ -48,9 +48,12 @@ void generateCronoSource()
 	src << "void Cronometer::resume()\n{\n";
 	src << "\tif(!m_isRunning)\n{\n";
 	src << "\t\tm_startTime += SDL_GetTicks() - m_stopTime;\n";
-	src << "\t\tm_stopTime = 0;\n\n";
 	src << "\t\tm_isRunning = true;\n";
 	src << "\t}\n";
+	src << "}\n\n";
+	src << "void Cronometer::restart()\n{\n";
+	src << "\tm_isRunning = true;\n";
+	src << "\tm_startTime = SDL_GetTicks();\n";
 	src << "}\n\n";
 	src << "unsigned int Cronometer::getSeconds() const\n{\n";
 	src << "\treturn ((m_isRunning ? SDL_GetTicks() : m_stopTime) - m_startTime) / 1000;\n";
