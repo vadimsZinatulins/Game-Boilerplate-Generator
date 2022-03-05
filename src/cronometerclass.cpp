@@ -1,71 +1,91 @@
 #include "cronometerclass.h"
-
-#include <fstream>
+#include "utils.h"
 
 void generateCronoHeader()
 {
-	std::ofstream header("include/Cronometer.h");
-
-	header << "#pragma once\n\n";
-	header << "class Cronometer\n{\n";
-	header << "public:\n";
-	header << "\tCronometer() = default;\n";
-	header << "\t~Cronometer() = default;\n\n";
-	header << "\tvoid start();\n";
-	header << "\tvoid stop();\n";
-	header << "\tvoid resume();\n";
-	header << "\tvoid restart();\n\n";
-	header << "\tunsigned int getSeconds() const;\n";
-	header << "\tunsigned int getMilliseconds() const;\n\n";
-	header << "\tbool isRunning() const;\n";
-	header << "private:\n";
-	header << "\tunsigned int m_startTime { 0 };\n";
-	header << "\tunsigned int m_stopTime { 0 };\n\n";
-	header << "\tbool m_isRunning { false };\n";
-	header << "};\n";
-
-	header.close();
+	mkfile("include/Cronometer.h", {
+		"#pragma once",
+		"",
+		"class Cronometer",
+		"{",
+		"public:",
+		"	Cronometer() = default;",
+		"	~Cronometer() = default;",
+		"	void start();",
+		"	void stop();",
+		"	void resume();",
+		"	void restart();",
+		"",
+		"	unsigned int getSeconds() const;",
+		"	unsigned int getMilliseconds() const;",
+		"",
+		"	bool isRunning() const;",
+		"private:",
+		"	unsigned int m_startTime { 0 };",
+		"	unsigned int m_stopTime { 0 };",
+		"",
+		"	bool m_isRunning { false };",
+		"};",
+	});
 }
 
 void generateCronoSource()
 {
-	std::ofstream src("src/Cronometer.cpp");
-
-	src << "#include \"Cronometer.h\"\n\n";
-	src << "#include <SDL2/SDL.h>\n\n";
-	src << "void Cronometer::start()\n{\n";
-	src << "\tif(!m_isRunning)\n{\n";
-	src << "\t\tm_isRunning = true;\n";
-	src << "\t\tm_startTime = SDL_GetTicks();\n";
-	src << "\t}\n";
-	src << "}\n\n";
-	src << "void Cronometer::stop()\n{\n";
-	src << "\tif(m_isRunning)\n{\n";
-	src << "\t\tm_stopTime = SDL_GetTicks();\n\n";
-	src << "\t\tm_isRunning = false;\n";
-	src << "\t}\n";
-	src << "}\n\n";
-	src << "void Cronometer::resume()\n{\n";
-	src << "\tif(!m_isRunning)\n{\n";
-	src << "\t\tm_startTime += SDL_GetTicks() - m_stopTime;\n";
-	src << "\t\tm_isRunning = true;\n";
-	src << "\t}\n";
-	src << "}\n\n";
-	src << "void Cronometer::restart()\n{\n";
-	src << "\tm_isRunning = true;\n";
-	src << "\tm_startTime = SDL_GetTicks();\n";
-	src << "}\n\n";
-	src << "unsigned int Cronometer::getSeconds() const\n{\n";
-	src << "\treturn ((m_isRunning ? SDL_GetTicks() : m_stopTime) - m_startTime) / 1000;\n";
-	src << "}\n\n";
-	src << "unsigned int Cronometer::getMilliseconds() const\n{\n";
-	src << "\treturn (m_isRunning ? SDL_GetTicks() : m_stopTime) - m_startTime;\n";
-	src << "}\n\n";
-	src << "bool Cronometer::isRunning() const\n{\n";
-	src << "\treturn m_isRunning;\n";
-	src << "}\n\n";
-
-	src.close();
+	mkfile("src/Cronometer.cpp", {
+		"#include \"Cronometer.h\"",
+		"",
+		"#include <SDL2/SDL.h>",
+		"",
+		"void Cronometer::start()",
+		"{",
+		"	if(!m_isRunning)",
+		"	{",
+		"		m_isRunning = true;",
+		"		m_startTime = SDL_GetTicks();",
+		"	}",
+		"}",
+		"",
+		"void Cronometer::stop()",
+		"{",
+		"	if(m_isRunning)",
+		"	{",
+		"		m_stopTime = SDL_GetTicks();",
+		"",
+		"		m_isRunning = false;",
+		"	}",
+		"}",
+		"",
+		"void Cronometer::resume()",
+		"{",
+		"	if(!m_isRunning)",
+		"	{",
+		"		m_startTime += SDL_GetTicks() - m_stopTime;",
+		"		m_isRunning = true;",
+		"	}",
+		"}",
+		"",
+		"void Cronometer::restart()",
+		"{",
+		"	m_isRunning = true;",
+		"	m_startTime = SDL_GetTicks();",
+		"}",
+		"",
+		"unsigned int Cronometer::getSeconds() const",
+		"{",
+		"	return ((m_isRunning ? SDL_GetTicks() : m_stopTime) - m_startTime) / 1000;",
+		"}",
+		"",
+		"unsigned int Cronometer::getMilliseconds() const",
+		"{",
+		"	return (m_isRunning ? SDL_GetTicks() : m_stopTime) - m_startTime;",
+		"}",
+		"",
+		"bool Cronometer::isRunning() const",
+		"{",
+		"	return m_isRunning;",
+		"}",
+		""
+	});
 }
 
 void generateCronometerClass()

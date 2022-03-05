@@ -1,49 +1,52 @@
 #include "randomclass.h"
-
-#include <fstream>
+#include "utils.h"
 
 void generateRandomHeader()
 {
-	std::ofstream header("include/Random.h");
-
-	header << "#pragma once\n\n";
-	header << "#include <random>\n\n";
-	header << "class Random\n{\n";
-	header << "public:\n";
-	header << "\tRandom(int seed);\n";
-	header << "\tRandom();\n";
-	header << "\t~Random();\n\n";
-	header << "\tint nextInt();\n";
-	header << "\tint nextInt(int max);\n";
-	header << "\tint nextInt(int min, int max);\n\n";
-	header << "\tfloat nextFloat();\n";
-	header << "\tfloat nextFloat(float max);\n";
-	header << "\tfloat nextFloat(float min, float max);\n";
-	header << "private:\n";
-	header << "\tstd::mt19937 m_engine;\n";
-	header << "};\n";
-
-	header.close();
+	mkfile("include/Random.h", {
+		"#pragma once",
+		"",
+		"#include <random>",
+		"",
+		"class Random{",
+		"public:",
+		"	Random(int seed);",
+		"	Random();",
+		"	~Random();",
+		"",
+		"	int nextInt();",
+		"	int nextInt(int max);",
+		"	int nextInt(int min, int max);",
+		"",
+		"	float nextFloat();",
+		"	float nextFloat(float max);",
+		"	float nextFloat(float min, float max);",
+		"private:",
+		"	std::mt19937 m_engine;",
+		"};"
+	});
 }
 
 void generateRandomSource()
 {
-	std::ofstream src("src/Random.cpp");
-
-	src << "#include \"Random.h\"\n\n";
-	src << "#include <limits>\n";
-	src << "#include <random>\n\n";
-	src << "Random::Random(int seed) : m_engine(seed) { }\n";
-	src << "Random::Random() : m_engine(std::random_device()()) { }\n";
-	src << "Random::~Random() { }\n\n";
-	src << "int Random::nextInt() { return nextInt(0, std::numeric_limits<int>::max()); }\n";
-	src << "int Random::nextInt(int max) { return nextInt(0, max); }\n";
-	src << "int Random::nextInt(int min, int max) { return std::uniform_int_distribution<int>(min, max)(m_engine); }\n\n";
-	src << "float Random::nextFloat() { return nextFloat(0, std::numeric_limits<float>::max()); }\n";
-	src << "float Random::nextFloat(float max) { return nextFloat(0, max); }\n";
-	src << "float Random::nextFloat(float min, float max) { return std::uniform_real_distribution<float>(min, max)(m_engine); }\n";
-
-	src.close();
+	mkfile("src/Random.cpp", {
+		"#include \"Random.h\"",
+		"",
+		"#include <limits>",
+		"#include <random>",
+		"",
+		"Random::Random(int seed) : m_engine(seed) { }",
+		"Random::Random() : m_engine(std::random_device()()) { }",
+		"Random::~Random() { }",
+		"",
+		"int Random::nextInt() { return nextInt(0, std::numeric_limits<int>::max()); }",
+		"int Random::nextInt(int max) { return nextInt(0, max); }",
+		"int Random::nextInt(int min, int max) { return std::uniform_int_distribution<int>(min, max)(m_engine); }",
+		"",
+		"float Random::nextFloat() { return nextFloat(0, std::numeric_limits<float>::max()); }",
+		"float Random::nextFloat(float max) { return nextFloat(0, max); }",
+		"float Random::nextFloat(float min, float max) { return std::uniform_real_distribution<float>(min, max)(m_engine); }",
+	});
 }
 
 void generateRandomClass()
