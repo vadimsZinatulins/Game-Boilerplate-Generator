@@ -1,65 +1,104 @@
 #include "keymanager.h"
+#include "utils.h"
 
 #include <fstream>
 
 void generateKeyManagerHeader()
 {
-	std::ofstream header("include/KeyManager.h");
-
-	header << "#pragma once\n\n";
-	header << "using Key = unsigned int;\n\n";
-	header << "class KeyManager\n{\n";
-	header << "public:\n";
-	header << "\tstatic KeyManager &getInstance();\n\n";
-	header << "\tbool isKeyPressed(Key key) const;\n";
-	header << "\tbool isKeyDown(Key key) const;\n";
-	header << "\tbool isKeyReleased(Key key) const;\n";
-	header << "private:\n";
-	header << "\tfriend class Game;\n\n";
-	header << "\tclass KeyMap\n\t{\n";
-	header << "\tpublic:\n";
-	header << "\t\tstatic constexpr int CacheLineSize { 64 };\n";
-	header << "\t\tstatic constexpr int ArraySize { (CacheLineSize - sizeof(unsigned char)) / sizeof(Key) / 2 };\n\n";
-	header << "\t\tvoid operator=(const KeyMap &other);\n\n";
-	header << "\t\tvoid insert(Key key);\n";
-	header << "\t\tbool contains(Key key) const;\n";
-	header << "\t\tvoid remove(Key key);\n\n";
-	header << "\tprivate:\n";
-	header << "\t\tKey m_keys[ArraySize];\n";
-	header << "\t\tunsigned char m_size { 0 };\n";
-	header << "\t};\n\n";
-	header << "\tKeyManager() = default;\n";
-	header << "\t~KeyManager() = default;\n\n";
-	header << "\tvoid update();\n\n";
-	header << "\tvoid keyPressed(Key key);\n";
-	header << "\tvoid keyReleased(Key key);\n\n";
-	header << "\tstatic KeyManager m_instance;\n\n";
-	header << "\tKeyMap m_currFrameKeys;\n";
-	header << "\tKeyMap m_oldFrameKeys;\n";
-	header << "};\n";
-
-	header.close();
+	mkfile("include/KeyManager.h", {
+		"#pragma once",
+		"",
+		"using Key = unsigned int;",
+		"",
+		"class KeyManager",
+		"{",
+		"public:",
+		"	static KeyManager &getInstance();",
+		"	bool isKeyPressed(Key key) const;",
+		"	bool isKeyDown(Key key) const;",
+		"	bool isKeyReleased(Key key) const;",
+		"",
+		"private:",
+		"	friend class Game;",
+		"",
+		"	class KeyMap",
+		"	{",
+		"	public:",
+		"		static constexpr int CacheLineSize { 64 };",
+		"		static constexpr int ArraySize { (CacheLineSize - sizeof(unsigned char)) / sizeof(Key) / 2 };",
+		"		void operator=(const KeyMap &other);",
+		"		void insert(Key key);",
+		"		bool contains(Key key) const;",
+		"		void remove(Key key);",
+		"	private:",
+		"		Key m_keys[ArraySize];",
+		"		unsigned char m_size { 0 };",
+		"	};",
+		"",
+		"	KeyManager() = default;",
+		"	~KeyManager() = default;",
+		"",
+		"	void update();",
+		"",
+		"	void keyPressed(Key key);",
+		"	void keyReleased(Key key);",
+		"",
+		"	KeyMap m_currFrameKeys;",
+		"	KeyMap m_oldFrameKeys;",
+		"};"
+	});
 }
 
 void generateKeyManagerSource()
 {
-	std::ofstream src("src/KeyManager.cpp");
-
-	src << "#include \"KeyManager.h\"\n\n";
-	src << "KeyManager KeyManager::m_instance;\n\n";
-	src << "KeyManager &KeyManager::getInstance() { return m_instance; }\n\n";
-	src << "bool KeyManager::isKeyPressed(Key key) const { return m_currFrameKeys.contains(key) && !m_oldFrameKeys.contains(key); }\n";
-	src << "bool KeyManager::isKeyDown(Key key) const { return m_currFrameKeys.contains(key); }\n";
-	src << "bool KeyManager::isKeyReleased(Key key) const { return !m_currFrameKeys.contains(key) && m_oldFrameKeys.contains(key); }\n\n";
-	src << "void KeyManager::update() { m_oldFrameKeys = m_currFrameKeys; }\n\n";
-	src << "void KeyManager::keyPressed(Key key) { m_currFrameKeys.insert(key); }\n";
-	src << "void KeyManager::keyReleased(Key key) { m_currFrameKeys.remove(key); }\n\n";
-	src << "void KeyManager::KeyMap::operator=(const KeyManager::KeyMap &other) \n{\n\tm_size = other.m_size;\n\tfor(unsigned char i = 0; i < m_size; ++i) m_keys[i] = other.m_keys[i];\n}\n\n";
-	src << "void KeyManager::KeyMap::insert(Key key)\n{\n\tif(!contains(key) && m_size < KeyManager::KeyMap::ArraySize)\n\t\tm_keys[m_size++] = key;\n}\n\n";
-	src << "void KeyManager::KeyMap::remove(Key key)\n{\n\tfor(unsigned char i = 0; i < m_size; ++i)\n\t\tif(m_keys[i] == key)\n\t\t{\n\t\t\tm_keys[i] = m_keys[--m_size];\n\t\t\treturn;\n\t\t}\n}\n\n";
-	src << "bool KeyManager::KeyMap::contains(Key key) const\n{\n\tfor(unsigned char i = 0; i < m_size; ++i)\n\t\tif(m_keys[i] == key) return true;\n\treturn false;\n}\n\n";
-
-	src.close();
+	mkfile("src/KeyManager.cpp", {
+		"#include \"KeyManager.h\"",
+		"",
+		"KeyManager &KeyManager::getInstance()",
+		"{",
+		"	static KeyManager instance;",
+		"	return instance;",
+		"}",
+		"",
+		"bool KeyManager::isKeyPressed(Key key) const { return m_currFrameKeys.contains(key) && !m_oldFrameKeys.contains(key); }",
+		"bool KeyManager::isKeyDown(Key key) const { return m_currFrameKeys.contains(key); }",
+		"bool KeyManager::isKeyReleased(Key key) const { return !m_currFrameKeys.contains(key) && m_oldFrameKeys.contains(key); }",
+		"",
+		"void KeyManager::update() { m_oldFrameKeys = m_currFrameKeys; }",
+		"",
+		"void KeyManager::keyPressed(Key key) { m_currFrameKeys.insert(key); }",
+		"void KeyManager::keyReleased(Key key) { m_currFrameKeys.remove(key); }",
+		"",
+		"void KeyManager::KeyMap::operator=(const KeyManager::KeyMap &other)",
+		"{",
+		"	m_size = other.m_size;",
+		"	for(unsigned char i = 0; i < m_size; ++i) m_keys[i] = other.m_keys[i];",
+		"}",
+		"",
+		"void KeyManager::KeyMap::insert(Key key)",
+		"{",
+		"	if(!contains(key) && m_size < KeyManager::KeyMap::ArraySize)",
+		"		m_keys[m_size++] = key;",
+		"}",
+		"",
+		"void KeyManager::KeyMap::remove(Key key)",
+		"{",
+		"	for(unsigned char i = 0; i < m_size; ++i)",
+		"		if(m_keys[i] == key)",
+		"		{",
+		"			m_keys[i] = m_keys[--m_size];",
+		"			return;",
+		"		}",
+		"}",
+		"",
+		"bool KeyManager::KeyMap::contains(Key key) const",
+		"{",
+		"	for(unsigned char i = 0; i < m_size; ++i)",
+		"		if(m_keys[i] == key) return true;",
+		"	return false;",
+		"}",
+		""
+	});
 }
 
 void generateKeyManager()
