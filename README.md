@@ -28,16 +28,22 @@ ProjectNameGoesHere/
 |-config/
 | '-config.h.in
 |-include/
-| |-Cronometer.h
-| |-Game.h
-| |-KeyManager.h
-| |-Time.h
+| |-BE/
+| | |-Cronometer.h
+| | |-Game.h
+| | |-KeyManager.h
+| | |-MouseManager.h
+| | |-Random.h
+| | '-Time.h
 | '-ProjectNameGoesHere.h
 |-src/
-| |-Cronometer.cpp
-| |-Game.cpp
-| |-KeyManager.cpp
-| |-Time.cpp
+| |-BE/
+| | |-Cronometer.cpp
+| | |-Game.cpp
+| | |-KeyManager.cpp
+| | |-MouseManager.cpp
+| | |-Random.cpp
+| | '-Time.cpp
 | |-ProjectNameGoesHere.cpp
 | '-main.cpp
 '-CMakeLists.txt
