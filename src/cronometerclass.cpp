@@ -3,7 +3,7 @@
 
 void generateCronoHeader()
 {
-	mkfile("include/Cronometer.h", {
+	mkfile("include/BE/Cronometer.h", {
 		"#pragma once",
 		"",
 		"namespace BE",
@@ -36,8 +36,8 @@ void generateCronoHeader()
 
 void generateCronoSource()
 {
-	mkfile("src/Cronometer.cpp", {
-		"#include \"Cronometer.h\"",
+	mkfile("src/BE/Cronometer.cpp", {
+		"#include \"BE/Cronometer.h\"",
 		"",
 		"#include <SDL2/SDL.h>",
 		"",

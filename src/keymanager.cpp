@@ -5,7 +5,7 @@
 
 void generateKeyManagerHeader()
 {
-	mkfile("include/KeyManager.h", {
+	mkfile("include/BE/KeyManager.h", {
 		"#pragma once",
 		"",
 		"namespace BE",
@@ -56,8 +56,8 @@ void generateKeyManagerHeader()
 
 void generateKeyManagerSource()
 {
-	mkfile("src/KeyManager.cpp", {
-		"#include \"KeyManager.h\"",
+	mkfile("src/BE/KeyManager.cpp", {
+		"#include \"BE/KeyManager.h\"",
 		"",
 		"namespace BE",
 		"{",

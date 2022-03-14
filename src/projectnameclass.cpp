@@ -6,7 +6,7 @@ void generateProjectNameClassHeader(const std::string &projectName)
 	mkfile("include/" + projectName + ".h", {
 		"#pragma once",
 		"",
-		"#include \"Game.h\"",
+		"#include \"BE/Game.h\"",
 		"",
 		"class " + projectName + " final : public BE::Game",
 		"{",

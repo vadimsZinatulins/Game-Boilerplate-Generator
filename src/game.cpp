@@ -3,7 +3,7 @@
 
 void generateGameHeader()
 {
-	mkfile("include/Game.h", {		
+	mkfile("include/BE/Game.h", {		
 		"#pragma once",
 		"",
 		"struct SDL_Window;",
@@ -39,11 +39,11 @@ void generateGameHeader()
 
 void generateGameSource()
 {
-	mkfile("src/Game.cpp", {		
-		"#include \"Game.h\"",
-		"#include \"Time.h\"",
-		"#include \"KeyManager.h\"",
-		"#include \"MouseManager.h\"",
+	mkfile("src/BE/Game.cpp", {		
+		"#include \"BE/Game.h\"",
+		"#include \"BE/Time.h\"",
+		"#include \"BE/KeyManager.h\"",
+		"#include \"BE/MouseManager.h\"",
 		"#include \"config.h\"",
 		"",
 		"#include <SDL2/SDL.h>",

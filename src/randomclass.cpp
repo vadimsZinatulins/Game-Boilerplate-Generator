@@ -3,7 +3,7 @@
 
 void generateRandomHeader()
 {
-	mkfile("include/Random.h", {
+	mkfile("include/BE/Random.h", {
 		"#pragma once",
 		"",
 		"#include <random>",
@@ -34,8 +34,8 @@ void generateRandomHeader()
 
 void generateRandomSource()
 {
-	mkfile("src/Random.cpp", {
-		"#include \"Random.h\"",
+	mkfile("src/BE/Random.cpp", {
+		"#include \"BE/Random.h\"",
 		"",
 		"namespace BE",
 		"{",

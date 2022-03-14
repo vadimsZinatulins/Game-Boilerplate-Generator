@@ -3,7 +3,7 @@
 
 void generateMouseManagerHeader()
 {
-	mkfile("include/MouseManager.h", {
+	mkfile("include/BE/MouseManager.h", {
 		"#pragma once",
 		"",
 		"namespace BE",
@@ -52,8 +52,8 @@ void generateMouseManagerHeader()
 
 void generateMouseManagerSource()
 {
-	mkfile("src/MouseManager.cpp", {
-		"#include \"MouseManager.h\"",
+	mkfile("src/BE/MouseManager.cpp", {
+		"#include \"BE/MouseManager.h\"",
 		"",
 		"namespace BE",
 		"{",

@@ -3,7 +3,7 @@
 
 void generateTimeHeader()
 {
-	mkfile("include/Time.h", {
+	mkfile("include/BE/Time.h", {
 		"#pragma once",
 		"",
 		"namespace BE",
@@ -30,8 +30,8 @@ void generateTimeHeader()
 
 void generateTimeSource()
 {
-	mkfile("src/Time.cpp", {
-		"#include \"Time.h\"",
+	mkfile("src/BE/Time.cpp", {
+		"#include \"BE/Time.h\"",
 		"#include \"config.h\"",
 		"",
 		"#include <SDL2/SDL.h>",

@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
 
 	std::vector<Task> tasks = {
 		MakeTask("Generating workspace", [&]{ generateWorkspace(projectName); }),
-		MakeTask("Generating CMakeLists.txt", [&]{ generateCMakeLists(projectName, { "main", "Game", "KeyManager", "MouseManager", "Time", "Cronometer", "Random", projectName }); }),
+		MakeTask("Generating CMakeLists.txt", [&]{ generateCMakeLists(projectName, { "main", "BE/Game", "BE/KeyManager", "BE/MouseManager", "BE/Time", "BE/Cronometer", "BE/Random", projectName }); }),
 		MakeTask("Generating KeyManager class", []{ generateKeyManager(); }),
 		MakeTask("Generating MouseManager class", []{ generateMouseManager(); }),
 		MakeTask("Generating Game class", []{ generateGameClass(); }),
