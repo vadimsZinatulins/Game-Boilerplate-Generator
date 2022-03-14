@@ -2,6 +2,7 @@
 #include "workspace.h"
 #include "cmakelists.h"
 #include "keymanager.h"
+#include "mousemanager.h"
 #include "timeclass.h"
 #include "cronometerclass.h"
 #include "game.h"
@@ -42,8 +43,9 @@ int main(int argc, char *argv[])
 
 	std::vector<Task> tasks = {
 		MakeTask("Generating workspace", [&]{ generateWorkspace(projectName); }),
-		MakeTask("Generating CMakeLists.txt", [&]{ generateCMakeLists(projectName, { "main", "Game", "KeyManager", "Time", "Cronometer", "Random", projectName }); }),
+		MakeTask("Generating CMakeLists.txt", [&]{ generateCMakeLists(projectName, { "main", "Game", "KeyManager", "MouseManager", "Time", "Cronometer", "Random", projectName }); }),
 		MakeTask("Generating KeyManager class", []{ generateKeyManager(); }),
+		MakeTask("Generating MouseManager class", []{ generateMouseManager(); }),
 		MakeTask("Generating Game class", []{ generateGameClass(); }),
 		MakeTask("Generating Time class", []{ generateTimeClass(); }),
 		MakeTask("Generating Cronometer class", []{ generateCronometerClass(); }),

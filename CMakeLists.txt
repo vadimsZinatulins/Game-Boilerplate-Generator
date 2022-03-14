@@ -15,6 +15,7 @@ add_executable(
 	${PROJECT_SOURCE_DIR}/src/workspace.cpp
 	${PROJECT_SOURCE_DIR}/src/cmakelists.cpp
 	${PROJECT_SOURCE_DIR}/src/keymanager.cpp
+	${PROJECT_SOURCE_DIR}/src/mousemanager.cpp
 	${PROJECT_SOURCE_DIR}/src/game.cpp
 	${PROJECT_SOURCE_DIR}/src/projectnameclass.cpp
 	${PROJECT_SOURCE_DIR}/src/mainfile.cpp
