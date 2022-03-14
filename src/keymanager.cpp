@@ -8,6 +8,9 @@ void generateKeyManagerHeader()
 	mkfile("include/KeyManager.h", {
 		"#pragma once",
 		"",
+		"namespace BE",
+		"{",
+		"",
 		"using Key = unsigned int;",
 		"",
 		"class KeyManager",
@@ -45,7 +48,9 @@ void generateKeyManagerHeader()
 		"",
 		"	KeyMap m_currFrameKeys;",
 		"	KeyMap m_oldFrameKeys;",
-		"};"
+		"};",
+		"",
+		"}"
 	});
 }
 
@@ -53,6 +58,9 @@ void generateKeyManagerSource()
 {
 	mkfile("src/KeyManager.cpp", {
 		"#include \"KeyManager.h\"",
+		"",
+		"namespace BE",
+		"{",
 		"",
 		"KeyManager &KeyManager::getInstance()",
 		"{",
@@ -97,7 +105,8 @@ void generateKeyManagerSource()
 		"		if(m_keys[i] == key) return true;",
 		"	return false;",
 		"}",
-		""
+		"",
+		"}"
 	});
 }
 

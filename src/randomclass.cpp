@@ -8,6 +8,9 @@ void generateRandomHeader()
 		"",
 		"#include <random>",
 		"",
+		"namespace BE",
+		"{",
+		"",
 		"class Random{",
 		"public:",
 		"	Random(int seed);",
@@ -23,7 +26,9 @@ void generateRandomHeader()
 		"	float nextFloat(float min, float max);",
 		"private:",
 		"	std::mt19937 m_engine;",
-		"};"
+		"};",
+		"",
+		"}"
 	});
 }
 
@@ -31,6 +36,9 @@ void generateRandomSource()
 {
 	mkfile("src/Random.cpp", {
 		"#include \"Random.h\"",
+		"",
+		"namespace BE",
+		"{",
 		"",
 		"#include <limits>",
 		"#include <random>",
@@ -46,6 +54,8 @@ void generateRandomSource()
 		"float Random::nextFloat() { return nextFloat(0, std::numeric_limits<float>::max()); }",
 		"float Random::nextFloat(float max) { return nextFloat(0, max); }",
 		"float Random::nextFloat(float min, float max) { return std::uniform_real_distribution<float>(min, max)(m_engine); }",
+		"",
+		"}"
 	});
 }
 

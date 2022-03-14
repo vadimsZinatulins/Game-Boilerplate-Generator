@@ -6,6 +6,9 @@ void generateCronoHeader()
 	mkfile("include/Cronometer.h", {
 		"#pragma once",
 		"",
+		"namespace BE",
+		"{",
+		"",
 		"class Cronometer",
 		"{",
 		"public:",
@@ -26,6 +29,8 @@ void generateCronoHeader()
 		"",
 		"	bool m_isRunning { false };",
 		"};",
+		"",
+		"}",
 	});
 }
 
@@ -35,6 +40,9 @@ void generateCronoSource()
 		"#include \"Cronometer.h\"",
 		"",
 		"#include <SDL2/SDL.h>",
+		"",
+		"namespace BE",
+		"{",
 		"",
 		"void Cronometer::start()",
 		"{",
@@ -84,7 +92,8 @@ void generateCronoSource()
 		"{",
 		"	return m_isRunning;",
 		"}",
-		""
+		"",
+		"}"
 	});
 }
 

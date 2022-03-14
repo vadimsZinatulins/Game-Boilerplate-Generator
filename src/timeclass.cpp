@@ -6,6 +6,9 @@ void generateTimeHeader()
 	mkfile("include/Time.h", {
 		"#pragma once",
 		"",
+		"namespace BE",
+		"{",
+		"",
 		"class Time",
 		"{",
 		"public:",
@@ -19,7 +22,9 @@ void generateTimeHeader()
 		"",
 		"	static unsigned int m_ticks;",
 		"	static float m_deltaTime;",
-		"};"
+		"};",
+		"",
+		"}"
 	});
 }
 
@@ -30,6 +35,9 @@ void generateTimeSource()
 		"#include \"config.h\"",
 		"",
 		"#include <SDL2/SDL.h>",
+		"",
+		"namespace BE",
+		"{",
 		"",
 		"constexpr unsigned int MinTicksPerFrame = 1000 / FRAME_CAP;",
 		"",
@@ -47,6 +55,8 @@ void generateTimeSource()
 		"	unsigned int frameTicks = SDL_GetTicks() - m_ticks;",
 		"	if(frameTicks < MinTicksPerFrame) SDL_Delay(MinTicksPerFrame - frameTicks);",
 		"}",
+		"",
+		"}"
 	});
 }
 

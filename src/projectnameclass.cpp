@@ -8,7 +8,7 @@ void generateProjectNameClassHeader(const std::string &projectName)
 		"",
 		"#include \"Game.h\"",
 		"",
-		"class " + projectName + " final : public Game",
+		"class " + projectName + " final : public BE::Game",
 		"{",
 		"public:",
 		"	" + projectName + "() = default;",
@@ -48,8 +48,7 @@ void generateProjectNameClassSource(const std::string &projectName)
 		"void " + projectName + "::render(SDL_Renderer *renderer)"
 		"{",
 		"",
-		"}",
-		"",
+		"}"
 	});
 }
 

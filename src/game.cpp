@@ -9,6 +9,9 @@ void generateGameHeader()
 		"struct SDL_Window;",
 		"struct SDL_Renderer;",
 		"",
+		"namespace BE",
+		"{",
+		"",
 		"class Game",
 		"{",
 		"public:",
@@ -28,7 +31,9 @@ void generateGameHeader()
 		"",
 		"	SDL_Window *m_window { nullptr };",
 		"	SDL_Renderer *m_renderer { nullptr };",
-		"};"
+		"};",
+		"",
+		"}"
 	});
 }
 
@@ -42,6 +47,9 @@ void generateGameSource()
 		"#include \"config.h\"",
 		"",
 		"#include <SDL2/SDL.h>",
+		"",
+		"namespace BE",
+		"{",
 		"",
 		"void Game::run()",
 		"{",
@@ -131,6 +139,7 @@ void generateGameSource()
 		"	SDL_Quit();",
 		"}",
 		"",
+		"}"
 	});
 }
 

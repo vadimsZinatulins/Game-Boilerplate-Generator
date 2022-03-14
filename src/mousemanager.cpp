@@ -6,6 +6,9 @@ void generateMouseManagerHeader()
 	mkfile("include/MouseManager.h", {
 		"#pragma once",
 		"",
+		"namespace BE",
+		"{",
+		"",
 		"enum class MouseButton:char { Left = 1, Middle = 2, Right = 3 };",
 		"",
 		"class MouseManager",
@@ -41,7 +44,9 @@ void generateMouseManagerHeader()
 		"	int m_dy { 0 };",
 		"",
 		"	char m_buttonState { 0 };",
-		"};"
+		"};",
+		"",
+		"}"
 	});
 }
 
@@ -49,6 +54,9 @@ void generateMouseManagerSource()
 {
 	mkfile("src/MouseManager.cpp", {
 		"#include \"MouseManager.h\"",
+		"",
+		"namespace BE",
+		"{",
 		"",
 		"MouseManager &MouseManager::getInstance()",
 		"{",
@@ -103,6 +111,8 @@ void generateMouseManagerSource()
 		"	m_dx = dx;",
 		"	m_dy = dy;",
 		"}",
+		"",
+		"}"
 	});
 }
 
