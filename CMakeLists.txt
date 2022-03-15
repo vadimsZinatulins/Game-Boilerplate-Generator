@@ -1,13 +1,15 @@
 cmake_minimum_required(VERSION 3.10)
 
 # Game Boilerplate Generator
-project(gbgen VERSION 1.3)
+project(gbgen VERSION 2.5)
 
 configure_file(${PROJECT_SOURCE_DIR}/config/config.h.in ${PROJECT_SOURCE_DIR}/include/config.h)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_EXPORT_COMPILE_COMMANDS On)
+
+find_package(Threads REQUIRED)
 
 add_executable(
 	${PROJECT_NAME} 
@@ -30,6 +32,11 @@ add_executable(
 target_include_directories(
 	${PROJECT_NAME}
 	PUBLIC ${PROJECT_SOURCE_DIR}/include	
+)
+
+target_link_libraries(
+	${PROJECT_NAME}
+	${CMAKE_THREAD_LIBS_INIT}
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)

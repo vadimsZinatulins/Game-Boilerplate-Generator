@@ -16,7 +16,7 @@ public:
 	template<typename T>
 	Logger &operator<<(const T &msg)
 	{
-		auto lock = std::unique_lock<std::mutex>(m_logMutex);
+		auto lock = std::lock_guard<std::mutex>(m_logMutex);
 
 		std::cout << msg;
 
