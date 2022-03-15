@@ -24,6 +24,7 @@ add_executable(
 	${PROJECT_SOURCE_DIR}/src/cronometerclass.cpp
 	${PROJECT_SOURCE_DIR}/src/randomclass.cpp
 	${PROJECT_SOURCE_DIR}/src/utils.cpp
+	${PROJECT_SOURCE_DIR}/src/Task.cpp
 )
 
 target_include_directories(

@@ -10,31 +10,16 @@
 #include "mainfile.h"
 #include "configfile.h"
 #include "randomclass.h"
-
-#include <iostream>
-#include <functional>
-#include <utility>
-#include <vector>
-
-using Task = std::pair<std::string, std::function<void()>>;
-constexpr auto MakeTask = std::make_pair<std::string, std::function<void()>>;
-
-void execute(std::vector<Task> &tasks)
-{
-	for(std::size_t i = 0; i < tasks.size(); ++i)
-	{
-		std::cout << "[" << (i + 1) << "/" << tasks.size() << "] " << tasks[i].first << std::endl;
-		tasks[i].second();
-	}
-}
+#include "Task.h"
+#include "Logger.h"
 
 int main(int argc, char *argv[])
 {
-	std::cout << "Running gbgen version: " << MAJOR_VERSION << "." << MINOR_VERSION << std::endl;
+	Log() << "Running gbgen version: " << MAJOR_VERSION << "." << MINOR_VERSION << "\n";
 	if(argc != 2)
 	{
-		std::cout << "Wrong argument count" << std::endl;
-		std::cout << "Usage: gbgen [PROJECT_NAME]" << std::endl;
+		Log() << "Wrong argument count" << '\n';
+		Log() << "Usage: gbgen [PROJECT_NAME]" << '\n';
 
 		return 1;
 	}
@@ -57,15 +42,15 @@ int main(int argc, char *argv[])
 
 	execute(tasks);
 
-	std::cout << "Done! You can now run the following commands:" << std::endl;
-	std::cout << "\tcd " << projectName << std::endl;
-	std::cout << "\tcmake -E chdir build/ cmake .." << std::endl;
-	std::cout << "\tln -s build/compile_commands.json ." << std::endl;
-	std::cout << "\tcmake --build build/" << std::endl;
-	std::cout << "\tbin/" << projectName << std::endl << std::endl;
-	std::cout << "Complete command:" << std::endl;
-	std::cout << "\tcd " << projectName << " && cmake -E chdir build/ cmake .. && ln -s build/compile_commands.json . && cmake --build build/" << std::endl << std::endl;
-	std::cout << "And change the both config/config.h.in and CMakeLists.txt files as you want. Have fun!" << std::endl;
+	Log() << "Done! You can now run the following commands:" << '\n';
+	Log() << "\tcd " << projectName << '\n';
+	Log() << "\tcmake -E chdir build/ cmake .." << '\n';
+	Log() << "\tln -s build/compile_commands.json ." << '\n';
+	Log() << "\tcmake --build build/" << '\n';
+	Log() << "\tbin/" << projectName << '\n' << '\n';
+	Log() << "Complete command:" << '\n';
+	Log() << "\tcd " << projectName << " && cmake -E chdir build/ cmake .. && ln -s build/compile_commands.json . && cmake --build build/" << '\n' << '\n';
+	Log() << "And change the both config/config.h.in and CMakeLists.txt files as you want. Have fun!" << '\n';
 
 	return 0;
 }
