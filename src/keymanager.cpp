@@ -22,6 +22,7 @@ void generateKeyManagerHeader()
 		"	bool isKeyReleased(Key key) const;",
 		"",
 		"private:",
+		"	template<typename T>",
 		"	friend class Game;",
 		"",
 		"	class KeyMap",

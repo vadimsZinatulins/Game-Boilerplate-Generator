@@ -23,6 +23,7 @@ void generateMouseManagerHeader()
 		"	void getMouseCoords(int &x, int &y) const;",
 		"	void getMouseRelCoords(int &dx, int &dy) const;",
 		"public:",
+		"	template<typename T>",
 		"	friend class Game;",
 		"",
 		"	MouseManager() = default;",

@@ -15,6 +15,7 @@ void generateTimeHeader()
 		"	static inline unsigned int getTicks() { return m_ticks; }",
 		"	static inline float getDeltaTime() { return m_deltaTime; }",
 		"private:",
+		"	template<typename T>",
 		"	friend class Game;",
 		"",
 		"	Time();",

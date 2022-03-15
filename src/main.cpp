@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
 
 	std::vector<Task> tasks = {
 		MakeTask("Generating workspace", [&]{ generateWorkspace(projectName); }),
-		MakeTask("Generating CMakeLists.txt", [&]{ generateCMakeLists(projectName, { "main", "BE/Game", "BE/KeyManager", "BE/MouseManager", "BE/Time", "BE/Cronometer", "BE/Random", projectName }); }),
+		MakeTask("Generating CMakeLists.txt", [&]{ generateCMakeLists(projectName, { "main", "BE/KeyManager", "BE/MouseManager", "BE/Time", "BE/Cronometer", "BE/Random", projectName }); }),
 		MakeTask("Generating KeyManager class", []{ generateKeyManager(); }),
 		MakeTask("Generating MouseManager class", []{ generateMouseManager(); }),
 		MakeTask("Generating Game class", []{ generateGameClass(); }),
@@ -60,8 +60,11 @@ int main(int argc, char *argv[])
 	std::cout << "Done! You can now run the following commands:" << std::endl;
 	std::cout << "\tcd " << projectName << std::endl;
 	std::cout << "\tcmake -E chdir build/ cmake .." << std::endl;
-	std::cout << "\tcmake --build build/" << std::endl << std::endl;
+	std::cout << "\tln -s build/compile_commands.json ." << std::endl;
+	std::cout << "\tcmake --build build/" << std::endl;
 	std::cout << "\tbin/" << projectName << std::endl << std::endl;
+	std::cout << "Complete command:" << std::endl;
+	std::cout << "\tcd " << projectName << " && cmake -E chdir build/ cmake .. && ln -s build/compile_commands.json . && cmake --build build/" << std::endl << std::endl;
 	std::cout << "And change the both config/config.h.in and CMakeLists.txt files as you want. Have fun!" << std::endl;
 
 	return 0;
