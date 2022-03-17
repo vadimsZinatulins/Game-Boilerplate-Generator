@@ -8,6 +8,7 @@ This project is build using C++ so a c++ is required (for example clang or gcc)
 
 
 #### CMake
+Cmake is used to manage the project
 ```bash
 sudo apt-get install cmake
 ```
