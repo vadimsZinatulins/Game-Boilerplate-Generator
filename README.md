@@ -3,16 +3,16 @@
 Simple application used to create boilerplate for [https://www.libsdl.org/download-2.0.php](SDL2) with key input handler
 
 ## Dependencies 
-### C++ Compiler
+#### C++ Compiler
 This project is build using C++ so a c++ is required (for example clang or gcc)
 
 
-### CMake
+#### CMake
 ```bash
 sudo apt-get install cmake
 ```
 
-### SDL2
+#### SDL2
 ```bash
 sudo apt-get install libsdl2-dev
 ```
