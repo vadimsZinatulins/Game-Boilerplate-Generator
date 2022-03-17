@@ -1,6 +1,6 @@
 # Game Boilerplate Generator
 
-Simple application used to create boilerplate for [https://www.libsdl.org/download-2.0.php](SDL2) with key input handler
+Simple application used to create boilerplate for [SDL2](https://www.libsdl.org/download-2.0.php) with key input handler
 
 ## Dependencies 
 #### C++ Compiler
