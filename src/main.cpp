@@ -28,8 +28,9 @@ int main(int argc, char *argv[])
 
 	std::string projectName(argv[1]);
 
-	std::vector<Task> tasks = {
-		MakeTask("Generating workspace", [&]{ generateWorkspace(projectName); }),
+	execute({ MakeTask("Generating workspace", [&]{ generateWorkspace(projectName); }) });
+
+	execute({
 		MakeTask("Generating CMakeLists.txt", [&]{ generateCMakeLists(projectName, { "main", "BE/KeyManager", "BE/MouseManager", "BE/Time", "BE/Cronometer", "BE/Random", projectName }); }),
 		MakeTask("Generating KeyManager class", []{ generateKeyManager(); }),
 		MakeTask("Generating MouseManager class", []{ generateMouseManager(); }),
@@ -40,9 +41,8 @@ int main(int argc, char *argv[])
 		MakeTask("Generating " + projectName + " class", [&]{ generateProjectNameClass(projectName); }),
 		MakeTask("Generating src/main.cpp", [&]{ generateMain(projectName); }),
 		MakeTask("Generating config/config.h.in", [&]{ generateConfigFile(projectName); })
-	};
+	});
 
-	execute(tasks);
 
 	Log() << "\nDone! You can now run the following commands:\n";
 	Log() << "\tcd " + projectName + '\n';

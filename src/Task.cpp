@@ -4,7 +4,7 @@
 #include <string>
 #include <thread>
 
-void execute(std::vector<Task> &tasks)
+void execute(const std::vector<Task> &&tasks)
 {
 	std::thread threads[tasks.size()];
 
