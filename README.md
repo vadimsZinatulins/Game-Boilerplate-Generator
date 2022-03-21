@@ -1,25 +1,28 @@
 # Game Boilerplate Generator
 
 Simple application used to create boilerplate for [SDL2](https://www.libsdl.org/download-2.0.php).
-This project will generate all files needed to build and run an SDL2 project.
+This project will generate all files needed to build and run an SDL2 project. This is not a library nor it generates one, this is an application that will create an file structure and some files to start using SDL2.
 
-## Dependencies 
+### Why not to create a library?
+Every time I start a new project (or want to make a quick test) with SDL2 I need to write a lot of boilerplate code (create a file structure, create CMakeLists.txt file, create classes that manage key and mouse input, a core class that initializes SDL2 and few more things) that I do not want to write every time I create this project (It's just a huge waste of time) so I decided to create an application that generates all these files for me.
+
+Also, by generating the boilerplate I've got more flexibility to make changes to the core than I would have with a library.
+
+## Installation
+### Dependencies 
 #### C++ Compiler
 Yoou need a C++ compiler (for example clang or gcc) to build this project and also to build the generated project
-
 #### CMake
 To build this project you need CMake. Also to build the generated project you also need CMake.
 ```bash
 sudo apt-get install cmake
 ```
-
 #### SDL2
 SDL2 is not a direct dependency but the generated project uses it so to take advantage of the generated project you need to install SDL2
 ```bash
 sudo apt-get install libsdl2-dev
 ```
-
-## installation
+#### Installation
 ```bash
 mkdir build
 mkdir bin
