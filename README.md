@@ -4,28 +4,37 @@ Simple application used to create boilerplate for [SDL2](https://www.libsdl.org/
 This project will generate all files needed to build and run an SDL2 project. This is not a library nor it generates one, this is an application that will create an file structure and some files to start using SDL2.
 
 ### Why not to create a library?
+
 Every time I start a new project (or want to make a quick test) with SDL2 I need to write a lot of boilerplate code (create a file structure, create CMakeLists.txt file, create classes that manage key and mouse input, a core class that initializes SDL2 and few more things) that I do not want to write every time I create this project (It's just a huge waste of time) so I decided to create an application that generates all these files for me.
 
 Also, by generating the boilerplate I've got more flexibility to make changes to the core than I would have with a library.
 
-## Installation
-### Dependencies 
-#### C++ Compiler
+## Dependencies
+
+### C++ Compiler
+
 Yoou need a C++ compiler (for example clang or gcc) to build this project and also to build the generated project
-#### CMake
+
+### CMake
+
 To build this project you need CMake. Also to build the generated project you also need CMake.
+
 ```bash
 sudo apt-get install cmake
 ```
-#### SDL2
+
+### SDL2
+
 SDL2 is not a direct dependency but the generated project uses it so to take advantage of the generated project you need to install SDL2
+
 ```bash
 sudo apt-get install libsdl2-dev
 ```
-#### Installation
+
+## Installation
+
 ```bash
-mkdir build
-mkdir bin
+mkdir build bin
 cmake -E chdir build/ cmake ..
 cmake --build build/
 # This is optional to make the application callable from anywhere
@@ -33,14 +42,17 @@ sudo cmake --install build/
 ```
 
 ## Usage
+
 ```bash
-path/to/app/gbgen ProjectNameGoesHere
+path/to/app/gbgen MyGame
 # Or if sudo cmake --install build/ has been run
 gbgen MyGame
 ```
 
 ### Output
+
 The output project structure is as follows:
+
 ```
 MyGame/
 |-bin/
@@ -70,10 +82,13 @@ MyGame/
 ```
 
 ### Generated files
+
 #### Game
+
 This is the core class that initializes and shutdowns the SDL2, manages the main loop and processes SDL2 events. Your **MyGame** class inherite from **Game** class (**ATTENTION:** It uses [CRTP](https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern)). 
 
 Usage:
+
 ```cpp
 #include "BE/Game.h"
 
@@ -85,26 +100,26 @@ class MyGame final : public BE::Game<MyGame>
 public:
   MyGame() = default;
   MyGame() = default;
-  
+
 private:
   friend class BE::Game<MyGame>;
-  
+
   // All these methods bellow need to be implemented otherwise it wont compile
   void initialize() 
   {
     // Initialization stuff goes here
   }
-  
+
   void shutdown()
   {
     // Shutdown stuff goes here
   }
-  
+
   void update()
   {
     // This method is called every frame to update the game state
   }
-  
+
   void render(SDL_Renderer *renderer)
   {
     // This method is called to render the game
@@ -115,16 +130,17 @@ private:
 int main(int argc, char *argv[])
 {
   MyGame().run();
-  
+
   return 0;
 }
-
 ```
 
 #### Time
+
 This class caps the frame rate (that is defined in _config/config.h.in_ file) and is used to obtain the delta time (time passed since last update call). This is needed to make your game [framerate-independent](https://gameprogrammingpatterns.com/game-loop.html).
 
 Usage:
+
 ```cpp
 #include "BE/Time.h"
 
@@ -133,12 +149,49 @@ Usage:
 void MyGame::update()
 {
   float deltaTime = BE::Time::getDeltaTime();
-  
-  // ..
-  
+
+  // ...
+
   // Make player fall
   player->position.x += 9.81f * deltaTime;
 }
+```
 
+#### KeyManager
 
+This class manages all key inputs from user (i.e. keyboard input) and you can obtain 3 differentes key states: **Pressed**, **Down**, **Released**.
+
+- Pressed is when user just pressed the key and not caring whether the key is still being pressed or released, it just indicates if the key was pressed.
+
+- Down is when the user presses the key and hold it down.
+
+- Released is when the user releases the key.
+
+Unfortunately, to get the state of a key you need to use [SDL_Keycode](https://wiki.libsdl.org/SDL_Keycode) to identify which's key state you want to check.
+
+Usage:
+
+```cpp
+#include "BE/KeyManager.h"
+
+void MyGame::update()
+{
+    BE::KeyManager &input = BE::KeyManager::getInstance();
+
+    // ...
+
+    if(input.isKeyPressed(SDLK_SPACE))
+        player->jump();
+
+    if(input.isKeyDown(SDLK_w))
+        player-moveForward();
+
+    // Same movements for a, s and d
+    // ...
+
+    if(input.isKeyReleased(SDLK_e))
+        player->pickupNearestItem();
+
+    // ...
+} 
 ```
