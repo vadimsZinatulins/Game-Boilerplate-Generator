@@ -1,8 +1,6 @@
 #include "keymanager.h"
 #include "utils.h"
 
-#include <fstream>
-
 void generateKeyManagerHeader()
 {
 	mkfile("include/BE/KeyManager.h", {

@@ -12,6 +12,9 @@
 #include "randomclass.h"
 #include "Task.h"
 #include "Logger.h"
+#include "scenemanager.h"
+#include "mainmenuscene.h"
+
 #include <string>
 
 int main(int argc, char *argv[])
@@ -31,13 +34,15 @@ int main(int argc, char *argv[])
 	execute({ MakeTask("Generating workspace", [&]{ generateWorkspace(projectName); }) });
 
 	execute({
-		MakeTask("Generating CMakeLists.txt", [&]{ generateCMakeLists(projectName, { "main", "BE/KeyManager", "BE/MouseManager", "BE/Time", "BE/Cronometer", "BE/Random", projectName }); }),
+		MakeTask("Generating CMakeLists.txt", [&]{ generateCMakeLists(projectName, { "main", "BE/KeyManager", "BE/MouseManager", "BE/Time", "BE/Cronometer", "BE/Random", "BE/SceneManager", "MainMenuScene", projectName }); }),
 		MakeTask("Generating KeyManager class", []{ generateKeyManager(); }),
 		MakeTask("Generating MouseManager class", []{ generateMouseManager(); }),
 		MakeTask("Generating Game class", []{ generateGameClass(); }),
 		MakeTask("Generating Time class", []{ generateTimeClass(); }),
 		MakeTask("Generating Cronometer class", []{ generateCronometerClass(); }),
 		MakeTask("Generating Random class", []{ generateRandomClass(); }),
+		MakeTask("Generating SceneManager class", []{ generateSceneManager(); }),
+		MakeTask("Generating MainMenuScene class", []{ generateMainMenuScene(); }),
 		MakeTask("Generating " + projectName + " class", [&]{ generateProjectNameClass(projectName); }),
 		MakeTask("Generating src/main.cpp", [&]{ generateMain(projectName); }),
 		MakeTask("Generating config/config.h.in", [&]{ generateConfigFile(projectName); })

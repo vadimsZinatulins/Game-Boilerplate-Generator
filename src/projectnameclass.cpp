@@ -18,8 +18,6 @@ void generateProjectNameClassHeader(const std::string &projectName)
 		"",
 		"	void initialize();",
 		"	void shutdown();",
-		"	void update();",
-		"	void render(SDL_Renderer *renderer);",
 		"};"
 	});
 }
@@ -28,12 +26,14 @@ void generateProjectNameClassSource(const std::string &projectName)
 {
 	mkfile("src/" + projectName + ".cpp", {
 		"#include \"" + projectName + ".h\"",
+		"#include \"MainMenuScene.h\"",
+		"#include \"BE/SceneManager.h\"",
 		"",
 		"#include <SDL2/SDL.h>",
 		"",
 		"void " + projectName + "::initialize()",
 		"{",
-		"",
+		"	BE::SceneManager::getInstance().pushScene<MainMenuScene>();",
 		"}",
 		"",
 		"void " + projectName + "::shutdown()",
@@ -41,15 +41,6 @@ void generateProjectNameClassSource(const std::string &projectName)
 		"",
 		"}",
 		"",
-		"void " + projectName + "::update()",
-		"{",
-		"",
-		"}",
-		"",
-		"void " + projectName + "::render(SDL_Renderer *renderer)"
-		"{",
-		"",
-		"}"
 	});
 }
 
