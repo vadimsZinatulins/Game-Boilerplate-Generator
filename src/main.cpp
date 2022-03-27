@@ -16,9 +16,10 @@
 #include "mainmenuscene.h"
 
 #include "CMakeFile.h"
+#include "Config.h"
 #include "KeyManager.h"
 #include "MouseManager.h"
-#include "Config.h"
+#include "Time.h"
 
 #include <string>
 
@@ -62,9 +63,11 @@ int main(int argc, char *argv[])
 			config.createFile();
 		}),
 		MakeTask("Generating KeyManager Class", []{ KeyManager().generate();	}),
-		MakeTask("Generating MouseManager Class", []{ MouseManager().generate(); })
+		MakeTask("Generating MouseManager Class", []{ MouseManager().generate(); }),
+		MakeTask("Generating Time Class", []{ Time().generate(); })
 	});
 
+	Log() << "\tcd " << projectName << " && cmake -E chdir build/ cmake .. && ln -s build/compile_commands.json . && cmake --build build/\n\n";
 	/*
 	execute({
 		MakeTask("Generating CMakeLists.txt", [&]{ generateCMakeLists(projectName, { "main", "BE/KeyManager", "BE/MouseManager", "BE/Time", "BE/Cronometer", "BE/Random", "BE/SceneManager", "MainMenuScene", projectName }); }),
@@ -89,7 +92,6 @@ int main(int argc, char *argv[])
 	Log() << "\tcmake --build build/\n";
 	Log() << "\tbin/" << projectName + "\n\n";
 	Log() << "Complete command:\n";
-	Log() << "\tcd " << projectName << " && cmake -E chdir build/ cmake .. && ln -s build/compile_commands.json . && cmake --build build/\n\n";
 	Log() << "And change the both config/config.h.in and CMakeLists.txt files as you want. Have fun!\n\n";
 	*/
 

@@ -31,6 +31,7 @@ add_executable(
 	${PROJECT_SOURCE_DIR}/src/KeyManager.cpp
 	${PROJECT_SOURCE_DIR}/src/MouseManager.cpp
 	${PROJECT_SOURCE_DIR}/src/Config.cpp
+	${PROJECT_SOURCE_DIR}/src/Time.cpp
 
 	${PROJECT_SOURCE_DIR}/src/workspace.cpp
 	${PROJECT_SOURCE_DIR}/src/cmakelists.cpp
