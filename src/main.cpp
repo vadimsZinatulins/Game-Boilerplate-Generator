@@ -17,6 +17,8 @@
 
 #include "CMakeFile.h"
 #include "KeyManager.h"
+#include "MouseManager.h"
+#include "Config.h"
 
 #include <string>
 
@@ -41,19 +43,26 @@ int main(int argc, char *argv[])
 			CMakeFile cmakefile;
 			cmakefile.setProjectName(projectName);
 			cmakefile.setVersion(1, 0);
-			cmakefile.addFileToCompile("main");
+			// cmakefile.addFileToCompile("main");
 			cmakefile.addFileToCompile("BE/KeyManager");
 			cmakefile.addFileToCompile("BE/MouseManager");
-			cmakefile.addFileToCompile("BE/Time");
-			cmakefile.addFileToCompile("BE/Cronometer");
-			cmakefile.addFileToCompile("BE/Random");
-			cmakefile.addFileToCompile("BE/SceneManager");
-			cmakefile.addFileToCompile("BE/MainMenuScene");
-			cmakefile.addFileToCompile(projectName);
+			// cmakefile.addFileToCompile("BE/Time");
+			// cmakefile.addFileToCompile("BE/Cronometer");
+			// cmakefile.addFileToCompile("BE/Random");
+			// cmakefile.addFileToCompile("BE/SceneManager");
+			// cmakefile.addFileToCompile("BE/MainMenuScene");
+			// cmakefile.addFileToCompile(projectName);
 
 			cmakefile.createFile();
 		}),
-		MakeTask("Generating KeyManagerClass", []{ KeyManager().generate();	})
+		MakeTask("Generating config/config.h.in file", [&]{ 
+			Config config;
+			config.setProjectName(projectName);
+
+			config.createFile();
+		}),
+		MakeTask("Generating KeyManager Class", []{ KeyManager().generate();	}),
+		MakeTask("Generating MouseManager Class", []{ MouseManager().generate(); })
 	});
 
 	/*
