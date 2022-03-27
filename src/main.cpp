@@ -16,6 +16,7 @@
 #include "mainmenuscene.h"
 
 #include "CMakeFile.h"
+#include "KeyManager.h"
 
 #include <string>
 
@@ -36,7 +37,7 @@ int main(int argc, char *argv[])
 	execute({ MakeTask("Generating workspace", [&]{ generateWorkspace(projectName); }) });
 
 	execute({
-		MakeTask("Generatic CMakeLists.txt", [&]{
+		MakeTask("Generating CMakeLists.txt", [&]{
 			CMakeFile cmakefile;
 			cmakefile.setProjectName(projectName);
 			cmakefile.setVersion(1, 0);
@@ -51,8 +52,10 @@ int main(int argc, char *argv[])
 			cmakefile.addFileToCompile(projectName);
 
 			cmakefile.createFile();
-		})
+		}),
+		MakeTask("Generating KeyManagerClass", []{ KeyManager().generate();	})
 	});
+
 	/*
 	execute({
 		MakeTask("Generating CMakeLists.txt", [&]{ generateCMakeLists(projectName, { "main", "BE/KeyManager", "BE/MouseManager", "BE/Time", "BE/Cronometer", "BE/Random", "BE/SceneManager", "MainMenuScene", projectName }); }),
