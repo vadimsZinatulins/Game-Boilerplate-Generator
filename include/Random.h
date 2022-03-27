@@ -2,16 +2,16 @@
 
 #include "utils/Class.h"
 
-class Cronometer
+class Random
 {
 public:
-	Cronometer();
-	~Cronometer();
+	Random();
+	~Random();
 
 	void generate() const;
 private:
 	void generateHeader() const;
 	void generateSource() const;
 
-	Class m_class { "Cronometer" };
+	Class m_class { "Random" };
 };

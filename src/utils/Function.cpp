@@ -48,7 +48,7 @@ void write(const Function::Declaration &declaration, std::stringstream &out, std
 	std::string def = func.m_returnType + " " + func.m_parentName + func.m_name;
 	trim(def);
 
-	out << std::string(position, '\t') << def << '\t';
+	out << std::string(position, '\t') << def << '\n';
 	out << std::string(position, '\t') << "{\n";
 	write(func.m_body, out, position + 1);
 	out << std::string(position, '\t') << "}\n";

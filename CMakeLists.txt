@@ -33,6 +33,7 @@ add_executable(
 	${PROJECT_SOURCE_DIR}/src/Config.cpp
 	${PROJECT_SOURCE_DIR}/src/Time.cpp
 	${PROJECT_SOURCE_DIR}/src/Cronometer.cpp
+	${PROJECT_SOURCE_DIR}/src/Random.cpp
 
 	${PROJECT_SOURCE_DIR}/src/workspace.cpp
 	${PROJECT_SOURCE_DIR}/src/cmakelists.cpp
