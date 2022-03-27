@@ -27,6 +27,8 @@ add_executable(
     ${PROJECT_SOURCE_DIR}/src/utils/Namespace.cpp
     ${PROJECT_SOURCE_DIR}/src/utils/File.cpp
 
+	${PROJECT_SOURCE_DIR}/src/CMakeFile.cpp
+
 	${PROJECT_SOURCE_DIR}/src/workspace.cpp
 	${PROJECT_SOURCE_DIR}/src/cmakelists.cpp
 	${PROJECT_SOURCE_DIR}/src/keymanager.cpp
