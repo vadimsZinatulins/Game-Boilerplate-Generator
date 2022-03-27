@@ -1,17 +1,17 @@
 #pragma once
 
-#include "utils/Class.h"
+#include <string>
 
 class KeyManager
 {
 public:
-	KeyManager();
-	~KeyManager();
+	KeyManager() = default;
+	~KeyManager() = default;
 
 	void generate() const;
 private:
 	void generateHeader() const;
 	void generateSource() const;
 
-	Class m_class { "KeyManager" };
+	std::string m_className { "KeyManager" };
 };

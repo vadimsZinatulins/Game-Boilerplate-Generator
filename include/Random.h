@@ -1,17 +1,17 @@
 #pragma once
 
-#include "utils/Class.h"
+#include <string>
 
 class Random
 {
 public:
-	Random();
-	~Random();
+	Random() = default;
+	~Random() = default;
 
 	void generate() const;
 private:
 	void generateHeader() const;
 	void generateSource() const;
 
-	Class m_class { "Random" };
+	std::string m_className { "Random" };
 };

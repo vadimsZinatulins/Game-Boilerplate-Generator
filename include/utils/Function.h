@@ -4,37 +4,15 @@
 #include "utils/Instruction.h"
 #include "utils/WritableContent.h"
 
-#include "utils/StringTrim.h"
-
-#include <sstream>
-#include <type_traits>
-
-struct Class;
-
 struct Function
 {
-	struct Definition { const Function &function;	};
-	struct Declaration { const Function &function; };
-
-	Function(Instruction preModifier, Instruction returnType, Instruction name, Instruction postModifier, WritableContent body);
+	Function(Instruction templateData, Instruction signature, WritableContent body);
 	~Function();
 
-	Definition defenition() const; 
-	Declaration declaration() const;
-
-	void setParentName(std::string name);
-
-	Instruction m_preModifier;
-	Instruction m_returnType;
-	Instruction m_name;
-	Instruction m_postModifier;
+	Instruction m_template;
+	Instruction m_signature;
 	WritableContent m_body;
-
-	std::string m_parentName;
 };
 
 template<>
-void write(const Function::Definition &definition, std::stringstream &out, std::size_t position);
-
-template<>
-void write(const Function::Declaration &declaration, std::stringstream &out, std::size_t position);
+void write(const Function &function, std::stringstream &out, std::size_t position);

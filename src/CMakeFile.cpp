@@ -1,6 +1,7 @@
 #include "CMakeFile.h"
 #include "utils/Instruction.h"
 #include "utils/File.h"
+
 #include <sstream>
 
 void CMakeFile::setVersion(std::size_t major, std::size_t minor)

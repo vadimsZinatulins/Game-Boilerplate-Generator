@@ -1,19 +1,17 @@
 #pragma once
 
-#include "utils/Class.h"
-
 #include <string>
 
 class MouseManager
 {
 public:
-	MouseManager();
-	~MouseManager();
+	MouseManager() = default;
+	~MouseManager() = default;
 
 	void generate() const;
 private:
 	void generateHeader() const;
 	void generateSource() const;
 
-	Class m_class { "MouseManager" };
+	std::string m_className { "MouseManager" };
 };

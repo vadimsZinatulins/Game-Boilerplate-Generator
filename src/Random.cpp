@@ -4,49 +4,6 @@
 #include "utils/Function.h"
 #include "utils/Namespace.h"
 
-Random::Random() 
-{ 
-	m_class.addAttribute("Random(int seed);", Class::Modifiers::Public);
-	m_class.addAttribute("Random();", Class::Modifiers::Public);
-	m_class.addAttribute("~Random();", Class::Modifiers::Public);
-	m_class.addAttribute("std::mt19937 m_engine;", Class::Modifiers::Private);
-
-	{
-		Function nextInt("", "int", "nextInt()", "", { "return nextInt(0, std::numeric_limits<int>::max());" });
-		m_class.addMethod(nextInt, Class::Modifiers::Public);
-	}
-
-	{
-		Function nextInt("", "int", "nextInt(int max)", "", { "return nextInt(0, max);"});
-		m_class.addMethod(nextInt, Class::Modifiers::Public);
-	}
-
-	{
-		Function nextInt("", "int", "nextInt(int min, int max)", "", { "return std::uniform_int_distribution<int>(min, max)(m_engine);" });
-		m_class.addMethod(nextInt, Class::Modifiers::Public);
-	}
-
-	{
-		Function nextFloat("", "float", "nextFloat()", "", { "return nextFloat(0, std::numeric_limits<float>::max());" });
-		m_class.addMethod(nextFloat, Class::Modifiers::Public);
-	}
-
-	{
-		Function nextFloat("", "float", "nextFloat(float max)", "", { "return nextFloat(0, max);" });
-		m_class.addMethod(nextFloat, Class::Modifiers::Public);
-	}
-
-	{
-		Function nextFloat("", "float", "nextFloat(float min, float max)", "", { "return std::uniform_real_distribution<float>(min, max)(m_engine);" });
-		m_class.addMethod(nextFloat, Class::Modifiers::Public);
-	}
-}
-
-Random::~Random() 
-{
-
-}
-
 void Random::generate() const
 {
 	generateHeader();
@@ -55,22 +12,44 @@ void Random::generate() const
 
 void Random::generateHeader() const
 {
-	Namespace ns("BE", { m_class.definition() });
-
-	File("include/BE/Random.h", { "#pragma once\n", "#include <random>" }, { ns }).write();
+	File("include/BE/" + m_className + ".h", {
+		"#pragma once\n",
+		"#include <random>"
+	}, {
+		Namespace("BE", {
+			Class(m_className, {
+				"Random(int seed);",
+				"Random();",
+				"~Random();",
+				"",
+				"int nextInt();",
+				"int nextInt(int max);",
+				"int nextInt(int min, int max);",
+				"",
+				"float nextFloat();",
+				"float nextFloat(float max);",
+				"float nextFloat(float min, float max);"
+			}, {}, { "std::mt19937 m_engine;" })
+		})
+	}).write();
 }
 
 void Random::generateSource() const
 {
-	Namespace ns("BE", { 
+	File("src/BE/" + m_className + ".cpp", { 
+		"#include \"" + m_className + ".h\"\n"
+		"#include <limits>",
+	}, {
 		"Random::Random(int seed) : m_engine(seed) { }",
 		"Random::Random() : m_engine(std::random_device()()) { }",
-		"Random::~Random() { }\n",
-		m_class.declaration() 
-	});
-
-	File("src/BE/Random.cpp", {
-		"#include \"BE/Random.h\"\n",
-		"#include <limits>",
-	}, { ns }).write();
+		"Random::~Random() { }",
+		"",
+		"int Random::nextInt() { return nextInt(0, std::numeric_limits<int>::max()); }",
+		"int Random::nextInt(int max) { return nextInt(0, max); }",
+		"int Random::nextInt(int min, int max) { return std::uniform_int_distribution<int>(min, max)(m_engine); }",
+		"",
+		"float Random::nextFloat() { return nextFloat(0, std::numeric_limits<float>::max()); }",
+		"float Random::nextFloat(float max) { return nextFloat(0, max); }",
+		"float Random::nextFloat(float min, float max) { return std::uniform_real_distribution<float>(min, max)(m_engine); }"
+	}).write();
 }
