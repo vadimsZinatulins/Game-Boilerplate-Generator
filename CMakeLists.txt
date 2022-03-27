@@ -14,6 +14,19 @@ find_package(Threads REQUIRED)
 add_executable(
 	${PROJECT_NAME} 
 	${PROJECT_SOURCE_DIR}/src/main.cpp
+
+    ${PROJECT_SOURCE_DIR}/src/utils/StringTrim.cpp
+    ${PROJECT_SOURCE_DIR}/src/utils/Conditional.cpp
+    ${PROJECT_SOURCE_DIR}/src/utils/ForStatement.cpp
+    ${PROJECT_SOURCE_DIR}/src/utils/Function.cpp
+    ${PROJECT_SOURCE_DIR}/src/utils/IfStatement.cpp
+    ${PROJECT_SOURCE_DIR}/src/utils/Instruction.cpp
+    ${PROJECT_SOURCE_DIR}/src/utils/WhileStatement.cpp
+    ${PROJECT_SOURCE_DIR}/src/utils/WritableContent.cpp
+    ${PROJECT_SOURCE_DIR}/src/utils/Class.cpp
+    ${PROJECT_SOURCE_DIR}/src/utils/Namespace.cpp
+    ${PROJECT_SOURCE_DIR}/src/utils/File.cpp
+
 	${PROJECT_SOURCE_DIR}/src/workspace.cpp
 	${PROJECT_SOURCE_DIR}/src/cmakelists.cpp
 	${PROJECT_SOURCE_DIR}/src/keymanager.cpp
