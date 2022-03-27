@@ -20,6 +20,7 @@
 #include "KeyManager.h"
 #include "MouseManager.h"
 #include "Time.h"
+#include "Cronometer.h"
 
 #include <string>
 
@@ -47,8 +48,8 @@ int main(int argc, char *argv[])
 			// cmakefile.addFileToCompile("main");
 			cmakefile.addFileToCompile("BE/KeyManager");
 			cmakefile.addFileToCompile("BE/MouseManager");
-			// cmakefile.addFileToCompile("BE/Time");
-			// cmakefile.addFileToCompile("BE/Cronometer");
+			cmakefile.addFileToCompile("BE/Time");
+			cmakefile.addFileToCompile("BE/Cronometer");
 			// cmakefile.addFileToCompile("BE/Random");
 			// cmakefile.addFileToCompile("BE/SceneManager");
 			// cmakefile.addFileToCompile("BE/MainMenuScene");
@@ -64,7 +65,8 @@ int main(int argc, char *argv[])
 		}),
 		MakeTask("Generating KeyManager Class", []{ KeyManager().generate();	}),
 		MakeTask("Generating MouseManager Class", []{ MouseManager().generate(); }),
-		MakeTask("Generating Time Class", []{ Time().generate(); })
+		MakeTask("Generating Time Class", []{ Time().generate(); }),
+		MakeTask("Generating Cronometer Class", []{ Cronometer().generate(); })
 	});
 
 	Log() << "\tcd " << projectName << " && cmake -E chdir build/ cmake .. && ln -s build/compile_commands.json . && cmake --build build/\n\n";
