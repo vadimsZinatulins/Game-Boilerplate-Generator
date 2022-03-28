@@ -16,18 +16,18 @@ void Cronometer::generateHeader() const
 	File("include/BE/" + m_className + ".h", { "#pragma once\n" }, {
 		Namespace("BE", {
 			Class(m_className, {
-				m_className + " = default;",
-				"~" + m_className + " = default;",
+				m_className + "() = default;",
+				"~" + m_className + "() = default;",
 				"",
 				"void start();",
 				"void stop();",
 				"void resume();",
 				"void restart();",
 				"",
-				"unsigned int getSeconds(); const",
-				"unsigned int getMilliseconds(); const",
+				"unsigned int getSeconds() const;",
+				"unsigned int getMilliseconds() const;",
 				"",
-				"bool isRunning(); const",
+				"bool isRunning() const;",
 			}, {}, {
 				"unsigned int m_startTime { 0 };",
 				"unsigned int m_stopTime { 0 };",
@@ -41,7 +41,8 @@ void Cronometer::generateHeader() const
 void Cronometer::generateSource() const
 {
 	File("src/BE/" + m_className + ".cpp", {
-		"#include \"" + m_className + ".h\"\n",
+		"#include \"BE/" + m_className + ".h\"",
+		"",
 		"#include <SDL2/SDL.h>"
 	}, {
 		Namespace("BE", {

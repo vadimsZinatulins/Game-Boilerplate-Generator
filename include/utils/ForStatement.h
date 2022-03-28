@@ -9,6 +9,10 @@ struct ForStatement : public Conditional
 		Conditional("for", initialization + "; " + condition + "; " + increment, std::move(body))
 	{ }
 
+	ForStatement(Instruction condition, WritableContent body) : 
+		Conditional("for", std::move(condition), std::move(body))
+	{ }
+
 	~ForStatement() { }
 };
 

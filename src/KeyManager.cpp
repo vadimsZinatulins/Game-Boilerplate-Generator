@@ -17,6 +17,7 @@ void KeyManager::generateHeader() const
 {
 	File("include/BE/" + m_className + ".h", {
 		"#pragma once"
+		"",
 	}, {
 		Namespace("BE", {
 			"using Key = unsigned int;"
@@ -44,8 +45,8 @@ void KeyManager::generateHeader() const
 					"unsigned char m_size { 0 };"
 				}),
 				"",
-				m_className + " = default;",
-				"~" + m_className + " = default;",
+				m_className + "() = default;",
+				"~" + m_className + "() = default;",
 				"",
 				"void update();",
 				"",
@@ -61,7 +62,7 @@ void KeyManager::generateHeader() const
 
 void KeyManager::generateSource() const
 {
-	File("src/BE/" + m_className + ".cpp", { "#include \"" + m_className + ".h\"" }, {
+	File("src/BE/" + m_className + ".cpp", { "#include \"BE/" + m_className + ".h\"" }, {
 		Namespace("BE", {
 			Function("", m_className + " &" + m_className + "::getInstance()", {
 				"static KeyManager instance;",

@@ -1,12 +1,12 @@
 #pragma once
 
-#include "utils/Class.h"
+#include <string>
 
 class SceneManager
 {
 public:
-	SceneManager();
-	~SceneManager();
+	SceneManager() = default;
+	~SceneManager() = default;
 
 	void generate() const;
 private:
@@ -14,7 +14,6 @@ private:
 	void generateSceneManagerSource() const;
 
 	void generateSceneHeader() const;
-	void generateSceneSource() const;
 
-	Class m_class { "SceneManager" };
+	std::string m_className { "SceneManager" };
 };

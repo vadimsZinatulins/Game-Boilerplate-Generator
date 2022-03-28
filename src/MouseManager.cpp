@@ -56,7 +56,7 @@ void MouseManager::generateHeader() const
 
 void MouseManager::generateSource() const
 {
-	File("src/BE/" + m_className + ".cpp", { "#include \"" + m_className + ".h\"" }, {
+	File("src/BE/" + m_className + ".cpp", { "#include \"BE/" + m_className + ".h\"" }, {
 		Namespace("BE", {
 			Function("", "MouseManager &MouseManager::getInstance()", {
 				"static MouseManager instance;",

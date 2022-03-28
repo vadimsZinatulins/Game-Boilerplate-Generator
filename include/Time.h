@@ -1,17 +1,17 @@
 #pragma once
 
-#include "utils/Class.h"
+#include <string>
 
 class Time
 {
 public:
-	Time();
-	~Time();
+	Time() = default;
+	~Time() = default;
 
 	void generate() const;
 private:
 	void generateHeader() const;
 	void generateSource() const;
 
-	Class m_class { "Time" };
+	std::string m_className { "Time" };
 };
