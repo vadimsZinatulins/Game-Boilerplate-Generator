@@ -13,6 +13,9 @@ void SceneManager::generate() const
 	generateSceneManagerSource();
 
 	generateSceneHeader();
+
+	generateMainMenuSceneHeader();
+	generateMainMenuSceneSource();
 }
 
 void SceneManager::generateSceneManagerHeader() const
@@ -126,6 +129,40 @@ void SceneManager::generateSceneHeader() const
 				"virtual void render(SDL_Renderer *renderer) = 0;"
 			}, {}, {})
 		})
+	}).write();
+}
+
+void SceneManager::generateMainMenuSceneHeader() const
+{
+	File("include/MainMenuScene.h", {
+		"#pragma once",
+		"",
+		"#include \"BE/IScene.h\"",
+	}, {
+		Class("MainMenuScene : public BE::IScene", {
+			"void initialize() override;",
+			"void shutdown() override;",
+			"",
+			"void update() override;",
+			"void render(SDL_Renderer *renderer) override;"
+		}, {}, {})
+	}).write();
+}
+
+void SceneManager::generateMainMenuSceneSource() const
+{
+	File("src/MainMenuScene.cpp", {
+		"#include \"MainMenuScene.h\"",
+		"",
+		"#include <SDL2/SDL.h>"
+	}, {
+		Function("", "void MainMenuScene::initialize()", { "" }),
+		"",
+		Function("", "void MainMenuScene::shutdown()", { "" }),
+		"",
+		Function("", "void MainMenuScene::update()", { "" }),
+		"",
+		Function("", "void MainMenuScene::render(SDL_Renderer *renderer)", { "" })
 	}).write();
 }
 
