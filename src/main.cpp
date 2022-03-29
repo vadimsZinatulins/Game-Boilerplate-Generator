@@ -28,24 +28,35 @@
 #include "MainFile.h"
 
 #include <string>
+#include <vector>
 
 int main(int argc, char *argv[])
 {
-	Log() << "Running gbgen version: " + std::to_string(MAJOR_VERSION) + "." + std::to_string(MINOR_VERSION) + "\n\n";
+	std::vector<std::string> args(&argv[0], &argv[0 + argc]);
 
-	if(argc != 2)
+	if(args.size() < 2)
 	{
 		Log() << "Wrong argument count\n";
-		Log() << "Usage: gbgen [PROJECT_NAME]\n";
+		Log() << "Usage: gbgen [--build-output|-bo] <PROJECT_NAME>\n";
 
 		return 1;
 	}
 
-	std::string projectName(argv[1]);
+	std::size_t nameIndex = 1;
+	bool printArg = true;
 
-	execute({ MakeTask("Generating workspace", [&]{ generateWorkspace(projectName); }) });
+	if(args[1] == "--build-output" || args[1] == "-bo")
+	{
+		nameIndex = 2;
+		printArg = false;
+	}
+	else Log() << "Running gbgen version: " + std::to_string(MAJOR_VERSION) + "." + std::to_string(MINOR_VERSION) + "\n\n";
 
-	execute({
+	std::string projectName(std::move(args[nameIndex]));
+
+	execute(printArg, { MakeTask("Generating workspace", [&]{ generateWorkspace(projectName); }) });
+
+	execute(printArg, {
 		MakeTask("Generating CMakeLists.txt", [&]{
 			CMakeFile cmakefile;
 			cmakefile.setProjectName(projectName);
@@ -79,15 +90,19 @@ int main(int argc, char *argv[])
 		MakeTask("Generating main file", [&]{ MainFile(projectName).generate(); })
 	});
 
-	Log() << "\nDone! You can now run the following commands:\n";
-	Log() << "\tcd " + projectName + '\n';
-	Log() << "\tcmake -E chdir build/ cmake ..\n";
-	Log() << "\tln -s build/compile_commands.json .\n";
-	Log() << "\tcmake --build build/\n";
-	Log() << "\tbin/" << projectName + "\n\n";
-	Log() << "Complete command:\n";
-	Log() << "\tcd " << projectName << " && cmake -E chdir build/ cmake .. && ln -s build/compile_commands.json . && cmake --build build/\n\n";
-	Log() << "And change the both config/config.h.in and CMakeLists.txt files as you want. Have fun!\n\n";
+	if(printArg) 
+	{
+		Log() << "\nDone! You can now run the following commands:\n";
+		Log() << "\tcd " + projectName + '\n';
+		Log() << "\tcmake -E chdir build/ cmake ..\n";
+		Log() << "\tln -s build/compile_commands.json .\n";
+		Log() << "\tcmake --build build/\n";
+		Log() << "\tbin/" << projectName + "\n\n";
+		Log() << "Complete command:\n";
+		Log() << "\tcd " << projectName << " && cmake -E chdir build/ cmake .. && ln -s build/compile_commands.json . && cmake --build build/\n\n";
+		Log() << "And change the both config/config.h.in and CMakeLists.txt files as you want. Have fun!\n\n";
+	}
+	else Log() << "cd " << projectName << " && cmake -E chdir build/ cmake .. && ln -s build/compile_commands.json . && cmake --build build/";
 
 	return 0;
 }
