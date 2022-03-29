@@ -1,9 +1,11 @@
 #include "Game.h"
+#include "utils/Case.h"
 #include "utils/Class.h"
 #include "utils/File.h"
 #include "utils/Function.h"
 #include "utils/IfStatement.h"
 #include "utils/Namespace.h"
+#include "utils/SwitchStatement.h"
 #include "utils/WhileStatement.h"
 
 void Game::generate() const
@@ -17,11 +19,8 @@ void Game::generateHeader() const
 	File("include/BE/" + m_className + ".h", {
 		"#pragma once",
 		"",
-		"#include \"BE/Time.h\"",
-		"#include \"BE/KeyManager.h\"",
-		"#include \"BE/MouseManager.h\"",
 		"#include \"BE/SceneManager.h\"",
-		"#include \"BE/config.h\"",
+		"#include \"config.h\"",
 		"",
 		"#include <SDL2/SDL.h>"
 	}, {
@@ -74,16 +73,20 @@ void Game::generateHeader() const
 void Game::generateSource() const
 {
 	File("src/BE/" + m_className + ".cpp", {
-		"#include \"BE/" + m_className + ".h\""
+		"#include \"BE/" + m_className + ".h\"",
+		"#include \"BE/Time.h\"\n",
+		"#include \"BE/KeyManager.h\"",
+		"#include \"BE/MouseManager.h\"",
+		"#include \"BE/SceneManager.h\""
 	}, {
 		Namespace("BE", {
-			Function("", "void run()", {
+			Function("template<typename T>", "void Game<T>::run()", {
 				"init();",
 				"loop();",
 				"close();"
 			}),
 			"",
-			Function("", "void loop()", {
+			Function("template<typename T>", "void Game<T>::loop()", {
 				"auto &keys = KeyManager::getInstance();",
 				"auto &mouse = MouseManager::getInstance();",
 				"auto &scenes = SceneManager::getInstance();",
@@ -97,6 +100,14 @@ void Game::generateSource() const
 					"mouse.update();",
 					"",
 					WhileStatement("SDL_PollEvent(&e)", {
+						SwitchStatement("e.type", {
+							Case("SDL_QUIT", { "scenes.popAllScenes();" }), "",
+							Case("SDL_KEYDOWN", { "keys.keyPressed(e.key.keysym.sym);" }), "",
+							Case("SDL_KEYUP", { "keys.keyReleased(e.key.keysym.sym);" }), "",
+							Case("SDL_MOUSEBUTTONDOWN", { "mouse.buttonPressed(static_cast<MouseButton>(e.button.button));" }), "",
+							Case("SDL_MOUSEBUTTONUP", { "mouse.buttonReleased(static_cast<MouseButton>(e.button.button));" }), "",
+							Case("SDL_MOUSEMOTION", { "mouse.mouseMoved(e.motion.x, e.motion.y, e.motion.xrel, e.motion.yrel);" }), ""
+						}), ""
 					}),
 					"",
 					"scene->update();",

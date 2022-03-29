@@ -2,6 +2,7 @@
 
 #include "utils/Conditional.h"
 #include "utils/WritableContent.h"
+
 #include <sstream>
 
 struct SwitchStatement : public Conditional
@@ -14,4 +15,4 @@ struct SwitchStatement : public Conditional
 };
 
 template<>
-void write(const SwitchStatement &ifStatement, std::stringstream &out, std::size_t position);
+void write(const SwitchStatement &switchStatement, std::stringstream &out, std::size_t position);

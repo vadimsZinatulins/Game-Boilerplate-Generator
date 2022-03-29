@@ -23,6 +23,8 @@
 #include "Cronometer.h"
 #include "Random.h"
 #include "SceneManager.h"
+#include "Game.h"
+#include "ProjectClass.h"
 
 #include <string>
 
@@ -47,15 +49,16 @@ int main(int argc, char *argv[])
 			CMakeFile cmakefile;
 			cmakefile.setProjectName(projectName);
 			cmakefile.setVersion(1, 0);
-			// cmakefile.addFileToCompile("main");
 			cmakefile.addFileToCompile("BE/KeyManager");
 			cmakefile.addFileToCompile("BE/MouseManager");
 			cmakefile.addFileToCompile("BE/Time");
 			cmakefile.addFileToCompile("BE/Cronometer");
 			cmakefile.addFileToCompile("BE/Random");
 			cmakefile.addFileToCompile("BE/SceneManager");
-			// cmakefile.addFileToCompile("BE/MainMenuScene");
-			// cmakefile.addFileToCompile(projectName);
+			cmakefile.addFileToCompile("BE/Game");
+			cmakefile.addFileToCompile("MainMenuScene");
+			cmakefile.addFileToCompile(projectName);
+			// cmakefile.addFileToCompile("main");
 
 			cmakefile.createFile();
 		}),
@@ -70,7 +73,9 @@ int main(int argc, char *argv[])
 		MakeTask("Generating Time Class", []{ Time().generate(); }),
 		MakeTask("Generating Cronometer Class", []{ Cronometer().generate(); }),
 		MakeTask("Generating Random Class", []{ Random().generate(); }),
-		MakeTask("Generating SceneManager Class", []{ SceneManager().generate(); })
+		MakeTask("Generating SceneManager Class", []{ SceneManager().generate(); }),
+		MakeTask("Generating Game Class", []{ Game().generate(); }),
+		MakeTask("Generating " + projectName + " Class", [&]{ ProjectClass(projectName).generate(); })
 	});
 
 	Log() << "\tcd " << projectName << " && cmake -E chdir build/ cmake .. && ln -s build/compile_commands.json . && cmake --build build/\n\n";

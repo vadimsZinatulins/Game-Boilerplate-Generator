@@ -16,12 +16,14 @@ add_executable(
 	${PROJECT_SOURCE_DIR}/src/main.cpp
 
     ${PROJECT_SOURCE_DIR}/src/utils/StringTrim.cpp
-    ${PROJECT_SOURCE_DIR}/src/utils/Conditional.cpp
-    ${PROJECT_SOURCE_DIR}/src/utils/ForStatement.cpp
-    ${PROJECT_SOURCE_DIR}/src/utils/Function.cpp
-    ${PROJECT_SOURCE_DIR}/src/utils/IfStatement.cpp
     ${PROJECT_SOURCE_DIR}/src/utils/Instruction.cpp
+    ${PROJECT_SOURCE_DIR}/src/utils/Conditional.cpp
+    ${PROJECT_SOURCE_DIR}/src/utils/IfStatement.cpp
+    ${PROJECT_SOURCE_DIR}/src/utils/ForStatement.cpp
     ${PROJECT_SOURCE_DIR}/src/utils/WhileStatement.cpp
+	${PROJECT_SOURCE_DIR}/src/utils/SwitchStatement.cpp
+	${PROJECT_SOURCE_DIR}/src/utils/Case.cpp
+    ${PROJECT_SOURCE_DIR}/src/utils/Function.cpp
     ${PROJECT_SOURCE_DIR}/src/utils/WritableContent.cpp
     ${PROJECT_SOURCE_DIR}/src/utils/Class.cpp
     ${PROJECT_SOURCE_DIR}/src/utils/Namespace.cpp
@@ -35,6 +37,8 @@ add_executable(
 	${PROJECT_SOURCE_DIR}/src/Cronometer.cpp
 	${PROJECT_SOURCE_DIR}/src/Random.cpp
 	${PROJECT_SOURCE_DIR}/src/SceneManager.cpp
+	${PROJECT_SOURCE_DIR}/src/Game.cpp
+	${PROJECT_SOURCE_DIR}/src/ProjectClass.cpp
 
 	${PROJECT_SOURCE_DIR}/src/workspace.cpp
 	${PROJECT_SOURCE_DIR}/src/cmakelists.cpp
