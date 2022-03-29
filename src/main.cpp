@@ -13,6 +13,7 @@
 #include "Game.h"
 #include "ProjectClass.h"
 #include "MainFile.h"
+#include "TextureManager.h"
 
 #include <string>
 #include <vector>
@@ -54,6 +55,7 @@ int main(int argc, char *argv[])
 			cmakefile.addFileToCompile("BE/Cronometer");
 			cmakefile.addFileToCompile("BE/Random");
 			cmakefile.addFileToCompile("BE/SceneManager");
+			cmakefile.addFileToCompile("BE/TextureManager");
 			cmakefile.addFileToCompile("MainMenuScene");
 			cmakefile.addFileToCompile(projectName);
 			cmakefile.addFileToCompile("main");
@@ -72,6 +74,7 @@ int main(int argc, char *argv[])
 		MakeTask("Generating Cronometer Class", []{ Cronometer().generate(); }),
 		MakeTask("Generating Random Class", []{ Random().generate(); }),
 		MakeTask("Generating SceneManager Class", []{ SceneManager().generate(); }),
+		MakeTask("Generating TextureManager file", []{ TextureManager().generate(); }),
 		MakeTask("Generating Game Class", []{ Game().generate(); }),
 		MakeTask("Generating " + projectName + " Class", [&]{ ProjectClass(projectName).generate(); }),
 		MakeTask("Generating main file", [&]{ MainFile(projectName).generate(); })

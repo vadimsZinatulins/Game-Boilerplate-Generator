@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
 # Game Boilerplate Generator
-project(gbgen VERSION 3.5)
+project(gbgen VERSION 3.6)
 
 configure_file(${PROJECT_SOURCE_DIR}/config/config.h.in ${PROJECT_SOURCE_DIR}/include/config.h)
 
@@ -40,6 +40,7 @@ add_executable(
 	${PROJECT_SOURCE_DIR}/src/Game.cpp
 	${PROJECT_SOURCE_DIR}/src/ProjectClass.cpp
 	${PROJECT_SOURCE_DIR}/src/MainFile.cpp
+	${PROJECT_SOURCE_DIR}/src/TextureManager.cpp
 
 	${PROJECT_SOURCE_DIR}/src/workspace.cpp
 	${PROJECT_SOURCE_DIR}/src/Task.cpp

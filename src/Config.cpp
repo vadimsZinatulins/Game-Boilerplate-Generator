@@ -26,6 +26,14 @@ void Config::createFile() const
 		"",
 		"// Maximum frame rate",
 		"#define FRAME_CAP 60",
+		"",
+		"// Initializations:",
+		"// \tJPG = 1",
+		"// \tPNG = 2",
+		"// \tTIF = 4",
+		"// \tWEBP = 8",
+		"// These can be ORed together (example: 1 | 4)",
+		"#define IMAGE_INIT 2"
 	}, {}).write();
 }
 

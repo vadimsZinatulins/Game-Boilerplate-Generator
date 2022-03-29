@@ -22,9 +22,11 @@ void Game::generateHeader() const
 		"#include \"BE/KeyManager.h\"",
 		"#include \"BE/MouseManager.h\"",
 		"#include \"BE/SceneManager.h\"",
+		"#include \"BE/TextureManager.h\"",
 		"#include \"config.h\"",
 		"",
-		"#include <SDL2/SDL.h>"
+		"#include <SDL2/SDL.h>",
+		"#include <SDL2/SDL_image.h>"
 	}, {
 		Namespace("BE", {
 			"template<typename T>",
@@ -41,9 +43,12 @@ void Game::generateHeader() const
 			}, {}, {
 				Function("", "void init()", {
 					"SDL_Init(SDL_INIT_VIDEO);",
+					"IMG_Init(IMAGE_INIT);",
 					"",
 					"m_window = SDL_CreateWindow(SCREEN_TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);",
 					"m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED);",
+					"",
+					"TextureManager::getInstance().init(m_renderer);",
 					"",
 					"SDL_SetRenderDrawColor(m_renderer, 0x00f, 0x00f, 0x00f, 0xff);",
 					"",
@@ -81,7 +86,9 @@ void Game::generateHeader() const
 						"SDL_RenderClear(m_renderer);",
 						"scene->render(m_renderer);",
 						"SDL_RenderPresent(m_renderer);"
-					})
+					}),
+					"",
+					"TextureManager::getInstance().clear();"
 				}),
 				"",
 				Function("", "void close()", {
