@@ -1,6 +1,12 @@
 #include "utils/SwitchStatement.h"
 #include <string>
 
+SwitchStatement::SwitchStatement(Instruction condition, WritableContent body) : 
+	Conditional("switch", std::move(condition), std::move(body))
+{ }
+
+SwitchStatement::~SwitchStatement() { }
+
 template<>
 void write(const SwitchStatement &switchStatement, std::stringstream &out, std::size_t position)
 {

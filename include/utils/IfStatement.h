@@ -6,12 +6,8 @@
 
 struct IfStatement : public Conditional
 {
-	IfStatement(Instruction condition, WritableContent body, WritableContent elseBody = {}) : 
-		Conditional("if", std::move(condition), std::move(body)),
-		m_elseBody(elseBody)
-	{ }
-
-	~IfStatement() { }
+	IfStatement(Instruction condition, WritableContent body, WritableContent elseBody = {});
+	~IfStatement();
 
 	WritableContent m_elseBody;
 };

@@ -7,11 +7,8 @@
 
 struct SwitchStatement : public Conditional
 {
-	SwitchStatement(Instruction condition, WritableContent body) : 
-		Conditional("switch", std::move(condition), std::move(body))
-	{ }
-
-	~SwitchStatement() { }
+	SwitchStatement(Instruction condition, WritableContent body);
+	~SwitchStatement();
 };
 
 template<>
