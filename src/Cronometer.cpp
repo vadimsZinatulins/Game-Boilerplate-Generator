@@ -72,15 +72,15 @@ void Cronometer::generateSource() const
 				"m_startTime = SDL_GetTicks();"
 			}),
 			"",
-			Function("", "unsigned int " + m_className + "::getSeconds()", {
+			Function("", "unsigned int " + m_className + "::getSeconds() const", {
 				"return ((m_isRunning ? SDL_GetTicks() : m_stopTime) - m_startTime) / 1000;",
 			}),
 			"",
-			Function("", "unsigned int " + m_className + "::getMilliseconds()", {
+			Function("", "unsigned int " + m_className + "::getMilliseconds() const", {
 				"return (m_isRunning ? SDL_GetTicks() : m_stopTime) - m_startTime;"
 			}),
 			"",
-			Function("", "bool " + m_className + "::isRunning()", {
+			Function("", "bool " + m_className + "::isRunning() const", {
 				"return m_isRunning;"
 			})
 		})

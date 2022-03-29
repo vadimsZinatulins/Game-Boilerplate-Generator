@@ -12,8 +12,6 @@ public:
 
 	void generate() const;
 private:
-	friend void write(const ProjectClass &project, std::stringstream &out, std::size_t position);
-
 	void generateHeader() const;
 	void generateSource() const;
 

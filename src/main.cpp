@@ -1,19 +1,19 @@
 #include "config.h"
 #include "workspace.h"
-#include "cmakelists.h"
-#include "keymanager.h"
-#include "mousemanager.h"
-#include "timeclass.h"
-#include "cronometerclass.h"
-#include "game.h"
-#include "projectnameclass.h"
-#include "mainfile.h"
-#include "configfile.h"
-#include "randomclass.h"
+// #include "cmakelists.h"
+// #include "keymanager.h"
+// #include "mousemanager.h"
+// #include "timeclass.h"
+// #include "cronometerclass.h"
+// #include "game.h"
+// #include "projectnameclass.h"
+// #include "mainfile.h"
+// #include "configfile.h"
+// #include "randomclass.h"
 #include "Task.h"
 #include "Logger.h"
-#include "scenemanager.h"
-#include "mainmenuscene.h"
+// #include "scenemanager.h"
+// #include "mainmenuscene.h"
 
 #include "CMakeFile.h"
 #include "Config.h"
@@ -25,6 +25,7 @@
 #include "SceneManager.h"
 #include "Game.h"
 #include "ProjectClass.h"
+#include "MainFile.h"
 
 #include <string>
 
@@ -58,7 +59,7 @@ int main(int argc, char *argv[])
 			cmakefile.addFileToCompile("BE/Game");
 			cmakefile.addFileToCompile("MainMenuScene");
 			cmakefile.addFileToCompile(projectName);
-			// cmakefile.addFileToCompile("main");
+			cmakefile.addFileToCompile("main");
 
 			cmakefile.createFile();
 		}),
@@ -75,26 +76,9 @@ int main(int argc, char *argv[])
 		MakeTask("Generating Random Class", []{ Random().generate(); }),
 		MakeTask("Generating SceneManager Class", []{ SceneManager().generate(); }),
 		MakeTask("Generating Game Class", []{ Game().generate(); }),
-		MakeTask("Generating " + projectName + " Class", [&]{ ProjectClass(projectName).generate(); })
+		MakeTask("Generating " + projectName + " Class", [&]{ ProjectClass(projectName).generate(); }),
+		MakeTask("Generating main file", [&]{ MainFile(projectName).generate(); })
 	});
-
-	Log() << "\tcd " << projectName << " && cmake -E chdir build/ cmake .. && ln -s build/compile_commands.json . && cmake --build build/\n\n";
-	/*
-	execute({
-		MakeTask("Generating CMakeLists.txt", [&]{ generateCMakeLists(projectName, { "main", "BE/KeyManager", "BE/MouseManager", "BE/Time", "BE/Cronometer", "BE/Random", "BE/SceneManager", "MainMenuScene", projectName }); }),
-		MakeTask("Generating KeyManager class", []{ generateKeyManager(); }),
-		MakeTask("Generating MouseManager class", []{ generateMouseManager(); }),
-		MakeTask("Generating Game class", []{ generateGameClass(); }),
-		MakeTask("Generating Time class", []{ generateTimeClass(); }),
-		MakeTask("Generating Cronometer class", []{ generateCronometerClass(); }),
-		MakeTask("Generating Random class", []{ generateRandomClass(); }),
-		MakeTask("Generating SceneManager class", []{ generateSceneManager(); }),
-		MakeTask("Generating MainMenuScene class", []{ generateMainMenuScene(); }),
-		MakeTask("Generating " + projectName + " class", [&]{ generateProjectNameClass(projectName); }),
-		MakeTask("Generating src/main.cpp", [&]{ generateMain(projectName); }),
-		MakeTask("Generating config/config.h.in", [&]{ generateConfigFile(projectName); })
-	});
-
 
 	Log() << "\nDone! You can now run the following commands:\n";
 	Log() << "\tcd " + projectName + '\n';
@@ -103,8 +87,8 @@ int main(int argc, char *argv[])
 	Log() << "\tcmake --build build/\n";
 	Log() << "\tbin/" << projectName + "\n\n";
 	Log() << "Complete command:\n";
+	Log() << "\tcd " << projectName << " && cmake -E chdir build/ cmake .. && ln -s build/compile_commands.json . && cmake --build build/\n\n";
 	Log() << "And change the both config/config.h.in and CMakeLists.txt files as you want. Have fun!\n\n";
-	*/
 
 	return 0;
 }
