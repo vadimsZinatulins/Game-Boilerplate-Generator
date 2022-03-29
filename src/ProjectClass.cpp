@@ -19,11 +19,11 @@ void ProjectClass::generateHeader() const
 		"",
 		"#include \"BE/Game.h\""
 	}, {
-		Class("Test final : public BE::Game<Test>", {
-			"Test() = default;",
-			"~Test() = default;"
+		Class(m_projectName + " final : public BE::Game<Test>", {
+			m_projectName + "() = default;",
+			"~" + m_projectName + "() = default;"
 		}, {}, {
-			"friend class BE::Game<Test>;",
+			"friend class BE::Game<" + m_projectName + ">;",
 			"",
 			"void initialize();",
 			"void shutdown();"
