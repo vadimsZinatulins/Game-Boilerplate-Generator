@@ -19,7 +19,7 @@ void ProjectClass::generateHeader() const
 		"",
 		"#include \"BE/Game.h\""
 	}, {
-		Class(m_projectName + " final : public BE::Game<Test>", {
+		Class(m_projectName + " final : public BE::Game<" + m_projectName + ">", {
 			m_projectName + "() = default;",
 			"~" + m_projectName + "() = default;"
 		}, {}, {
@@ -40,7 +40,7 @@ void ProjectClass::generateSource() const
 		"",
 		"#include <SDL2/SDL.h>"
 	}, {
-		Function("", "void Test::initialize()", { "BE::SceneManager::getInstance().pushScene<MainMenuScene>();" }),
-		Function("", "void Test::shutdown()", { "" })
+		Function("", "void " + m_projectName + "::initialize()", { "BE::SceneManager::getInstance().pushScene<MainMenuScene>();" }),
+		Function("", "void " + m_projectName + "::shutdown()", { "" })
 	}).write();
 }
