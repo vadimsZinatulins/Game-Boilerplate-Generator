@@ -5,11 +5,8 @@
 
 struct WhileStatement : public Conditional
 {
-	WhileStatement(Instruction condition, WritableContent body) : 
-		Conditional("while", std::move(condition), std::move(body))
-	{ }
-
-	~WhileStatement() { }
+	WhileStatement(Instruction condition, WritableContent body);
+	~WhileStatement();
 };
 
 template<>

@@ -8,12 +8,8 @@
 
 struct Conditional
 {
-	Conditional(Instruction signature, Instruction condition, WritableContent body) :
-		m_condition(signature + "(" + condition + ")"),
-		m_body(std::move(body))
-	{ }
-
-	virtual ~Conditional() { }
+	Conditional(Instruction signature, Instruction condition, WritableContent body);
+	virtual ~Conditional();
 
 	Instruction m_condition;
 	WritableContent m_body;

@@ -1,4 +1,5 @@
 #include "utils/Case.h"
+
 #include <string>
 
 Case::Case(Instruction condition, WritableContent body) :

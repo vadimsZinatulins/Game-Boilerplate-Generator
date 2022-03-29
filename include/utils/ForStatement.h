@@ -5,15 +5,10 @@
 
 struct ForStatement : public Conditional
 {
-	ForStatement(Instruction initialization, Instruction condition, Instruction increment, WritableContent body) : 
-		Conditional("for", initialization + "; " + condition + "; " + increment, std::move(body))
-	{ }
+	ForStatement(Instruction initialization, Instruction condition, Instruction increment, WritableContent body);
+	ForStatement(Instruction condition, WritableContent body);
 
-	ForStatement(Instruction condition, WritableContent body) : 
-		Conditional("for", std::move(condition), std::move(body))
-	{ }
-
-	~ForStatement() { }
+	~ForStatement();
 };
 
 template<>
