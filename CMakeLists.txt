@@ -42,19 +42,6 @@ add_executable(
 	${PROJECT_SOURCE_DIR}/src/MainFile.cpp
 
 	${PROJECT_SOURCE_DIR}/src/workspace.cpp
-	# ${PROJECT_SOURCE_DIR}/src/cmakelists.cpp
-	# ${PROJECT_SOURCE_DIR}/src/keymanager.cpp
-	# ${PROJECT_SOURCE_DIR}/src/mousemanager.cpp
-	# ${PROJECT_SOURCE_DIR}/src/game.cpp
-	# ${PROJECT_SOURCE_DIR}/src/projectnameclass.cpp
-	# ${PROJECT_SOURCE_DIR}/src/mainfile.cpp
-	# ${PROJECT_SOURCE_DIR}/src/configfile.cpp
-	# ${PROJECT_SOURCE_DIR}/src/timeclass.cpp
-	# ${PROJECT_SOURCE_DIR}/src/cronometerclass.cpp
-	# ${PROJECT_SOURCE_DIR}/src/randomclass.cpp
-	# ${PROJECT_SOURCE_DIR}/src/utils.cpp
-	# ${PROJECT_SOURCE_DIR}/src/scenemanager.cpp
-	# ${PROJECT_SOURCE_DIR}/src/mainmenuscene.cpp
 	${PROJECT_SOURCE_DIR}/src/Task.cpp
 )
 
