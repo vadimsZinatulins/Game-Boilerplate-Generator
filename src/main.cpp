@@ -56,7 +56,6 @@ int main(int argc, char *argv[])
 			cmakefile.addFileToCompile("BE/Cronometer");
 			cmakefile.addFileToCompile("BE/Random");
 			cmakefile.addFileToCompile("BE/SceneManager");
-			cmakefile.addFileToCompile("BE/Game");
 			cmakefile.addFileToCompile("MainMenuScene");
 			cmakefile.addFileToCompile(projectName);
 			cmakefile.addFileToCompile("main");
