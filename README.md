@@ -23,12 +23,12 @@ To build this project you need CMake. Also to build the generated project you al
 sudo apt-get install cmake
 ```
 
-### SDL2
+### SDL2 & SDL2-Image
 
-SDL2 is not a direct dependency but the generated project uses it so to take advantage of the generated project you need to install SDL2
+SDL2 is not a direct dependency (neither is SDL2-Image) but the generated project uses it so to take advantage of the generated project you need to install SDL2 and SDL2-Image.
 
 ```bash
-sudo apt-get install libsdl2-dev
+sudo apt-get install libsdl2-dev libsdl2-image-dev
 ```
 
 ## Installation
@@ -81,117 +81,62 @@ MyGame/
 '-CMakeLists.txt
 ```
 
-### Generated files
+### In code usage
 
-#### Game
+**Quick Start**
 
-This is the core class that initializes and shutdowns the SDL2, manages the main loop and processes SDL2 events. Your **MyGame** class inherite from **Game** class (**ATTENTION:** It uses [CRTP](https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern)). 
-
-Usage:
+Your game logic should be inside *Scenes*. The generated code already provide *MainMenuScene* and it is a good startup point.
 
 ```cpp
-#include "BE/Game.h"
+#include "MainMenuScene.h"
 
 #include <SDL2/SDL.h>
 
-// Minimum required class definition to create a game
-class MyGame final : public BE::Game<MyGame>
+void MainMenuScene::initialize()
 {
-public:
-  MyGame() = default;
-  MyGame() = default;
-
-private:
-  friend class BE::Game<MyGame>;
-
-  // All these methods bellow need to be implemented otherwise it wont compile
-  void initialize() 
-  {
-    // Initialization stuff goes here
-  }
-
-  void shutdown()
-  {
-    // Shutdown stuff goes here
-  }
-
-  void update()
-  {
-    // This method is called every frame to update the game state
-  }
-
-  void render(SDL_Renderer *renderer)
-  {
-    // This method is called to render the game
-  }
-};
-
-// SDL2 requires that you declare your main function with argc and argv
-int main(int argc, char *argv[])
-{
-  MyGame().run();
-
-  return 0;
+    // This method only gets called once before update and render 
+    // This is a good place to initialize stuff, such as textures
+    // or other resources.
 }
+
+void MainMenuScene::shutdown()
+{
+    // This method only gets calle once after update and render
+    // This is a good place to do cleanup, such os closing files 
+    // or freeing resources
+}
+
+void MainMenuScene::update()
+{
+	// This gets called once every frame.
+    // The game logic should go here.
+}
+
+void MainMenuScene::render(SDL_Renderer *renderer)
+{
+	// This gets called once every frame.
+    // All the rendering should be done here
+}
+
 ```
 
-#### Time
-
-This class caps the frame rate (that is defined in _config/config.h.in_ file) and is used to obtain the delta time (time passed since last update call). This is needed to make your game [framerate-independent](https://gameprogrammingpatterns.com/game-loop.html).
-
-Usage:
+The *Scenes* are managed as [stack](https://en.wikipedia.org/wiki/Stack_(abstract_data_type)) and the top *Scene* is considered to be the current active *Scene*. *Scenes* are _initialized_ and _shutdown_ when they are pushed and pop to/from the stack respectively. They are managed by *SceneManager* class as such:
 
 ```cpp
-#include "BE/Time.h"
+// Pushes a scene to the stack and will be the current
+// active scene next frame (the initialization of the Scene will be
+// called at the end of the current frame).
+BE::SceneManager::getInstance().pushScene<PauseScene>();
 
-// ...
+// Pops the current active scene from the stack and the current active
+// scene in the next frame will be the next scene in the stack (the 
+// shutdown of the scene will be called at the end of the current frame).
+BE::SceneManager::getInstance().popScene();
 
-void MyGame::update()
-{
-  float deltaTime = BE::Time::getDeltaTime();
-
-  // ...
-
-  // Make player fall
-  player->position.x += 9.81f * deltaTime;
-}
+// Pops the current scene from the stack and pushes the new scene (at
+// the end of the frame the initialization of the new scene will be
+// called and then the shutdown)
+BE::SceneManager::getInstance().swap<LevelTwoScene>();
 ```
 
-#### KeyManager
-
-This class manages all key inputs from user (i.e. keyboard input) and you can obtain 3 differentes key states: **Pressed**, **Down**, **Released**.
-
-- Pressed is when user just pressed the key and not caring whether the key is still being pressed or released, it just indicates if the key was pressed.
-
-- Down is when the user presses the key and hold it down.
-
-- Released is when the user releases the key.
-
-Unfortunately, to get the state of a key you need to use [SDL_Keycode](https://wiki.libsdl.org/SDL_Keycode) to identify which's key state you want to check.
-
-Usage:
-
-```cpp
-#include "BE/KeyManager.h"
-
-void MyGame::update()
-{
-    BE::KeyManager &input = BE::KeyManager::getInstance();
-
-    // ...
-
-    if(input.isKeyPressed(SDLK_SPACE))
-        player->jump();
-
-    if(input.isKeyDown(SDLK_w))
-        player-moveForward();
-
-    // Same movements for a, s and d
-    // ...
-
-    if(input.isKeyReleased(SDLK_e))
-        player->pickupNearestItem();
-
-    // ...
-} 
-```
+For player input you can use *KeyManager* and *MouseManager* classes for input from keyboard and input from mouse respectively.
