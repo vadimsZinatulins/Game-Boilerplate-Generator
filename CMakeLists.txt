@@ -3,59 +3,11 @@ cmake_minimum_required(VERSION 3.10)
 # Game Boilerplate Generator
 project(gbgen VERSION 3.6)
 
-configure_file(${PROJECT_SOURCE_DIR}/config/config.h.in ${PROJECT_SOURCE_DIR}/include/config.h)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
-set(CMAKE_EXPORT_COMPILE_COMMANDS On)
+set(CMAKE_EXPORT_COMPILE_COMMANDS True)
 
 find_package(Threads REQUIRED)
 
-add_executable(
-	${PROJECT_NAME} 
-	${PROJECT_SOURCE_DIR}/src/main.cpp
-
-	${PROJECT_SOURCE_DIR}/src/utils/StringTrim.cpp
-	${PROJECT_SOURCE_DIR}/src/utils/Instruction.cpp
-	${PROJECT_SOURCE_DIR}/src/utils/Conditional.cpp
-	${PROJECT_SOURCE_DIR}/src/utils/IfStatement.cpp
-	${PROJECT_SOURCE_DIR}/src/utils/ForStatement.cpp
-	${PROJECT_SOURCE_DIR}/src/utils/WhileStatement.cpp
-	${PROJECT_SOURCE_DIR}/src/utils/SwitchStatement.cpp
-	${PROJECT_SOURCE_DIR}/src/utils/Case.cpp
-	${PROJECT_SOURCE_DIR}/src/utils/Function.cpp
-	${PROJECT_SOURCE_DIR}/src/utils/WritableContent.cpp
-	${PROJECT_SOURCE_DIR}/src/utils/Class.cpp
-	${PROJECT_SOURCE_DIR}/src/utils/Namespace.cpp
-	${PROJECT_SOURCE_DIR}/src/utils/File.cpp
-
-	${PROJECT_SOURCE_DIR}/src/CMakeFile.cpp
-	${PROJECT_SOURCE_DIR}/src/KeyManager.cpp
-	${PROJECT_SOURCE_DIR}/src/MouseManager.cpp
-	${PROJECT_SOURCE_DIR}/src/Config.cpp
-	${PROJECT_SOURCE_DIR}/src/Time.cpp
-	${PROJECT_SOURCE_DIR}/src/Cronometer.cpp
-	${PROJECT_SOURCE_DIR}/src/Random.cpp
-	${PROJECT_SOURCE_DIR}/src/SceneManager.cpp
-	${PROJECT_SOURCE_DIR}/src/Game.cpp
-	${PROJECT_SOURCE_DIR}/src/ProjectClass.cpp
-	${PROJECT_SOURCE_DIR}/src/MainFile.cpp
-	${PROJECT_SOURCE_DIR}/src/TextureManager.cpp
-
-	${PROJECT_SOURCE_DIR}/src/workspace.cpp
-	${PROJECT_SOURCE_DIR}/src/Task.cpp
-)
-
-target_include_directories(
-	${PROJECT_NAME}
-	PUBLIC ${PROJECT_SOURCE_DIR}/include	
-)
-
-target_link_libraries(
-	${PROJECT_NAME}
-	${CMAKE_THREAD_LIBS_INIT}
-)
-
-set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
-
-install(TARGETS ${PROJECT_NAME} DESTINATION bin)
+add_subdirectory(src)
