@@ -1,6 +1,10 @@
 configure_file(config/config.h.in include/config.h)
 
 add_executable(gbgen
+	ArgsParser.cpp
+	writeHelp.cpp
+	ProjectListFiles.cpp
+	ProjectBuilder.cpp
 	main.cpp
 
 	utils/StringTrim.cpp
@@ -17,7 +21,6 @@ add_executable(gbgen
 	utils/Namespace.cpp
 	utils/File.cpp
 
-	CMakeFile.cpp
 	KeyManager.cpp
 	MouseManager.cpp
 	Config.cpp
@@ -34,9 +37,9 @@ add_executable(gbgen
 	Task.cpp
 )
 
-target_include_directories(gbgen PRIVATE include)
+target_include_directories(gbgen PRIVATE include include/generators)
 
-target_link_libraries(gbgen ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries(gbgen ${CMAKE_THREAD_LIBS_INIT} STM::SimpleTaskManager)
 
 # set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
 

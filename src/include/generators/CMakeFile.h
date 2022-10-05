@@ -3,6 +3,8 @@
 #include <string>
 #include <vector>
 
+namespace gbg::generators {
+
 class CMakeFile
 {
 public:
@@ -21,3 +23,5 @@ private:
 	std::string m_name { "" };
 	std::vector<std::string> m_filesToCompile { };
 };
+
+}

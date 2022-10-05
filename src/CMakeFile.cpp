@@ -4,6 +4,8 @@
 
 #include <sstream>
 
+namespace gbg::generators {
+
 void CMakeFile::setVersion(std::size_t major, std::size_t minor)
 {
 	m_majorVersion = major;
@@ -70,4 +72,6 @@ void CMakeFile::createFile() const
 		"# Set output directory",
 		"set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)",
 	}, {}).write();
+}
+
 }

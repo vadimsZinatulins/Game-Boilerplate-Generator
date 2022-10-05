@@ -2,4 +2,8 @@
 
 #include <string>
 
+namespace gbg::generators {
+
 void generateWorkspace(const std::string &projectName);
+
+}
