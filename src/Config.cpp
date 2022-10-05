@@ -1,12 +1,12 @@
 #include "Config.h"
 #include "utils/File.h"
+
 #include <sstream>
 #include <string>
 
 namespace gbg::generators {
 
-void Config::setProjectName(std::string name)
-{
+void Config::setProjectName(std::string name) {
 	m_projectName = name;
 }
 
@@ -15,7 +15,7 @@ void Config::setWithSDL2ImageExtra(bool flag) {
 }
 
 void Config::createFile() const {
-	File("src/config/config.h.in", {
+	File("config/config.h.in", {
 		"#pragma once",
 		"",
 		"// Set the major version for the project",

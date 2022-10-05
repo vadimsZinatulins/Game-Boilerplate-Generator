@@ -4,17 +4,17 @@
 #include "utils/Function.h"
 #include "utils/Namespace.h"
 
-void Time::generate() const
-{
+namespace gbg::generators {
+
+void Time::generate() const {
 	generateHeader();
 	generateSource();
 }
 
-void Time::generateHeader() const
-{
-	File("include/BE/" + m_className + ".h", { "#pragma once", "" }, {
-		Namespace("BE", {
-			Class(m_className, {
+void Time::generateHeader() const {
+	File("include/be/Time.h", { "#pragma once", "" }, {
+		Namespace("be", {
+			Class("Time", {
 				"static inline unsigned int getTicks() { return m_ticks; }",
 				"static inline float getDeltaTime() { return m_deltaTime; }"
 			}, {}, {
@@ -31,15 +31,14 @@ void Time::generateHeader() const
 	}).write();
 }
 
-void Time::generateSource() const
-{
-	File("src/BE/" + m_className + ".cpp", { 
-		"#include \"BE/" + m_className + ".h\"",
+void Time::generateSource() const {
+	File("src/be/Time.cpp", { 
+		"#include \"be/Time.h\"",
 		"#include \"config.h\"",
 		"",
 		"#include <SDL2/SDL.h>"
 	}, {
-		Namespace("BE", {
+		Namespace("be", {
 			"constexpr unsigned int MinTicksPerFrame = 1000 / FRAME_CAP;",
 			"",
 			"unsigned int Time::m_ticks = 0;",
@@ -59,3 +58,4 @@ void Time::generateSource() const
 	}).write();
 }
 
+}

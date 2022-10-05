@@ -1,9 +1,8 @@
 #pragma once
 
-#include <string>
+namespace gbg::generators {
 
-class Cronometer
-{
+class Cronometer {
 public:
 	Cronometer() = default;
 	~Cronometer() = default;
@@ -12,6 +11,7 @@ public:
 private:
 	void generateHeader() const;
 	void generateSource() const;
-
-	std::string m_className { "Cronometer" };
 };
+
+}
+

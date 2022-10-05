@@ -34,7 +34,6 @@ add_executable(gbgen
 	TextureManager.cpp
 
 	workspace.cpp
-	Task.cpp
 )
 
 target_include_directories(gbgen PRIVATE include include/generators)

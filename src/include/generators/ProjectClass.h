@@ -1,11 +1,10 @@
 #pragma once
 
-#include <cstddef>
-#include <sstream>
 #include <string>
 
-class ProjectClass
-{
+namespace gbg::generators {
+
+class ProjectClass {
 public:
 	ProjectClass(std::string projectName);
 	~ProjectClass();
@@ -17,3 +16,5 @@ private:
 
 	std::string m_projectName;
 };
+
+}

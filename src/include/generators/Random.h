@@ -1,17 +1,17 @@
 #pragma once
 
-#include <string>
+namespace gbg::generators {
 
-class Time
+class Random
 {
 public:
-	Time() = default;
-	~Time() = default;
+	Random() = default;
+	~Random() = default;
 
 	void generate() const;
 private:
 	void generateHeader() const;
 	void generateSource() const;
-
-	std::string m_className { "Time" };
 };
+
+}

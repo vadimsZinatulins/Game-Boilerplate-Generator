@@ -1,9 +1,8 @@
 #pragma once
 
-#include <string>
+namespace gbg::generators {
 
-class SceneManager
-{
+class SceneManager {
 public:
 	SceneManager() = default;
 	~SceneManager() = default;
@@ -17,6 +16,6 @@ private:
 
 	void generateMainMenuSceneHeader() const;
 	void generateMainMenuSceneSource() const;
-
-	std::string m_className { "SceneManager" };
 };
+
+}

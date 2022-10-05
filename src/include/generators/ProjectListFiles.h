@@ -5,15 +5,15 @@
 
 namespace gbg::generators {
 
-class ProjectListFiles
-{
+class ProjectListFiles {
 public:
 	ProjectListFiles() = default;
 	~ProjectListFiles() = default;
 
+	void setProjectName(std::string name);
+	void setWithSDL2ImageExtra(bool flag);
 	void setProjectVersion(std::size_t major, std::size_t minor = 0, std::size_t patch = 0, std::size_t tweak = 0);
 	void addFileToCompile(std::string newFile);
-	void setProjectName(std::string name);
 
 	void generateFiles() const;
 private:
@@ -32,6 +32,7 @@ private:
 
 	std::string m_name { "" };
 	std::vector<std::string> m_filesToCompile { };
+	bool m_withSDL2ImageExtra { false };
 };
 
 }

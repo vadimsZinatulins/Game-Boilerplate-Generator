@@ -1,9 +1,8 @@
 #pragma once
 
-#include <string>
+namespace gbg::generators {
 
-class TextureManager
-{
+class TextureManager {
 public:
 	TextureManager() = default;
 	~TextureManager() = default;
@@ -12,6 +11,6 @@ public:
 private:
 	void generateHeader() const;
 	void generateSource() const;
-
-	std::string m_className { "TextureManager" };
 };
+
+}

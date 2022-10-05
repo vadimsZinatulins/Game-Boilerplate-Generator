@@ -9,19 +9,17 @@
 
 namespace gbg::generators {
 
-void KeyManager::generate() const
-{
+void KeyManager::generate() const {
 	generateHeader();
 	generateSource();
 }
 
-void KeyManager::generateHeader() const
-{
+void KeyManager::generateHeader() const {
 	File("include/be/KeyManager.h", {
 		"#pragma once"
 		"",
 	}, {
-		Namespace("BE", {
+		Namespace("be", {
 			"using Key = unsigned int;"
 			"",
 			Class("KeyManager", {
@@ -62,10 +60,9 @@ void KeyManager::generateHeader() const
 	}).write();
 }
 
-void KeyManager::generateSource() const
-{
-	File("src/KeyManager.cpp", { "#include \"be/KeyManager.h\"" }, {
-		Namespace("BE", {
+void KeyManager::generateSource() const {
+	File("src/be/KeyManager.cpp", { "#include \"be/KeyManager.h\"" }, {
+		Namespace("be", {
 			Function("", "KeyManager &KeyManager::getInstance()", {
 				"static KeyManager instance;",
 				"return instance;"

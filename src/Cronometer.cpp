@@ -5,19 +5,19 @@
 #include "utils/IfStatement.h"
 #include "utils/Namespace.h"
 
-void Cronometer::generate() const
-{
+namespace gbg::generators {
+
+void Cronometer::generate() const {
 	generateHeader();
 	generateSource();
 }
 
-void Cronometer::generateHeader() const
-{
-	File("include/BE/" + m_className + ".h", { "#pragma once\n" }, {
-		Namespace("BE", {
-			Class(m_className, {
-				m_className + "() = default;",
-				"~" + m_className + "() = default;",
+void Cronometer::generateHeader() const {
+	File("include/be/Cronometer.h", { "#pragma once\n" }, {
+		Namespace("be", {
+			Class("Cronometer", {
+				"Cronometer() = default;",
+				"~Cronometer() = default;",
 				"",
 				"void start();",
 				"void stop();",
@@ -38,52 +38,52 @@ void Cronometer::generateHeader() const
 	}).write();
 }
 
-void Cronometer::generateSource() const
-{
-	File("src/BE/" + m_className + ".cpp", {
-		"#include \"BE/" + m_className + ".h\"",
+void Cronometer::generateSource() const {
+	File("src/be/Cronometer.cpp", {
+		"#include \"be/Cronometer.h\"",
 		"",
 		"#include <SDL2/SDL.h>"
 	}, {
-		Namespace("BE", {
-			Function("", "void " + m_className + "::start()", {
+		Namespace("be", {
+			Function("", "void Cronometer::start()", {
 				IfStatement("!m_isRunning", {
 					"m_isRunning = true;",
 					"m_startTime = SDL_GetTicks();"
 				})
 			}),
 			"",
-			Function("", "void " + m_className + "::stop()", {
+			Function("", "void Cronometer::stop()", {
 				IfStatement("m_isRunning", {
 					"m_stopTime = SDL_GetTicks();",
 					"m_isRunning = false;"
 				})
 			}),
 			"",
-			Function("", "void " + m_className + "::resume()", {
+			Function("", "void Cronometer::resume()", {
 				IfStatement("m_isRunning", {
 					"m_startTime += SDL_GetTicks() - m_stopTime;",
 					"m_isRunning = true;"
 				})
 			}),
 			"",
-			Function("", "void " + m_className + "::restart()", {
+			Function("", "void Cronometer::restart()", {
 				"m_isRunning = true;",
 				"m_startTime = SDL_GetTicks();"
 			}),
 			"",
-			Function("", "unsigned int " + m_className + "::getSeconds() const", {
+			Function("", "unsigned int Cronometer::getSeconds() const", {
 				"return ((m_isRunning ? SDL_GetTicks() : m_stopTime) - m_startTime) / 1000;",
 			}),
 			"",
-			Function("", "unsigned int " + m_className + "::getMilliseconds() const", {
+			Function("", "unsigned int Cronometer::getMilliseconds() const", {
 				"return (m_isRunning ? SDL_GetTicks() : m_stopTime) - m_startTime;"
 			}),
 			"",
-			Function("", "bool " + m_className + "::isRunning() const", {
+			Function("", "bool Cronometer::isRunning() const", {
 				"return m_isRunning;"
 			})
 		})
 	}).write();
 }
 
+}

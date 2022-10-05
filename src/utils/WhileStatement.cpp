@@ -8,7 +8,6 @@ WhileStatement::WhileStatement(Instruction condition, WritableContent body) :
 WhileStatement::~WhileStatement() { }
 
 template<>
-void write(const WhileStatement &whileStatement, std::stringstream &out, std::size_t position)
-{
+void write(const WhileStatement &whileStatement, std::stringstream &out, std::size_t position) {
 	write((Conditional&)(whileStatement), out, position);
 }

@@ -6,15 +6,15 @@
 #include "utils/IfStatement.h"
 #include "utils/Namespace.h"
 
-void TextureManager::generate() const
-{
+namespace gbg::generators {
+
+void TextureManager::generate() const {
 	generateHeader();
 	generateSource();
 }
 
-void TextureManager::generateHeader() const
-{
-	File("include/BE/" + m_className + ".h", {
+void TextureManager::generateHeader() const {
+	File("include/be/TextureManager.h", {
 		"#pragma once",
 		"",
 		"#include <unordered_map>",
@@ -23,8 +23,8 @@ void TextureManager::generateHeader() const
 		"struct SDL_Texture;",
 		"struct SDL_Renderer;",
 		"",
-		Namespace("BE", {
-			Class(m_className, {
+		Namespace("be", {
+			Class("TextureManager", {
 				"static TextureManager &getInstance();",
 				"",
 				"static SDL_Texture *loadOrGet(std::string path);"
@@ -47,15 +47,14 @@ void TextureManager::generateHeader() const
 	}).write();
 }
 
-void TextureManager::generateSource() const
-{
-	File("src/BE/" + m_className + ".cpp", {
-		"#include \"BE/" + m_className + ".h\"",
+void TextureManager::generateSource() const {
+	File("src/be/TextureManager.cpp", {
+		"#include \"be/TextureManager.h\"",
 		"",
 		"#include <SDL2/SDL.h>",
 		"#include <SDL2/SDL_image.h>",
 	}, {
-		Namespace("BE", {
+		Namespace("be", {
 			Function("", "TextureManager &TextureManager::getInstance()", {
 				"static TextureManager instance;",
 				"return instance;"
@@ -92,3 +91,4 @@ void TextureManager::generateSource() const
 	}).write();
 }
 
+}

@@ -5,8 +5,7 @@
 
 namespace gbg::generators {
 
-class CMakeFile
-{
+class CMakeFile {
 public:
 	CMakeFile() = default;
 	~CMakeFile() = default;

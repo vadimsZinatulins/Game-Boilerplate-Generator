@@ -1,8 +1,10 @@
 #pragma once
 
 #include <string>
-class MainFile
-{
+
+namespace gbg::generators {
+
+class MainFile {
 public:
 	MainFile(std::string projectName);
 	~MainFile();
@@ -13,3 +15,5 @@ private:
 
 	std::string m_projectName;
 };
+
+}

@@ -3,27 +3,28 @@
 #include "utils/File.h"
 #include "utils/Function.h"
 
+namespace gbg::generators {
+
+
 ProjectClass::ProjectClass(std::string projectName) : m_projectName(std::move(projectName)) { }
 ProjectClass::~ProjectClass() { }
 
-void ProjectClass::generate() const 
-{
+void ProjectClass::generate() const  {
 	generateHeader();
 	generateSource();
 }
 
-void ProjectClass::generateHeader() const
-{
+void ProjectClass::generateHeader() const {
 	File("include/" + m_projectName + ".h", {
 		"#pragma once",
 		"",
-		"#include \"BE/Game.h\""
+		"#include \"be/Game.h\""
 	}, {
-		Class(m_projectName + " final : public BE::Game<" + m_projectName + ">", {
+		Class(m_projectName + " final : public be::Game<" + m_projectName + ">", {
 			m_projectName + "() = default;",
 			"~" + m_projectName + "() = default;"
 		}, {}, {
-			"friend class BE::Game<" + m_projectName + ">;",
+			"friend class be::Game<" + m_projectName + ">;",
 			"",
 			"void initialize();",
 			"void shutdown();"
@@ -31,16 +32,17 @@ void ProjectClass::generateHeader() const
 	}).write();
 }
 
-void ProjectClass::generateSource() const
-{
+void ProjectClass::generateSource() const {
 	File("src/" + m_projectName + ".cpp", {
 		"#include \"" + m_projectName + ".h\"",
 		"#include \"MainMenuScene.h\"",
-		"#include \"BE/SceneManager.h\"",
+		"#include \"be/SceneManager.h\"",
 		"",
 		"#include <SDL2/SDL.h>"
 	}, {
-		Function("", "void " + m_projectName + "::initialize()", { "BE::SceneManager::getInstance().pushScene<MainMenuScene>();" }),
+		Function("", "void " + m_projectName + "::initialize()", { "be::SceneManager::getInstance().pushScene<MainMenuScene>();" }),
 		Function("", "void " + m_projectName + "::shutdown()", { "" })
 	}).write();
+}
+
 }

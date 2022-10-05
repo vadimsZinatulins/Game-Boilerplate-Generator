@@ -12,7 +12,7 @@ void generateWorkspace(const std::string &projectName) {
 	std::filesystem::current_path(std::filesystem::current_path().string() + "/" + projectName);
 
 	// Create the following directories
-	for(const auto &dir : { "src", "src/config", "src/include", "src/include/be" }) {
+	for(const auto &dir : { "src", "src/be", "config", "include", "include/be" }) {
 		std::filesystem::create_directory(dir);
 	}
 }

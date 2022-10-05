@@ -8,15 +8,11 @@
 File::File(std::string path, WritableContent includes, WritableContent content) :
 	m_path(std::move(path)),
 	m_includes(std::move(includes)),
-	m_content(std::move(content))
-{
-	
-}
+	m_content(std::move(content)) { }
 
 File::~File() { }
 
-void File::write() const
-{
+void File::write() const {
 	std::ofstream file(m_path);
 
 	std::stringstream fileContent;

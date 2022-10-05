@@ -7,8 +7,9 @@
 #include "utils/Namespace.h"
 #include "utils/WhileStatement.h"
 
-void SceneManager::generate() const
-{
+namespace gbg::generators {
+
+void SceneManager::generate() const {
 	generateSceneManagerHeader();
 	generateSceneManagerSource();
 
@@ -18,9 +19,8 @@ void SceneManager::generate() const
 	generateMainMenuSceneSource();
 }
 
-void SceneManager::generateSceneManagerHeader() const
-{
-	File("include/BE/" + m_className + ".h", {
+void SceneManager::generateSceneManagerHeader() const {
+	File("include/be/SceneManager.h", {
 		"#pragma once",
 		"",
 		"#include \"IScene.h\"",
@@ -28,8 +28,8 @@ void SceneManager::generateSceneManagerHeader() const
 		"#include <stack>",
 		"#include <vector>",
 	}, {
-		Namespace("BE", {
-			Class(m_className, {
+		Namespace("be", {
+			Class("SceneManager", {
 				"static SceneManager &getInstance();",
 				"",
 				Function("template<typename T>", "void pushScene()", {
@@ -63,10 +63,9 @@ void SceneManager::generateSceneManagerHeader() const
 	}).write();
 }
 
-void SceneManager::generateSceneManagerSource() const
-{
-	File("src/BE/" + m_className + ".cpp", { "#include \"BE/" + m_className + ".h\"", "" }, {
-		Namespace("BE", {
+void SceneManager::generateSceneManagerSource() const {
+	File("src/be/SceneManager.cpp", { "#include \"be/SceneManager.h\"", "" }, {
+		Namespace("be", {
 			Function("", "SceneManager &SceneManager::getInstance()", {
 				"static SceneManager instance;",
 				"return instance;"
@@ -112,12 +111,12 @@ void SceneManager::generateSceneManagerSource() const
 
 void SceneManager::generateSceneHeader() const
 {
-	File("include/BE/IScene.h", { 
+	File("include/be/IScene.h", { 
 		"#pragma once", 
 		"", 
 		"struct SDL_Renderer;",
 	}, {
-		Namespace("BE", {
+		Namespace("be", {
 			Class("IScene", {
 				"IScene() = default;",
 				"virtual ~IScene() = default;",
@@ -137,9 +136,9 @@ void SceneManager::generateMainMenuSceneHeader() const
 	File("include/MainMenuScene.h", {
 		"#pragma once",
 		"",
-		"#include \"BE/IScene.h\"",
+		"#include \"be/IScene.h\"",
 	}, {
-		Class("MainMenuScene : public BE::IScene", {
+		Class("MainMenuScene : public be::IScene", {
 			"void initialize() override;",
 			"void shutdown() override;",
 			"",
@@ -166,3 +165,4 @@ void SceneManager::generateMainMenuSceneSource() const
 	}).write();
 }
 
+}

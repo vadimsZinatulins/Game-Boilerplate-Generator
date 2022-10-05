@@ -1,16 +1,18 @@
 #pragma once
 
-#include <string>
+namespace gbg::generators {
 
-class Game
-{
+class Game {
 public:
 	Game() = default;
 	~Game() = default;
 
 	void generate() const;
+	void setWithSDL2ImageExtra(bool flag);
 private:
 	void generateHeader() const;
 
-	std::string m_className { "Game" };
+	bool m_withSDL2ImageExtra { false };
 };
+
+}

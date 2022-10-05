@@ -4,8 +4,7 @@
 
 namespace gbg::generators {
 
-class Config
-{
+class Config {
 public:
 	Config() = default;
 	~Config() = default;

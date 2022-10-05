@@ -8,29 +8,51 @@
 #include "utils/SwitchStatement.h"
 #include "utils/WhileStatement.h"
 
-void Game::generate() const
-{
+#include <sstream>
+
+namespace gbg::generators {
+
+void Game::generate() const {
 	generateHeader();
 }
 
-void Game::generateHeader() const
-{
-	File("include/BE/" + m_className + ".h", {
+void Game::setWithSDL2ImageExtra(bool flag) {
+	m_withSDL2ImageExtra = flag;
+}
+
+void Game::generateHeader() const {
+	std::stringstream sdl2ImageInclude;
+	std::stringstream sdl2ImageTextureInclude;
+	std::stringstream sdl2ImageTextureInit;
+	std::stringstream sdl2ImageTextureClear;
+	std::stringstream sdl2ImageInit;
+	std::stringstream sdl2ImageQuit;
+
+	if(m_withSDL2ImageExtra) {
+		sdl2ImageTextureInclude << "#include \"be/TextureManager.h\"";
+		sdl2ImageTextureClear << "TextureManager::getInstance().clear();";
+		sdl2ImageTextureInit << "TextureManager::getInstance().init(m_renderer);";
+		sdl2ImageInclude << "#include <SDL2/SDL_image.h>";
+		sdl2ImageInit << "IMG_Init(IMAGE_INIT);";
+		sdl2ImageQuit << "IMG_Quit();";
+	}
+
+	File("include/be/Game.h", {
 		"#pragma once",
+		sdl2ImageTextureInclude.str(),
+		"#include \"be/Time.h\"\n",
+		"#include \"be/KeyManager.h\"",
+		"#include \"be/MouseManager.h\"",
+		"#include \"be/SceneManager.h\"",
 		"",
-		"#include \"BE/Time.h\"\n",
-		"#include \"BE/KeyManager.h\"",
-		"#include \"BE/MouseManager.h\"",
-		"#include \"BE/SceneManager.h\"",
-		"#include \"BE/TextureManager.h\"",
 		"#include \"config.h\"",
 		"",
 		"#include <SDL2/SDL.h>",
-		"#include <SDL2/SDL_image.h>"
+		sdl2ImageInclude.str()
 	}, {
-		Namespace("BE", {
+		Namespace("be", {
 			"template<typename T>",
-			Class(m_className, {
+			Class("Game", {
 				"Game() = default;",
 				"~Game() = default;",
 				"",
@@ -43,12 +65,12 @@ void Game::generateHeader() const
 			}, {}, {
 				Function("", "void init()", {
 					"SDL_Init(SDL_INIT_VIDEO);",
-					"IMG_Init(IMAGE_INIT);",
+					sdl2ImageInit.str(),
 					"",
 					"m_window = SDL_CreateWindow(SCREEN_TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);",
 					"m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED);",
 					"",
-					"TextureManager::getInstance().init(m_renderer);",
+					sdl2ImageTextureInit.str(),
 					"",
 					"SDL_SetRenderDrawColor(m_renderer, 0x00f, 0x00f, 0x00f, 0xff);",
 					"",
@@ -88,7 +110,7 @@ void Game::generateHeader() const
 						"SDL_RenderPresent(m_renderer);"
 					}),
 					"",
-					"TextureManager::getInstance().clear();"
+					sdl2ImageTextureClear.str()
 				}),
 				"",
 				Function("", "void close()", {
@@ -104,6 +126,7 @@ void Game::generateHeader() const
 						"m_window = nullptr;"
 					}),
 					"",
+					sdl2ImageQuit.str(),
 					"SDL_Quit();"
 				}),
 				"",
@@ -114,3 +137,4 @@ void Game::generateHeader() const
 	}).write();
 }
 
+}

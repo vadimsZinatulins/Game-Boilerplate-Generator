@@ -4,21 +4,21 @@
 #include "utils/Function.h"
 #include "utils/Namespace.h"
 
-void Random::generate() const
-{
+namespace gbg::generators {
+
+void Random::generate() const {
 	generateHeader();
 	generateSource();
 }
 
-void Random::generateHeader() const
-{
-	File("include/BE/" + m_className + ".h", {
+void Random::generateHeader() const {
+	File("include/be/Random.h", {
 		"#pragma once",
 		""
 		"#include <random>"
 	}, {
-		Namespace("BE", {
-			Class(m_className, {
+		Namespace("be", {
+			Class("Random", {
 				"Random(int seed);",
 				"Random();",
 				"~Random();",
@@ -35,14 +35,13 @@ void Random::generateHeader() const
 	}).write();
 }
 
-void Random::generateSource() const
-{
-	File("src/BE/" + m_className + ".cpp", { 
-		"#include \"BE/" + m_className + ".h\"",
+void Random::generateSource() const {
+	File("src/be/Random.cpp", { 
+		"#include \"be/Random.h\"",
 		""
 		"#include <limits>",
 	}, {
-		Namespace("BE", {
+		Namespace("be", {
 			"Random::Random(int seed) : m_engine(seed) { }",
 			"Random::Random() : m_engine(std::random_device()()) { }",
 			"Random::~Random() { }",
@@ -56,4 +55,6 @@ void Random::generateSource() const
 			"float Random::nextFloat(float min, float max) { return std::uniform_real_distribution<float>(min, max)(m_engine); }"
 		})
 	}).write();
+}
+
 }

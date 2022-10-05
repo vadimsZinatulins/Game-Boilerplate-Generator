@@ -11,7 +11,6 @@ ForStatement::ForStatement(Instruction condition, WritableContent body) :
 ForStatement::~ForStatement() { }
 
 	template<>
-void write(const ForStatement &forStatement, std::stringstream &out, std::size_t position)
-{
+void write(const ForStatement &forStatement, std::stringstream &out, std::size_t position) {
 	write((Conditional&)(forStatement), out, position);
 }

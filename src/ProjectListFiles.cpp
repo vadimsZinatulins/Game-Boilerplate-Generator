@@ -5,6 +5,14 @@
 
 namespace gbg::generators {
 
+void ProjectListFiles::setProjectName(std::string name) {
+	m_name = name;
+}
+
+void ProjectListFiles::setWithSDL2ImageExtra(bool flag) {
+	m_withSDL2ImageExtra = flag;
+}
+
 void ProjectListFiles::setProjectVersion(std::size_t major, std::size_t minor, std::size_t patch, std::size_t tweak) {
 	m_projectMajorVersion = major;
 	m_projectMinorVersion = minor;
@@ -14,10 +22,6 @@ void ProjectListFiles::setProjectVersion(std::size_t major, std::size_t minor, s
 
 void ProjectListFiles::addFileToCompile(std::string file) {
 	m_filesToCompile.push_back(file);
-}
-
-void ProjectListFiles::setProjectName(std::string name) {
-	m_name = name;
 }
 
 void ProjectListFiles::generateFiles() const {
@@ -33,7 +37,7 @@ void ProjectListFiles::generateBaseListFile() const {
 		"cmake_minimum_required(VERSION 3.20)",
 		"",
 		"# Project name",
-		"project(" + m_name + " " + projectVersion + ")",
+		"project(" + m_name + " VERSION " + projectVersion + ")",
 		"",
 		"# C++ standard",
 		"set(CMAKE_CXX_STANDARD 20)",
@@ -41,6 +45,9 @@ void ProjectListFiles::generateBaseListFile() const {
 		"set(CMAKE_CXX_STANDARD_REQUIRED True)",
 		"# Generate compile commands (this is for vim)",
 		"set(CMAKE_EXPORT_COMPILE_COMMANDS True)",
+		"",
+		"# Project configuration file",
+		"configure_file(config/config.h.in \"${PROJECT_SOURCE_DIR}/include/config.h\")",
 		"",
 		"add_subdirectory(src)",
 
@@ -54,13 +61,12 @@ void ProjectListFiles::generateSrcListFile() const {
 
 	File("src/CMakeLists.txt", {
 		findLibraries,
-		"# Project configuration file",
-		"configure_file(config/config.h.in include/config.h)",
-		"",
 		"# Create the executable from following cpp files",
-		"add_executable(",
+		"add_executable(${PROJECT_NAME}",
 		sourceFiles,
 		")",
+		"",
+		"target_include_directories(${PROJECT_NAME} PRIVATE \"${PROJECT_SOURCE_DIR}/include\")",
 		"",
 		findLibraries,
 		linkLibraries,
@@ -89,9 +95,8 @@ std::string ProjectListFiles::generateProjectVersion() const {
 std::string ProjectListFiles::generateSourceFiles() const {
 	std::stringstream sourceFiles;
 
-	sourceFiles << "\t${PROJECT_NAME}";
 	for(const auto &srcFile : m_filesToCompile) {
-	   	sourceFiles << "\n\tsrc/" << srcFile << ".cpp";
+	   	sourceFiles << "\n\t" << srcFile << ".cpp";
 	}
 
 	return sourceFiles.str();
@@ -103,7 +108,7 @@ std::string ProjectListFiles::generateFindLibraries() const {
 	findLibraries << "# Find the SDL2 library\n";
 	findLibraries << "find_package(SDL2 REQUIRED)\n";
 
-	if(false) {
+	if(m_withSDL2ImageExtra) {
 		findLibraries << "# Find SDL2_image library\n";
 		findLibraries << "find_library(SDL2_IMAGE_LIBRARY SDL2_image)\n";
 	}
@@ -118,7 +123,7 @@ std::string ProjectListFiles::generateLinkLibraries() const {
 	linkLibraries << "target_link_libraries(${PROJECT_NAME}\n";
 	linkLibraries << "\tPUBLIC\n";
 	linkLibraries << "\t\t${SDL2_LIBRARIES}\n";
-	if(false) {
+	if(m_withSDL2ImageExtra) {
 		linkLibraries << "\t\t${SDL2_IMAGE_LIBRARY}\n";
 	}
 	linkLibraries << ")\n";
