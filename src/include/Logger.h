@@ -4,6 +4,8 @@
 #include <string>
 #include <iostream>
 
+namespace gbg {
+
 class Logger
 {
 public:
@@ -28,3 +30,4 @@ private:
 
 constexpr auto Log = Logger::getInstance;
 
+}

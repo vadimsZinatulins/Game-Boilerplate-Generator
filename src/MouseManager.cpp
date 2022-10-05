@@ -5,6 +5,8 @@
 #include "utils/Instruction.h"
 #include "utils/Namespace.h"
 
+namespace gbg::generators {
+
 void MouseManager::generate() const
 {
 	generateHeader();
@@ -13,11 +15,11 @@ void MouseManager::generate() const
 
 void MouseManager::generateHeader() const
 {
-	File("include/BE/" + m_className + ".h", { "#pragma once" }, {
+	File("include/MouseManager.h", { "#pragma once" }, {
 		Namespace("BE", {
 			"enum class MouseButton:char { Left = 1, Middle = 2, Right = 3 };",
 			"",
-			Class(m_className, {
+			Class("MouseManager", {
 				"static MouseManager &getInstance();",
 				"",
 				"bool isButtonPressed(MouseButton btn) const;",
@@ -56,7 +58,7 @@ void MouseManager::generateHeader() const
 
 void MouseManager::generateSource() const
 {
-	File("src/BE/" + m_className + ".cpp", { "#include \"BE/" + m_className + ".h\"" }, {
+	File("src/be/MouseManager.cpp", { "#include \"be/MouseManager.h\"" }, {
 		Namespace("BE", {
 			Function("", "MouseManager &MouseManager::getInstance()", {
 				"static MouseManager instance;",
@@ -98,3 +100,4 @@ void MouseManager::generateSource() const
 	}).write();
 }
 	
+}

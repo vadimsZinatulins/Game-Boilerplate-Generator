@@ -7,6 +7,8 @@
 #include "utils/Namespace.h"
 #include "utils/File.h"
 
+namespace gbg::generators {
+
 void KeyManager::generate() const
 {
 	generateHeader();
@@ -15,15 +17,15 @@ void KeyManager::generate() const
 
 void KeyManager::generateHeader() const
 {
-	File("include/BE/" + m_className + ".h", {
+	File("include/be/KeyManager.h", {
 		"#pragma once"
 		"",
 	}, {
 		Namespace("BE", {
 			"using Key = unsigned int;"
 			"",
-			Class(m_className, {
-				"static " + m_className + " &getInstance();",
+			Class("KeyManager", {
+				"static KeyManager &getInstance();",
 				"",
 				"bool isKeyPressed(Key key) const;",
 				"bool isKeyDown(Key key) const;",
@@ -45,8 +47,8 @@ void KeyManager::generateHeader() const
 					"unsigned char m_size { 0 };"
 				}),
 				"",
-				m_className + "() = default;",
-				"~" + m_className + "() = default;",
+				"KeyManager() = default;",
+				"~KeyManager() = default;",
 				"",
 				"void update();",
 				"",
@@ -62,9 +64,9 @@ void KeyManager::generateHeader() const
 
 void KeyManager::generateSource() const
 {
-	File("src/BE/" + m_className + ".cpp", { "#include \"BE/" + m_className + ".h\"" }, {
+	File("src/KeyManager.cpp", { "#include \"be/KeyManager.h\"" }, {
 		Namespace("BE", {
-			Function("", m_className + " &" + m_className + "::getInstance()", {
+			Function("", "KeyManager &KeyManager::getInstance()", {
 				"static KeyManager instance;",
 				"return instance;"
 			}),
@@ -78,20 +80,20 @@ void KeyManager::generateSource() const
 			"void KeyManager::keyPressed(Key key) { m_currFrameKeys.insert(key); }",
 			"void KeyManager::keyReleased(Key key) { m_currFrameKeys.remove(key); }",
 			"",
-			Function("", "void " + m_className + "::KeyMap::operator=(const KeyManager::KeyMap &other)", {
+			Function("", "void KeyManager::KeyMap::operator=(const KeyManager::KeyMap &other)", {
 				"m_size = other.m_size;",
 				"for(unsigned char i = 0; i < m_size; ++i) m_keys[i] = other.m_keys[i];"
 			}),
 			"",
-			Function("", "void " + m_className + "::KeyMap::insert(Key key)", {
+			Function("", "void KeyManager::KeyMap::insert(Key key)", {
 				"if(!contains(key) && m_size < KeyManager::KeyMap::ArraySize) m_keys[m_size++] = key;"
 			}),
 			"",
-			Function("", "void " + m_className + "::KeyMap::remove(Key key)", {
+			Function("", "void KeyManager::KeyMap::remove(Key key)", {
 				ForStatement("unsigned char i = 0", "i < m_size", "++i", { IfStatement("m_keys[i] == key", { "m_keys[i] = m_keys[--m_size];", "return;" }) })
 			}),
 			"",
-			Function("", "bool " + m_className + "::KeyMap::contains(Key key) const", {
+			Function("", "bool KeyManager::KeyMap::contains(Key key) const", {
 				"for(unsigned char i = 0; i < m_size; ++i) if(m_keys[i] == key) return true;",
 				"return false;"
 			})
@@ -99,3 +101,4 @@ void KeyManager::generateSource() const
 	}).write();
 }
 
+}

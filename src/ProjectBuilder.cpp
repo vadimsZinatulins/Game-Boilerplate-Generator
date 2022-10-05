@@ -1,11 +1,11 @@
 #include "ProjectBuilder.h"
 #include "workspace.h"
 #include "ProjectListFiles.h"
-#include "config.h"
-#include "Task.h"
-#include "Logger.h"
-#include "Config.h"
 #include "KeyManager.h"
+#include "Logger.h"
+
+#include "Task.h"
+#include "Config.h"
 #include "MouseManager.h"
 #include "Time.h"
 #include "Cronometer.h"
@@ -73,13 +73,14 @@ void ProjectBuilder::build() {
 
 	auto generateKeyManagerTask { stm::make_task([] {
 		Log() << "Generating KeyManager Class\n";
- 		KeyManager().generate();	
+
+		generators::KeyManager().generate();	
 	}, generateWorkspaceTask) };
 	
 	auto generateMouseManagerTask { stm::make_task([] {
 		Log() << "Generating MouseManager Class\n";
 
- 		MouseManager().generate(); 
+		generators::MouseManager().generate(); 
 	}, generateWorkspaceTask) };
 	
 	auto generateTimeClassTask { stm::make_task([] {
