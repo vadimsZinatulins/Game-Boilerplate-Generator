@@ -38,8 +38,6 @@ add_executable(gbgen
 
 target_include_directories(gbgen PRIVATE include include/generators)
 
-target_link_libraries(gbgen ${CMAKE_THREAD_LIBS_INIT} STM::SimpleTaskManager)
+target_link_libraries(gbgen STM::SimpleTaskManager)
 
-# set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
-
-# install(TARGETS ${PROJECT_NAME} DESTINATION bin)
+install(TARGETS ${PROJECT_NAME} RUNTIME)
