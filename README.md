@@ -2,7 +2,7 @@
 
 Simple application that generates a [SDL2](https://www.libsdl.org/download-2.0.php) project.
 
-This application generates C++ files already with code ready to use SDL2. Among these files is a very simplistic game engine (name Basic Engie or be for short) that handles the initilization, input, time, scenes and the shutdown.
+This application generates C++ files already with code ready to use SDL2. Among these files is a very simplistic game engine (name Basic Engine or be for short) that handles the initilization, input, time, scenes and the shutdown.
 
 After the project generation it is ready to build, compile and run.
 
