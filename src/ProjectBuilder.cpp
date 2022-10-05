@@ -33,6 +33,10 @@ void ProjectBuilder::setWithLogsExtra(bool flag) {
 }
 
 void ProjectBuilder::build() {
+	if(m_projectName.empty()) {
+		return;
+	}
+
 	auto generateWorkspaceTask { stm::make_task([&] { 
 		Log() << "Generating workspace\n";
 

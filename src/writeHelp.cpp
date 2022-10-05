@@ -1,10 +1,21 @@
 #include "utils/writeHelp.h"
 #include "Logger.h"
+#include <sstream>
 
 namespace gbg::utils {
 
 void writeHelp() {
-	Log() << "Usage: gbg --name PROJECT_NAME\n";
+	std::stringstream help;
+
+	help << "Usage: gbg --name PROJECT_NAME [OPTIONS...]\n";
+	help << "Generates a base game structure that uses SDL2 (and optionally SDL2_Image) ready to build using CMake\n\n";
+	help << "List of options:\n";
+	help << "\t-n, --name\t\tSpecifies what name for the project to use (mandatory)\n";
+	help << "\t    --no-logs\t\tDon't print logs\n";
+	help << "\t-h, --help\t\tDisplay help\n";
+	help << "\t    --with-SDL2-image\tInclude SDL2_Image in the project (requires that SDL2_image is installed)\n";
+
+	Log() << help.str();
 }
 
 }
