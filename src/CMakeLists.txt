@@ -1,5 +1,3 @@
-configure_file(config/config.h.in include/config.h)
-
 add_executable(gbgen
 	ArgsParser.cpp
 	writeHelp.cpp
@@ -36,7 +34,7 @@ add_executable(gbgen
 	workspace.cpp
 )
 
-target_include_directories(gbgen PRIVATE include include/generators)
+target_include_directories(gbgen PRIVATE "${PROJECT_SOURCE_DIR}/include" "${PROJECT_SOURCE_DIR}/include/generators")
 
 target_link_libraries(gbgen STM::SimpleTaskManager)
 
