@@ -9,7 +9,14 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_EXPORT_COMPILE_COMMANDS True)
 
-find_package(Threads)
-find_package(SimpleTaskManager)
+include(FetchContent)
+
+FetchContent_Declare(
+  SimpleTaskManager
+  GIT_REPOSITORY https://github.com/vadimsZinatulins/SimpleTaskManager.git
+  GIT_TAG        main
+)
+
+FetchContent_MakeAvailable(SimpleTaskManager)
 
 add_subdirectory(src)
