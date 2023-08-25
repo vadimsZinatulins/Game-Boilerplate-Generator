@@ -47,7 +47,7 @@ void ProjectListFiles::generateBaseListFile() const {
 		"# Generate compile commands (this is for vim)",
 		"set(CMAKE_EXPORT_COMPILE_COMMANDS True)",
 		"",
-		fetchContent.str(),
+		fetchContent,
 		"",
 		"# Project configuration file",
 		"configure_file(config/config.h.in \"${PROJECT_SOURCE_DIR}/include/config.h\")",
@@ -62,7 +62,6 @@ void ProjectListFiles::generateSrcListFile() const {
 	auto linkLibraries { generateLinkLibraries() };
 
 	File("src/CMakeLists.txt", {
-		findLibraries,
 		"# Create the executable from following cpp files",
 		"add_executable(${PROJECT_NAME}",
 		sourceFiles,
