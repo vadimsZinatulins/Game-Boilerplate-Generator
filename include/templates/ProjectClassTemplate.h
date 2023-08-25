@@ -2,7 +2,7 @@
 
 const auto PROJECTCLASS_H_TEMPLATE { R"(#pragma once
 
-#include "be/{NAME}.h"
+#include "be/Game.h"
 
 class {NAME} final : public be::Game<{NAME}> {
 public:
