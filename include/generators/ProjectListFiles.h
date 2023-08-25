@@ -22,7 +22,7 @@ private:
 
 	std::string generateProjectVersion() const;
 	std::string generateSourceFiles() const;
-	std::string generateFindLibraries() const;
+	std::string generateFetchContent() const;
 	std::string generateLinkLibraries() const;
 
 	std::size_t m_projectMajorVersion { 1 };

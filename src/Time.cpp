@@ -36,7 +36,7 @@ void Time::generateSource() const {
 		"#include \"be/Time.h\"",
 		"#include \"config.h\"",
 		"",
-		"#include <SDL2/SDL.h>"
+		"#include <SDL.h>"
 	}, {
 		Namespace("be", {
 			"constexpr unsigned int MinTicksPerFrame = 1000 / FRAME_CAP;",

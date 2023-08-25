@@ -38,7 +38,7 @@ void ProjectClass::generateSource() const {
 		"#include \"MainMenuScene.h\"",
 		"#include \"be/SceneManager.h\"",
 		"",
-		"#include <SDL2/SDL.h>"
+		"#include <SDL.h>"
 	}, {
 		Function("", "void " + m_projectName + "::initialize()", { "be::SceneManager::getInstance().pushScene<MainMenuScene>();" }),
 		Function("", "void " + m_projectName + "::shutdown()", { "" })

@@ -15,6 +15,8 @@ void Config::setWithSDL2ImageExtra(bool flag) {
 }
 
 void Config::createFile() const {
+	auto extras { generateExtras() };
+
 	File("config/config.h.in", {
 		"#pragma once",
 		"",
@@ -33,6 +35,7 @@ void Config::createFile() const {
 		"",
 		"// Maximum frame rate",
 		"#define FRAME_CAP 60",
+		extras
 	}, {}).write();
 }
 
@@ -40,8 +43,8 @@ std::string Config::generateExtras() const {
 	std::stringstream extras;
 
 	if(m_withSDL2ImageExtra) {
-		extras << "",
-		extras << "// Initializations:\n";
+		extras << "\n",
+		extras << "// Initializations for SDL2-image:\n";
 		extras << "// \tJPG = 1\n";
 		extras << "// \tPNG = 2\n";
 		extras << "// \tTIF = 4\n";
