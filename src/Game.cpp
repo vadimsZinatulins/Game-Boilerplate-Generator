@@ -32,7 +32,7 @@ void Game::generateHeader() const {
 		sdl2ImageTextureInclude << "#include \"be/TextureManager.h\"";
 		sdl2ImageTextureClear << "TextureManager::getInstance().clear();";
 		sdl2ImageTextureInit << "TextureManager::getInstance().init(m_renderer);";
-		sdl2ImageInclude << "#include <SDL2/SDL_image.h>";
+		sdl2ImageInclude << "#include <SDL_image.h>";
 		sdl2ImageInit << "IMG_Init(IMAGE_INIT);";
 		sdl2ImageQuit << "IMG_Quit();";
 	}
@@ -47,7 +47,7 @@ void Game::generateHeader() const {
 		"",
 		"#include \"config.h\"",
 		"",
-		"#include <SDL2/SDL.h>",
+		"#include <SDL.h>",
 		sdl2ImageInclude.str()
 	}, {
 		Namespace("be", {

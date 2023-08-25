@@ -117,10 +117,10 @@ std::string ProjectListFiles::generateFetchContent() const {
 	fetchContent << "\tGIT_REPOSITORY https://github.com/libsdl-org/SDL.git\n";
 	fetchContent << "\tGIT_TAG release-2.28.2  # Change this freely\n";
 	fetchContent << ")\n\n";
-	fetchContent << "FetchContent_MakeAvailable(SDL2)\n";
+	fetchContent << "FetchContent_MakeAvailable(SDL2)";
 
 	if(m_withSDL2ImageExtra) {
-		fetchContent << "\n# Do not install SDL2-image\n";
+		fetchContent << "\n\n# Do not install SDL2-image\n";
 		fetchContent << "set(SDL2IMAGE_INSTALL CACHE BOOL Off FORCE)\n";
 		fetchContent << "# Build only SDL2_image static lib\n";
 		fetchContent << "set(BUILD_SHARED_LIBS CACHE BOOL Off FORCE)\n";
@@ -130,7 +130,7 @@ std::string ProjectListFiles::generateFetchContent() const {
 		fetchContent << "\tGIT_REPOSITORY https://github.com/libsdl-org/SDL_image.git\n";
 		fetchContent << "\tGIT_TAG release-2.6.3  # Change this freely\n";
 		fetchContent << ")\n\n";
-		fetchContent << "FetchContent_MakeAvailable(SDL2_image)\n";
+		fetchContent << "FetchContent_MakeAvailable(SDL2_image)";
 	}
 
 	return fetchContent.str();

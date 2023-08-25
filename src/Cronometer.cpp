@@ -42,7 +42,7 @@ void Cronometer::generateSource() const {
 	File("src/be/Cronometer.cpp", {
 		"#include \"be/Cronometer.h\"",
 		"",
-		"#include <SDL2/SDL.h>"
+		"#include <SDL.h>"
 	}, {
 		Namespace("be", {
 			Function("", "void Cronometer::start()", {
