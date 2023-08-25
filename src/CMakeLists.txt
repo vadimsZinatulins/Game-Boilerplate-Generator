@@ -16,6 +16,7 @@ target_sources(
 	gbgen
 		PRIVATE 
 			utils/StringTrim.cpp
+			utils/replaceAll.cpp
 			utils/Instruction.cpp
 			utils/Conditional.cpp
 			utils/IfStatement.cpp

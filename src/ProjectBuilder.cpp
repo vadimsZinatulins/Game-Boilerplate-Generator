@@ -4,7 +4,6 @@
 #include "KeyManager.h"
 #include "Logger.h"
 
-#include "Config.h"
 #include "MouseManager.h"
 #include "Time.h"
 #include "Cronometer.h"
@@ -14,6 +13,10 @@
 #include "ProjectClass.h"
 #include "MainFile.h"
 #include "TextureManager.h"
+
+#include "utils/replaceAll.h"
+
+#include "tempaltes/ConfigTemplate.h"
 
 #include <SimpleTaskManager/make_task.h>
 #include <iostream>
@@ -36,6 +39,8 @@ void ProjectBuilder::build() {
 	if(m_projectName.empty()) {
 		return;
 	}
+
+	const auto withSDL2ImageExtra { m_withSDL2ImageExtra };
 
 	auto generateWorkspaceTask { stm::make_task([&] { 
 		Log() << "Generating workspace\n";
@@ -71,11 +76,15 @@ void ProjectBuilder::build() {
 	auto generateConfigTask { stm::make_task([&] {
 		Log() << "Generating src/config/config.h.in file\n";
 
-		generators::Config config;
-		config.setProjectName(m_projectName);
-		config.setWithSDL2ImageExtra(m_withSDL2ImageExtra);
+		std::stringstream sdl2ImageContent;
 
-		config.createFile();
+		if(withSDL2ImageExtra) {
+			sdl2ImageContent << CONFIG_H_IN_SDL2_IMAGE_CONTENT_TEMPLATE;
+		}
+
+		std::ofstream configHInFile("config/config.h.in");
+		configHInFile << replaceAll(CONFIG_H_IN_TEMPLATE, "{SDL_IMAGE_CONTENT}", sdl2ImageContent.str());
+		configHInFile.close();
 	}, generateWorkspaceTask) };
 
 	auto generateKeyManagerTask { stm::make_task([] {
