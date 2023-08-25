@@ -4,7 +4,7 @@ auto ROOT_LISTFILE_TEMPLATE { R"(#Minimum cmake version required to run this tex
 cmake_minimum_required(VERSION 3.20)
 
 # Project name
-project(Test VERSION 1)
+project({NAME} VERSION 1)
 
 # C++ standard
 set(CMAKE_CXX_STANDARD 20)
@@ -67,7 +67,7 @@ target_sources(${PROJECT_NAME}
 target_sources(${PROJECT_NAME}
 	PRIVATE
 		MainMenuScene.cpp
-		Test.cpp
+		{NAME}.cpp
 		main.cpp
 )
 

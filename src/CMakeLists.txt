@@ -36,11 +36,9 @@ target_sources(
 		PRIVATE
 			KeyManager.cpp
 			MouseManager.cpp
-			Cronometer.cpp
 			Random.cpp
 			SceneManager.cpp
 			Game.cpp
-			ProjectClass.cpp
 			MainFile.cpp
 			TextureManager.cpp
 			workspace.cpp

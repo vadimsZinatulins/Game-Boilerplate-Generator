@@ -4,16 +4,15 @@
 #include "Logger.h"
 
 #include "MouseManager.h"
-#include "Cronometer.h"
 #include "Random.h"
 #include "SceneManager.h"
 #include "Game.h"
-#include "ProjectClass.h"
 #include "MainFile.h"
 #include "TextureManager.h"
 
 #include "utils/replaceAll.h"
 
+#include "templates/ProjectClassTemplate.h"
 #include "templates/ConfigTemplate.h"
 #include "templates/ListFilesTemplate.h"
 #include "templates/TimeTemplate.h"
@@ -138,7 +137,17 @@ void ProjectBuilder::build() {
 	auto generateCronometerTask { stm::make_task([] {
 		Log() << "Generating Cronometer Class\n";
 
-		generators::Cronometer().generate(); 
+		{
+			std::ofstream cronometerHFile("include/be/Cronometer.h");
+			cronometerHFile << CRONOMETER_H_TEMPLATE;
+			cronometerHFile.close();
+		}
+
+		{
+			std::ofstream cronometerCppFile("src/be/Cronometer.cpp");
+			cronometerCppFile << CRONOMETER_CPP_TEMPLATE;
+			cronometerCppFile.close();
+		}
 	}, generateWorkspaceTask) };
 	
 	auto generateRandomTask { stm::make_task([] {
@@ -173,7 +182,17 @@ void ProjectBuilder::build() {
 	auto generateProjectNameFileTask { stm::make_task([&] {
 		Log() << "Generating " + projectName + " Class\n";
 
-		gbg::generators::ProjectClass(projectName).generate(); 
+		{
+			std::ofstream projectclassHFile("include/" + projectName + ".h");
+			projectclassHFile << replaceAll(PROJECTCLASS_H_TEMPLATE, { { "{NAME}", projectName } });
+			projectclassHFile.close();
+		}
+
+		{
+			std::ofstream projectclassCppFile("src/" + projectName + ".cpp");
+			projectclassCppFile << replaceAll(PROJECTCLASS_CPP_TEMPLATE, { { "{NAME}", projectName } });
+			projectclassCppFile.close();
+		}
 	}, generateWorkspaceTask) };
 	
 	auto generateMainFileTask { stm::make_task([&] {
