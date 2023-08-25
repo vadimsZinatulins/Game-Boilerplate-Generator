@@ -1,5 +1,9 @@
-#pragma once 
+#pragma once
 
+#include <vector>
+#include <utility>
 #include <string>
 
-std::string replaceAll(const std::string &subject, const std::string &search, const std::string &replace);
+using ReplaceContent = std::vector<std::pair<std::string, std::string>>;
+
+std::string replaceAll(const std::string &subject, const ReplaceContent &replaceContent);

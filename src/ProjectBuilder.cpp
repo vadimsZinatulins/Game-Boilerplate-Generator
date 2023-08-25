@@ -17,9 +17,12 @@
 #include "utils/replaceAll.h"
 
 #include "tempaltes/ConfigTemplate.h"
+#include "tempaltes/ListFilesTemplate.h"
 
 #include <SimpleTaskManager/make_task.h>
 #include <iostream>
+#include <fstream>
+#include <sstream>
 
 namespace gbg {
 
@@ -36,41 +39,59 @@ void ProjectBuilder::setWithLogsExtra(bool flag) {
 }
 
 void ProjectBuilder::build() {
-	if(m_projectName.empty()) {
+	const auto projectName { m_projectName };
+	const auto withSDL2ImageExtra { m_withSDL2ImageExtra };
+
+	if(projectName.empty()) {
 		return;
 	}
-
-	const auto withSDL2ImageExtra { m_withSDL2ImageExtra };
 
 	auto generateWorkspaceTask { stm::make_task([&] { 
 		Log() << "Generating workspace\n";
 
-		generators::generateWorkspace(m_projectName); 
+		generators::generateWorkspace(projectName); 
 	}) };
 
 	auto generateCMakeFileTask { stm::make_task([&] {
 		Log() << "Generating listfiles\n";
 
-		generators::ProjectListFiles listFiles;
+		auto withSdl2ImageExtra { m_withSDL2ImageExtra };
+		
+		{
+			std::stringstream sdl2ImageLibContent;
 
-		listFiles.setProjectName(m_projectName);
-		listFiles.setProjectVersion(1);
-		listFiles.setWithSDL2ImageExtra(m_withSDL2ImageExtra);
+			if(withSdl2ImageExtra) {
+				sdl2ImageLibContent << ROOT_LISTFILE_SDL2_IMAGE_FETCH_CONTENT_TEMPLATE;
+			}
 
-		listFiles.addFileToCompile("be/KeyManager");
-		listFiles.addFileToCompile("be/MouseManager");
-		listFiles.addFileToCompile("be/Time");
-		listFiles.addFileToCompile("be/Cronometer");
-		listFiles.addFileToCompile("be/Random");
-		listFiles.addFileToCompile("be/SceneManager");
-		if(m_withSDL2ImageExtra) {
-			listFiles.addFileToCompile("be/TextureManager");
+			ReplaceContent rc = {
+				{ "{SDL2_IMAGE_FETCH_CONTENT}", sdl2ImageLibContent.str() },
+				{ "{NAME}", projectName }
+			};
+
+			std::ofstream rootListfile("CMakeLists.txt");
+			rootListfile << replaceAll(ROOT_LISTFILE_TEMPLATE, rc);
+			rootListfile.close();
 		}
-		listFiles.addFileToCompile("MainMenuScene");
-		listFiles.addFileToCompile(m_projectName);
-		listFiles.addFileToCompile("main");
 
-		listFiles.generateFiles();
+		{
+			std::stringstream sdl2ImageContent;
+			std::stringstream sdl2ImageSourceContent;
+			if(withSdl2ImageExtra) {
+				sdl2ImageContent << SRC_LISTFILE_SDL2_IMAGE_LIBRARY_TEMPLATE;
+				sdl2ImageSourceContent <<  SRC_LISTFILE_SDL2_IMAGE_CPPS_TEMPLATE;
+			}
+
+			ReplaceContent rc = {
+				{ "{SDL2_IMAGE_CONTENT}", sdl2ImageContent.str() },
+				{ "{SDL2_IMAGE_SOURCES}", sdl2ImageSourceContent.str() },
+				{ "{NAME}", projectName }
+			};
+
+			std::ofstream srcListfile("src/CMakeLists.txt");
+			srcListfile << replaceAll(SRC_LISTFILE_TEMPLATE, rc);
+			srcListfile.close();
+		}
 	}, generateWorkspaceTask) };
 
 	auto generateConfigTask { stm::make_task([&] {
@@ -83,7 +104,7 @@ void ProjectBuilder::build() {
 		}
 
 		std::ofstream configHInFile("config/config.h.in");
-		configHInFile << replaceAll(CONFIG_H_IN_TEMPLATE, "{SDL_IMAGE_CONTENT}", sdl2ImageContent.str());
+		configHInFile << replaceAll(CONFIG_H_IN_TEMPLATE, { { "{SDL_IMAGE_CONTENT}", sdl2ImageContent.str() } });
 		configHInFile.close();
 	}, generateWorkspaceTask) };
 
@@ -124,7 +145,7 @@ void ProjectBuilder::build() {
 	}, generateWorkspaceTask) };
 	
 	auto generateTextureManagerTask { stm::make_task([&] {
-		if(m_withSDL2ImageExtra) {
+		if(withSDL2ImageExtra) {
 			Log() << "Generating TextureManager file\n";
 
 			gbg::generators::TextureManager().generate(); 
@@ -136,20 +157,20 @@ void ProjectBuilder::build() {
 
 		gbg::generators::Game game;
 		
-		game.setWithSDL2ImageExtra(m_withSDL2ImageExtra);
+		game.setWithSDL2ImageExtra(withSDL2ImageExtra);
 		game.generate(); 
 	}, generateWorkspaceTask) };
 	
 	auto generateProjectNameFileTask { stm::make_task([&] {
-		Log() << "Generating " + m_projectName + " Class\n";
+		Log() << "Generating " + projectName + " Class\n";
 
-		gbg::generators::ProjectClass(m_projectName).generate(); 
+		gbg::generators::ProjectClass(projectName).generate(); 
 	}, generateWorkspaceTask) };
 	
 	auto generateMainFileTask { stm::make_task([&] {
 		Log() << "Generating main file\n";
 
-		gbg::generators::MainFile(m_projectName).generate(); 
+		gbg::generators::MainFile(projectName).generate(); 
 	}, generateWorkspaceTask) };
 	
 
@@ -167,7 +188,7 @@ void ProjectBuilder::build() {
 	generateMainFileTask->result();
 
 	if(m_withLogsExtra) {
-		Log() << "\n\tcd " << m_projectName << " && cmake -B build/ && ln -s build/compile_commands.json . && cmake --build build/\n";
+		Log() << "\n\tcd " << projectName << " && cmake -B build/ && ln -s build/compile_commands.json . && cmake --build build/\n";
 	}
 }
 
