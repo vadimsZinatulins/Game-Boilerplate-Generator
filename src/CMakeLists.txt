@@ -6,7 +6,6 @@ target_sources(
 		PRIVATE 
 			ArgsParser.cpp 
 			writeHelp.cpp 
-			ProjectListFiles.cpp 
 			ProjectBuilder.cpp 
 			main.cpp
 )
@@ -37,8 +36,6 @@ target_sources(
 		PRIVATE
 			KeyManager.cpp
 			MouseManager.cpp
-			Config.cpp
-			Time.cpp
 			Cronometer.cpp
 			Random.cpp
 			SceneManager.cpp

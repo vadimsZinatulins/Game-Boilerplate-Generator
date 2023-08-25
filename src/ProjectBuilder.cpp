@@ -1,11 +1,9 @@
 #include "ProjectBuilder.h"
 #include "workspace.h"
-#include "ProjectListFiles.h"
 #include "KeyManager.h"
 #include "Logger.h"
 
 #include "MouseManager.h"
-#include "Time.h"
 #include "Cronometer.h"
 #include "Random.h"
 #include "SceneManager.h"
@@ -18,6 +16,7 @@
 
 #include "tempaltes/ConfigTemplate.h"
 #include "tempaltes/ListFilesTemplate.h"
+#include "tempaltes/TimeTemplate.h"
 
 #include <SimpleTaskManager/make_task.h>
 #include <iostream>
@@ -123,7 +122,17 @@ void ProjectBuilder::build() {
 	auto generateTimeClassTask { stm::make_task([] {
 		Log() << "Generating Time Class\n";
 
-		generators::Time().generate(); 
+		{
+			std::ofstream timerHFile("include/be/Time.h");
+			timerHFile << TIMER_H_TEMPLATE;
+			timerHFile.close();
+		}
+
+		{
+			std::ofstream timerCppFile("src/be/Time.cpp");
+			timerCppFile << TIMER_CPP_TEMPLATE;
+			timerCppFile.close();
+		}
 	}, generateWorkspaceTask) };
 	
 	auto generateCronometerTask { stm::make_task([] {
