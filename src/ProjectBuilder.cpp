@@ -13,6 +13,7 @@
 #include "utils/replaceAll.h"
 
 #include "templates/ProjectClassTemplate.h"
+#include "templates/CronometerTemplate.h"
 #include "templates/ConfigTemplate.h"
 #include "templates/ListFilesTemplate.h"
 #include "templates/TimeTemplate.h"
