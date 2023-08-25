@@ -62,10 +62,7 @@ void ProjectListFiles::generateSrcListFile() const {
 	auto linkLibraries { generateLinkLibraries() };
 
 	File("src/CMakeLists.txt", {
-		"# Create the executable from following cpp files",
-		"add_executable(${PROJECT_NAME}",
 		sourceFiles,
-		")",
 		"",
 		"target_include_directories(${PROJECT_NAME} PRIVATE \"${PROJECT_SOURCE_DIR}/include\")",
 		"",
@@ -96,9 +93,14 @@ std::string ProjectListFiles::generateProjectVersion() const {
 std::string ProjectListFiles::generateSourceFiles() const {
 	std::stringstream sourceFiles;
 
+	sourceFiles << "# Create the executable from following cpp files\n";
+	sourceFiles << "add_executable(${PROJECT_NAME}";
+
 	for(const auto &srcFile : m_filesToCompile) {
 	   	sourceFiles << "\n\t" << srcFile << ".cpp";
 	}
+
+	sourceFiles << ")";
 
 	return sourceFiles.str();
 }
