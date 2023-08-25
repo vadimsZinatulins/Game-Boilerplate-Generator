@@ -31,6 +31,7 @@ void ProjectListFiles::generateFiles() const {
 
 void ProjectListFiles::generateBaseListFile() const {
 	auto projectVersion { generateProjectVersion() };
+	auto fetchContent { generateFetchContent() };
 
 	File("CMakeLists.txt", {
 		"#Minimum cmake version required to run this text file",
@@ -46,6 +47,8 @@ void ProjectListFiles::generateBaseListFile() const {
 		"# Generate compile commands (this is for vim)",
 		"set(CMAKE_EXPORT_COMPILE_COMMANDS True)",
 		"",
+		fetchContent.str(),
+		"",
 		"# Project configuration file",
 		"configure_file(config/config.h.in \"${PROJECT_SOURCE_DIR}/include/config.h\")",
 		"",
@@ -56,7 +59,6 @@ void ProjectListFiles::generateBaseListFile() const {
 
 void ProjectListFiles::generateSrcListFile() const {
 	auto sourceFiles { generateSourceFiles() };
-	auto findLibraries { generateFindLibraries() };
 	auto linkLibraries { generateLinkLibraries() };
 
 	File("src/CMakeLists.txt", {
@@ -68,7 +70,7 @@ void ProjectListFiles::generateSrcListFile() const {
 		"",
 		"target_include_directories(${PROJECT_NAME} PRIVATE \"${PROJECT_SOURCE_DIR}/include\")",
 		"",
-		findLibraries,
+		// findLibraries,
 		linkLibraries,
 	}, {}).write();
 }
@@ -102,18 +104,37 @@ std::string ProjectListFiles::generateSourceFiles() const {
 	return sourceFiles.str();
 }
 
-std::string ProjectListFiles::generateFindLibraries() const {
-	std::stringstream findLibraries;
-	
-	findLibraries << "# Find the SDL2 library\n";
-	findLibraries << "find_package(SDL2 REQUIRED)\n";
+std::string ProjectListFiles::generateFetchContent() const {
+	std::stringstream fetchContent;
+
+	fetchContent << "include(FetchContent)\n\n";
+	fetchContent << "# Do not install SDL2\n";
+	fetchContent << "set(SDL2_DISABLE_INSTALL CACHE BOOL On FORCE)\n";
+	fetchContent << "# Build only SDL2 Static Lib\n";
+	fetchContent << "set(SDL_SHARED_ENABLED_BY_DEFAULT CACHE BOOL Off FORCE)\n";
+	fetchContent << "message(STATUS \"Fetching and configuring SDL2\")\n";
+	fetchContent << "FetchContent_Declare(\n";
+	fetchContent << "\tSDL2\n";
+	fetchContent << "\tGIT_REPOSITORY https://github.com/libsdl-org/SDL.git\n";
+	fetchContent << "\tGIT_TAG release-2.28.2  # Change this freely\n";
+	fetchContent << ")\n\n";
+	fetchContent << "FetchContent_MakeAvailable(SDL2)\n";
 
 	if(m_withSDL2ImageExtra) {
-		findLibraries << "# Find SDL2_image library\n";
-		findLibraries << "find_library(SDL2_IMAGE_LIBRARY SDL2_image)\n";
+		fetchContent << "\n# Do not install SDL2-image\n";
+		fetchContent << "set(SDL2IMAGE_INSTALL CACHE BOOL Off FORCE)\n";
+		fetchContent << "# Build only SDL2_image static lib\n";
+		fetchContent << "set(BUILD_SHARED_LIBS CACHE BOOL Off FORCE)\n";
+		fetchContent << "message(STATUS \"Fetching and configuring SDL2_image\")\n";
+		fetchContent << "FetchContent_Declare(\n";
+		fetchContent << "\tSDL2_image\n";
+		fetchContent << "\tGIT_REPOSITORY https://github.com/libsdl-org/SDL_image.git\n";
+		fetchContent << "\tGIT_TAG release-2.6.3  # Change this freely\n";
+		fetchContent << ")\n\n";
+		fetchContent << "FetchContent_MakeAvailable(SDL2_image)\n";
 	}
 
-	return findLibraries.str();
+	return fetchContent.str();
 }
 
 std::string ProjectListFiles::generateLinkLibraries() const {
@@ -122,9 +143,9 @@ std::string ProjectListFiles::generateLinkLibraries() const {
 	linkLibraries << "# Libraries to link to the project\n";
 	linkLibraries << "target_link_libraries(${PROJECT_NAME}\n";
 	linkLibraries << "\tPUBLIC\n";
-	linkLibraries << "\t\t${SDL2_LIBRARIES}\n";
+	linkLibraries << "\t\tSDL2::SDL2-static\n";
 	if(m_withSDL2ImageExtra) {
-		linkLibraries << "\t\t${SDL2_IMAGE_LIBRARY}\n";
+		linkLibraries << "\t\t${SDL2_image::SDL2_image-static}\n";
 	}
 	linkLibraries << ")\n";
 
