@@ -14,9 +14,9 @@
 
 #include "utils/replaceAll.h"
 
-#include "tempaltes/ConfigTemplate.h"
-#include "tempaltes/ListFilesTemplate.h"
-#include "tempaltes/TimeTemplate.h"
+#include "templates/ConfigTemplate.h"
+#include "templates/ListFilesTemplate.h"
+#include "templates/TimeTemplate.h"
 
 #include <SimpleTaskManager/make_task.h>
 #include <iostream>
