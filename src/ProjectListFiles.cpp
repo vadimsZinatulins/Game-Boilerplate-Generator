@@ -144,7 +144,7 @@ std::string ProjectListFiles::generateLinkLibraries() const {
 	linkLibraries << "\tPUBLIC\n";
 	linkLibraries << "\t\tSDL2::SDL2-static\n";
 	if(m_withSDL2ImageExtra) {
-		linkLibraries << "\t\t${SDL2_image::SDL2_image-static}\n";
+		linkLibraries << "\t\tSDL2_image::SDL2_image-static\n";
 	}
 	linkLibraries << ")\n";
 
