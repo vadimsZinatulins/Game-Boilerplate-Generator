@@ -81,6 +81,6 @@ target_link_libraries(${PROJECT_NAME}
 		SDL2::SDL2main{SDL2_IMAGE_CONTENT}
 ))" };
 
-auto SRC_LISTFILE_SDL2_IMAGE_CPPS_TEMPLATE { R"(\n\t\tbe/TextureManager.cpp") };
+auto SRC_LISTFILE_SDL2_IMAGE_CPPS_TEMPLATE { R"(\n\t\tbe/TextureManager.cpp)" };
 
 auto SRC_LISTFILE_SDL2_IMAGE_LIBRARY_TEMPLATE { R"(\n\t\t(SDL2_image::SDL2_image-static)" };
