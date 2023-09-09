@@ -26,16 +26,14 @@ FetchContent_Declare(
 	GIT_TAG release-2.28.2  # Change this freely
 )
 
-FetchContent_MakeAvailable(SDL2)
-
-{SDL2_IMAGE_FETCH_CONTENT}
+FetchContent_MakeAvailable(SDL2){SDL2_IMAGE_FETCH_CONTENT}
 
 # Project configuration file
 configure_file(config/config.h.in "${PROJECT_SOURCE_DIR}/include/config.h")
 
 add_subdirectory(src))" };
 
-auto ROOT_LISTFILE_SDL2_IMAGE_FETCH_CONTENT_TEMPLATE { R"(# Do not install SDL2-image
+auto ROOT_LISTFILE_SDL2_IMAGE_FETCH_CONTENT_TEMPLATE { R"\n\n(# Do not install SDL2-image
 set(SDL2IMAGE_INSTALL CACHE BOOL Off FORCE)
 # Build only SDL2_image static lib
 set(BUILD_SHARED_LIBS CACHE BOOL Off FORCE)
@@ -49,7 +47,11 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(SDL2_image))" };
 
 auto SRC_LISTFILE_TEMPLATE { R"(# Create the executable from following cpp files
-add_executable(${PROJECT_NAME})
+if(WIN32)
+	add_executable(${PROJECT_NAME} WIN32)
+else()
+	add_executable(${PROJECT_NAME})
+endif()
 
 # Basic Engine source files
 target_sources(${PROJECT_NAME}
@@ -59,8 +61,7 @@ target_sources(${PROJECT_NAME}
 		be/Time.cpp
 		be/Cronometer.cpp
 		be/Random.cpp
-		be/SceneManager.cpp
-		{SDL2_IMAGE_SOURCES}
+		be/SceneManager.cpp{SDL2_IMAGE_SOURCES}
 )
 
 # Game core source files
@@ -77,8 +78,8 @@ target_include_directories(${PROJECT_NAME} PRIVATE "${PROJECT_SOURCE_DIR}/includ
 target_link_libraries(${PROJECT_NAME}
 	PUBLIC
 		SDL2::SDL2-static
-		{SDL2_IMAGE_CONTENT}
+		SDL2::SDL2main{SDL2_IMAGE_CONTENT}
 ))" };
 
-auto SRC_LISTFILE_SDL2_IMAGE_CPPS_TEMPLATE { R"(be/TextureManager.cpp)" };
-auto SRC_LISTFILE_SDL2_IMAGE_LIBRARY_TEMPLATE { R"(SDL2_image::SDL2_image-static)" };
+auto SRC_LISTFILE_SDL2_IMAGE_CPPS_TEMPLATE { R"\n\t\t(be/TextureManager.cpp)" };
+auto SRC_LISTFILE_SDL2_IMAGE_LIBRARY_TEMPLATE { R"\n\t\t(SDL2_image::SDL2_image-static)" };
