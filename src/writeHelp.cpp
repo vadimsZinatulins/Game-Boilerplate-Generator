@@ -1,5 +1,6 @@
-#include "utils/writeHelp.h"
+#include "writeHelp.h"
 #include "Logger.h"
+
 #include <sstream>
 
 namespace gbg::utils {

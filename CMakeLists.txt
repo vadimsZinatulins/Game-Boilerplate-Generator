@@ -11,6 +11,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS True)
 
 include(FetchContent)
 
+message(STATUS "Fetching SimpleTaskManager")
 FetchContent_Declare(
   SimpleTaskManager
   GIT_REPOSITORY https://github.com/vadimsZinatulins/SimpleTaskManager.git
