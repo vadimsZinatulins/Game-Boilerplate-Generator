@@ -2,13 +2,17 @@
 
 Simple application that generates a [SDL2](https://www.libsdl.org/download-2.0.php) project.
 
-This application generates C++ files already with code ready to use SDL2. Among these files is a very simplistic game engine (name Basic Engine or be for short) that handles the initilization, input, time, scenes and the shutdown.
+This application generates C++ files already with code ready to use SDL2 (and optionally SDL2-image). Among these files is a very simplistic game engine (name __Basic Engine__ or __be__ for short) that handles the initilization, input, time, scenes and the shutdown.
+
+The generated project is another [Cmake](https://cmake.org/cmake/help/latest/) project. This project will fetch SDL2 (and optionally SDL2-image), which means that no SDL2 is required to be installed.
+
+⚠️ Fetching __SDL2__ takes some time, and fetching __SDL2-image__ takes even more time. Please be patient 🙂
 
 After the project generation it is ready to build, compile and run.
 
 ### Why not to create a library?
 
-Having the game engine generated gives more flexibility as opposed to having a library. This way I can adapt the game engine to my needs.
+Generating all the source files for the game engine more flexibility as opposed to having a library. This way it is possible to adapt the game engine whenever needed.
 
 ## Dependencies
 
@@ -22,22 +26,6 @@ To build this project you need CMake. Also to build the generated project you al
 
 ```bash
 sudo apt-get install cmake
-```
-
-### SDL2 
-
-SDL2 is not a direct dependecy of this project but the generated project uses SDL2 so to take advantage of the generated project SDL2 is required.
-
-```bash
-sudo apt-get install libsdl2-dev
-```
-
-### (Optional) SDL2-Image
-
-During the generation of the project, you can specify to use SDL2-image and the generator will adapt to include this library and set some extra C++ files for this
-
-```bash
-sudo apt-get install libsdl2-image-dev
 ```
 
 ## Installation
