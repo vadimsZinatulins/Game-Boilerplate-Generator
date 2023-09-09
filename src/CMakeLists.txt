@@ -7,6 +7,7 @@ target_sources(
 			ArgsParser.cpp 
 			writeHelp.cpp 
 			ProjectBuilder.cpp 
+			workspace.cpp
 			main.cpp
 )
 
@@ -30,21 +31,7 @@ target_sources(
 			utils/File.cpp
 )
 
-# Specific generator sources
-target_sources(
-	gbgen 
-		PRIVATE
-			KeyManager.cpp
-			MouseManager.cpp
-			Random.cpp
-			SceneManager.cpp
-			Game.cpp
-			MainFile.cpp
-			TextureManager.cpp
-			workspace.cpp
-)
-
-target_include_directories(gbgen PRIVATE "${PROJECT_SOURCE_DIR}/include" "${PROJECT_SOURCE_DIR}/include/generators")
+target_include_directories(gbgen PRIVATE "${PROJECT_SOURCE_DIR}/include")
 
 target_link_libraries(gbgen STM::SimpleTaskManager)
 

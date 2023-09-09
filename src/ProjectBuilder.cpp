@@ -1,14 +1,6 @@
 #include "ProjectBuilder.h"
 #include "workspace.h"
-#include "KeyManager.h"
 #include "Logger.h"
-
-#include "MouseManager.h"
-#include "Random.h"
-#include "SceneManager.h"
-#include "Game.h"
-#include "MainFile.h"
-#include "TextureManager.h"
 
 #include "utils/replaceAll.h"
 
@@ -25,6 +17,7 @@
 #include "templates/SceneManagerTemplate.h"
 #include "templates/TextureManagerTemplate.h"
 #include "templates/MainTemplate.h"
+#include "templates/GameTemplate.h"
 
 #include <SimpleTaskManager/make_task.h>
 #include <iostream>
@@ -62,12 +55,10 @@ void ProjectBuilder::build() {
 	auto generateCMakeFileTask { stm::make_task([&] {
 		Log() << "Generating listfiles\n";
 
-		auto withSdl2ImageExtra { m_withSDL2ImageExtra };
-		
 		{
 			std::stringstream sdl2ImageLibContent;
 
-			if(withSdl2ImageExtra) {
+			if(withSDL2ImageExtra) {
 				sdl2ImageLibContent << ROOT_LISTFILE_SDL2_IMAGE_FETCH_CONTENT_TEMPLATE;
 			}
 
@@ -84,7 +75,7 @@ void ProjectBuilder::build() {
 		{
 			std::stringstream sdl2ImageContent;
 			std::stringstream sdl2ImageSourceContent;
-			if(withSdl2ImageExtra) {
+			if(withSDL2ImageExtra) {
 				sdl2ImageContent << SRC_LISTFILE_SDL2_IMAGE_LIBRARY_TEMPLATE;
 				sdl2ImageSourceContent <<  SRC_LISTFILE_SDL2_IMAGE_CPPS_TEMPLATE;
 			}
@@ -102,7 +93,7 @@ void ProjectBuilder::build() {
 	}, generateWorkspaceTask) };
 
 	auto generateConfigTask { stm::make_task([&] {
-		Log() << "Generating src/config/config.h.in file\n";
+		Log() << "Generating config.h.in file\n";
 
 		std::stringstream sdl2ImageContent;
 
@@ -134,8 +125,6 @@ void ProjectBuilder::build() {
 			keyManagerCppFile << KEYMANAGER_CPP_TEMPLATE;
 			keyManagerCppFile.close();
 		}
-
-		generators::KeyManager().generate();	
 	}, generateWorkspaceTask) };
 	
 	auto generateMouseManagerTask { stm::make_task([] {
@@ -246,7 +235,7 @@ void ProjectBuilder::build() {
 	
 	auto generateTextureManagerTask { stm::make_task([&] {
 		if(withSDL2ImageExtra) {
-			Log() << "Generating TextureManager file\n";
+			Log() << "Generating TextureManager Class\n";
 
 			{
 				std::ofstream textureManagerHFile("include/be/TextureManager.h");
@@ -265,30 +254,54 @@ void ProjectBuilder::build() {
 	auto generateGameTask { stm::make_task([&] {
 		Log() << "Generating Game Class\n";
 
-		gbg::generators::Game game;
-		
-		game.setWithSDL2ImageExtra(withSDL2ImageExtra);
-		game.generate(); 
+		std::stringstream textureManagerIncludeContent;
+		std::stringstream sdlImageIncludeContent;
+		std::stringstream imgInitContent;
+		std::stringstream textureManagerInitContent;
+		std::stringstream textureManagerClearContent;
+		std::stringstream imgQuitContent;
+
+		if(withSDL2ImageExtra) {
+			textureManagerIncludeContent << GAME_TEXTURE_MANAGER_INCLUDE_TEMPLATE;
+			sdlImageIncludeContent << GAME_SDL_IMAGE_INCLUDE_TEMPLATE;
+			imgInitContent << GAME_IMG_INIT_TEMPLATE;
+			textureManagerInitContent << GAME_TEXTURE_MANAGER_INIT_TEMPLATE;
+			textureManagerClearContent << GAME_TEXTURE_MANAGER_CLEAR_TEMPLATE;
+			imgQuitContent << GAME_IMG_QUIT_TEMPLATE;
+		}
+
+		ReplaceContent rc = {
+			{ "{TEXTURE_MANAGER_INCLUDE}", textureManagerIncludeContent.str() },
+			{ "{SDL_IMAGE_INCLUDE}", sdlImageIncludeContent.str() },
+			{ "{IMG_INIT}", imgInitContent.str() },
+			{ "{TEXTURE_MANAGER_INIT}", textureManagerInitContent.str() },
+			{ "{TEXTURE_MANAGER_CLEAR}", textureManagerClearContent.str() },
+			{ "{IMG_QUIT}", imgQuitContent.str() }
+		};
+
+		std::ofstream GameHFile("include/be/Game.h");
+		GameHFile << replaceAll(GAME_H_TEMPLATE, rc);
+		GameHFile.close();
 	}, generateWorkspaceTask) };
 	
 	auto generateProjectNameFileTask { stm::make_task([&] {
 		Log() << "Generating " + projectName + " Class\n";
 
 		{
-			std::ofstream projectclassHFile("include/" + projectName + ".h");
-			projectclassHFile << replaceAll(PROJECTCLASS_H_TEMPLATE, { { "{NAME}", projectName } });
-			projectclassHFile.close();
+			std::ofstream projectClassHFile("include/" + projectName + ".h");
+			projectClassHFile << replaceAll(PROJECTCLASS_H_TEMPLATE, { { "{NAME}", projectName } });
+			projectClassHFile.close();
 		}
 
 		{
-			std::ofstream projectclassCppFile("src/" + projectName + ".cpp");
-			projectclassCppFile << replaceAll(PROJECTCLASS_CPP_TEMPLATE, { { "{NAME}", projectName } });
-			projectclassCppFile.close();
+			std::ofstream projectClassCppFile("src/" + projectName + ".cpp");
+			projectClassCppFile << replaceAll(PROJECTCLASS_CPP_TEMPLATE, { { "{NAME}", projectName } });
+			projectClassCppFile.close();
 		}
 	}, generateWorkspaceTask) };
 	
 	auto generateMainFileTask { stm::make_task([&] {
-		Log() << "Generating main file\n";
+		Log() << "Generating main.cpp file\n";
 
 		std::ofstream mainCppFile("src/main.cpp");
 		mainCppFile << replaceAll(MAIN_CPP_TEMPLATE, { { "{NAME}", projectName } });
