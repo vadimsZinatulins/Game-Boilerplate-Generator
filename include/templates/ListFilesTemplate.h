@@ -33,7 +33,9 @@ configure_file(config/config.h.in "${PROJECT_SOURCE_DIR}/include/config.h")
 
 add_subdirectory(src))" };
 
-auto ROOT_LISTFILE_SDL2_IMAGE_FETCH_CONTENT_TEMPLATE { R"(\n\n# Do not install SDL2-image
+auto ROOT_LISTFILE_SDL2_IMAGE_FETCH_CONTENT_TEMPLATE { R"(
+	
+# Do not install SDL2-image
 set(SDL2IMAGE_INSTALL CACHE BOOL Off FORCE)
 # Build only SDL2_image static lib
 set(BUILD_SHARED_LIBS CACHE BOOL Off FORCE)
@@ -81,6 +83,10 @@ target_link_libraries(${PROJECT_NAME}
 		SDL2::SDL2main{SDL2_IMAGE_CONTENT}
 ))" };
 
-auto SRC_LISTFILE_SDL2_IMAGE_CPPS_TEMPLATE { R"(\n\t\tbe/TextureManager.cpp)" };
+auto SRC_LISTFILE_SDL2_IMAGE_CPPS_TEMPLATE { R"(
+		be/TextureManager.cpp)" 
+};
 
-auto SRC_LISTFILE_SDL2_IMAGE_LIBRARY_TEMPLATE { R"(\n\t\t(SDL2_image::SDL2_image-static)" };
+auto SRC_LISTFILE_SDL2_IMAGE_LIBRARY_TEMPLATE { R"(
+		SDL2_image::SDL2_image-static)" 
+};
