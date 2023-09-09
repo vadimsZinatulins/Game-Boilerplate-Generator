@@ -126,6 +126,6 @@ auto GAME_TEXTURE_MANAGER_CLEAR_TEMPLATE { R"(
 		TextureManager::getInstance().clear();)" 
 };
 
-auto GAME_IMG_QUIT_TEMPLATE { R"(       IMG_Quit();
-)" 
+auto GAME_IMG_QUIT_TEMPLATE { R"(IMG_Quit();
+        )" 
 };

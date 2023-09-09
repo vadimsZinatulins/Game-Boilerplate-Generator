@@ -1,5 +1,5 @@
 #include "utils/ArgsParser.h"
-#include "utils/writeHelp.h"
+#include "writeHelp.h"
 #include "ProjectBuilder.h"
 
 #include <SimpleTaskManager/Scheduler.h>

@@ -17,18 +17,6 @@ target_sources(
 		PRIVATE 
 			utils/StringTrim.cpp
 			utils/replaceAll.cpp
-			utils/Instruction.cpp
-			utils/Conditional.cpp
-			utils/IfStatement.cpp
-			utils/ForStatement.cpp
-			utils/WhileStatement.cpp
-			utils/SwitchStatement.cpp
-			utils/Case.cpp
-			utils/Function.cpp
-			utils/WritableContent.cpp
-			utils/Class.cpp
-			utils/Namespace.cpp
-			utils/File.cpp
 )
 
 target_include_directories(gbgen PRIVATE "${PROJECT_SOURCE_DIR}/include")
