@@ -91,34 +91,34 @@ MyGame/
 
 **Quick Start**
 
-Your game logic should be inside *Scenes*. The generated code already provide *MainMenuScene* and it is a good startup point.
+Your game logic should be inside *Scenes*. The generated code already provide *MainScene* and it is a good startup point.
 
 ```cpp
-#include "MainMenuScene.h"
+#include "MainScene.h"
 
 #include <SDL2/SDL.h>
 
-void MainMenuScene::initialize()
+void MainScene::initialize()
 {
     // This method only gets called once before update and render 
     // This is a good place to initialize stuff, such as textures
     // or other resources.
 }
 
-void MainMenuScene::shutdown()
+void MainScene::shutdown()
 {
     // This method only gets calle once after update and render
     // This is a good place to do cleanup, such os closing files 
     // or freeing resources
 }
 
-void MainMenuScene::update()
+void MainScene::update()
 {
 	// This gets called once every frame.
     // The game logic should go here.
 }
 
-void MainMenuScene::render(SDL_Renderer *renderer)
+void MainScene::render(SDL_Renderer *renderer)
 {
 	// This gets called once every frame.
     // All the rendering should be done here

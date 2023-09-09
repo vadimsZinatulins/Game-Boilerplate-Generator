@@ -17,6 +17,14 @@
 #include "templates/ConfigTemplate.h"
 #include "templates/ListFilesTemplate.h"
 #include "templates/TimeTemplate.h"
+#include "templates/KeyManagerTemplate.h"
+#include "templates/MouseManagerTemplate.h"
+#include "templates/RandomTemplate.h"
+#include "templates/ISceneTemplate.h"
+#include "templates/MainSceneTemplate.h"
+#include "templates/SceneManagerTemplate.h"
+#include "templates/TextureManagerTemplate.h"
+#include "templates/MainTemplate.h"
 
 #include <SimpleTaskManager/make_task.h>
 #include <iostream>
@@ -102,13 +110,30 @@ void ProjectBuilder::build() {
 			sdl2ImageContent << CONFIG_H_IN_SDL2_IMAGE_CONTENT_TEMPLATE;
 		}
 
+		ReplaceContent rc =  { 
+			{ "{SDL_IMAGE_CONTENT}", sdl2ImageContent.str() }, 
+			{ "{NAME}", projectName } 
+		};
+
 		std::ofstream configHInFile("config/config.h.in");
-		configHInFile << replaceAll(CONFIG_H_IN_TEMPLATE, { { "{SDL_IMAGE_CONTENT}", sdl2ImageContent.str() } });
+		configHInFile << replaceAll(CONFIG_H_IN_TEMPLATE, rc);
 		configHInFile.close();
 	}, generateWorkspaceTask) };
 
 	auto generateKeyManagerTask { stm::make_task([] {
 		Log() << "Generating KeyManager Class\n";
+
+		{
+			std::ofstream keyManagerHFile("include/be/KeyManager.h");
+			keyManagerHFile << KEYMANAGER_H_TEMPLATE;
+			keyManagerHFile.close();
+		}
+		
+		{
+			std::ofstream keyManagerCppFile("src/be/KeyManager.cpp");
+			keyManagerCppFile << KEYMANAGER_CPP_TEMPLATE;
+			keyManagerCppFile.close();
+		}
 
 		generators::KeyManager().generate();	
 	}, generateWorkspaceTask) };
@@ -116,7 +141,17 @@ void ProjectBuilder::build() {
 	auto generateMouseManagerTask { stm::make_task([] {
 		Log() << "Generating MouseManager Class\n";
 
-		generators::MouseManager().generate(); 
+		{
+			std::ofstream mouseManagerHFile("include/be/MouseManager.h");
+			mouseManagerHFile << MOUSEMANAGER_H_TEMPLATE;
+			mouseManagerHFile.close();
+		}
+		
+		{
+			std::ofstream mouseManagerCppFile("src/be/MouseManager.cpp");
+			mouseManagerCppFile << MOUSEMANAGER_CPP_TEMPLATE;
+			mouseManagerCppFile.close();
+		}
 	}, generateWorkspaceTask) };
 	
 	auto generateTimeClassTask { stm::make_task([] {
@@ -154,20 +189,76 @@ void ProjectBuilder::build() {
 	auto generateRandomTask { stm::make_task([] {
 		Log() << "Generating Random Class\n";
 
-		gbg::generators::Random().generate(); 
+		{
+			std::ofstream randomHFile("include/be/Random.h");
+			randomHFile << RANDOM_H_TEMPLATE;
+			randomHFile.close();
+		}
+
+		{
+			std::ofstream randomCppFile("src/be/Random.cpp");
+			randomCppFile << RANDOM_CPP_TEMPLATE;
+			randomCppFile.close();
+		}
 	}, generateWorkspaceTask) };
 	
+	auto generateISceneTask { stm::make_task([]{
+		Log() << "Generating IScene Class\n";
+
+		std::ofstream isceneHFile("include/be/IScene.h");
+		isceneHFile << ISCENE_H_TEMPLATE;
+		isceneHFile.close();
+
+	}, generateWorkspaceTask) };
+
+	auto generateMainSceneTask { stm::make_task([]{
+		Log() << "Generating MainScene Class\n";
+
+		{
+			std::ofstream mainSceneHFile("include/MainScene.h");
+			mainSceneHFile << MAINSCENE_H_TEMPLATE;
+			mainSceneHFile.close();
+		}
+
+		{
+			std::ofstream mainSceneCppFile("src/MainScene.cpp");
+			mainSceneCppFile << MAINSCENE_CPP_TEMPLATE;
+			mainSceneCppFile.close();
+		}
+
+	}, generateWorkspaceTask) };
+
 	auto generateSceneManagerTask { stm::make_task([] {
 		Log() << "Generating SceneManager Class\n";
 
-		gbg::generators::SceneManager().generate(); 
+		{
+			std::ofstream sceneManagerHFile("include/be/SceneManager.h");
+			sceneManagerHFile << SCENEMANAGER_H_TEMPLATE;
+			sceneManagerHFile.close();
+		}
+		
+		{
+			std::ofstream sceneManagerCppFile("src/be/SceneManager.cpp");
+			sceneManagerCppFile << SCENEMANAGER_CPP_TEMPLATE;
+			sceneManagerCppFile.close();
+		}
 	}, generateWorkspaceTask) };
 	
 	auto generateTextureManagerTask { stm::make_task([&] {
 		if(withSDL2ImageExtra) {
 			Log() << "Generating TextureManager file\n";
 
-			gbg::generators::TextureManager().generate(); 
+			{
+				std::ofstream textureManagerHFile("include/be/TextureManager.h");
+				textureManagerHFile << TEXTUREMANAGER_H_TEMPLATE;
+				textureManagerHFile.close();
+			}
+			
+			{
+				std::ofstream textureManagerCppFile("src/be/TextureManager.cpp");
+				textureManagerCppFile << TEXTUREMANAGER_CPP_TEMPLATE;
+				textureManagerCppFile.close();
+			}
 		}
 	}, generateWorkspaceTask) };
 	
@@ -199,7 +290,9 @@ void ProjectBuilder::build() {
 	auto generateMainFileTask { stm::make_task([&] {
 		Log() << "Generating main file\n";
 
-		gbg::generators::MainFile(projectName).generate(); 
+		std::ofstream mainCppFile("src/main.cpp");
+		mainCppFile << replaceAll(MAIN_CPP_TEMPLATE, { { "{NAME}", projectName } });
+		mainCppFile.close();
 	}, generateWorkspaceTask) };
 	
 
@@ -210,6 +303,8 @@ void ProjectBuilder::build() {
 	generateTimeClassTask->result();
 	generateCronometerTask->result();
 	generateRandomTask->result();
+	generateISceneTask->result();
+	generateMainSceneTask->result();
 	generateSceneManagerTask->result();
 	generateTextureManagerTask->result();
 	generateGameTask->result();

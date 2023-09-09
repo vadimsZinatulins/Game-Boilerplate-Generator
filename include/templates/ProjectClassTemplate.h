@@ -17,14 +17,15 @@ private:
 )" };
 
 const auto PROJECTCLASS_CPP_TEMPLATE { R"(#include "{NAME}.h"
-#include "MainMenuScene.h"
+#include "MainScene.h"
 #include "be/SceneManager.h"
 
 #include <SDL.h>
 
 void {NAME}::initialize() {
-	be::SceneManager::getInstance().pushScene<MainMenuScene>();
+	be::SceneManager::getInstance().pushScene<MainScene>();
 }
+
 void {NAME}::shutdown() {
 	
 }

@@ -3,12 +3,12 @@
 const auto CONFIG_H_IN_TEMPLATE { R"(#pragma once
 
 // Set the major version for the project
-#define MAJOR_VERSION @Test_VERSION_MAJOR@
+#define MAJOR_VERSION @{NAME}_VERSION_MAJOR@
 // Set the minor version for the project
-#define MINOR_VERSION @Test_VERSION_MINOR@
+#define MINOR_VERSION @{NAME}_VERSION_MINOR@
 
 // Window title
-#define SCREEN_TITLE "Test"
+#define SCREEN_TITLE "{NAME}"
 
 // Window width
 #define SCREEN_WIDTH 800
