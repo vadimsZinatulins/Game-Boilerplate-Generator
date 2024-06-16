@@ -19,6 +19,15 @@
 #include "templates/MainTemplate.h"
 #include "templates/GameTemplate.h"
 
+// Vulkan templates
+#include "templates/vulkan/VulkanInstanceTemplate.h"
+#include "templates/vulkan/VulkanDebugTempalte.h"
+#include "templates/vulkan/VulkanGameTemplate.h"
+#include "templates/vulkan/VulkanISceneTemplate.h"
+#include "templates/vulkan/VulkanMainSceneTemplate.h"
+#include "templates/vulkan/VulkanMainTemplate.h"
+#include "templates/vulkan/VulkanListFilesTemplate.h"
+
 #include <SimpleTaskManager/make_task.h>
 #include <iostream>
 #include <fstream>
@@ -28,6 +37,10 @@ namespace gbg {
 
 void ProjectBuilder::setProjectName(std::string projectName) {
 	m_projectName = projectName;
+}
+
+void ProjectBuilder::setWithVulkanExtra(bool flag) {
+	m_withVulkanExtra = flag;
 }
 
 void ProjectBuilder::setWithSDL2ImageExtra(bool flag) {
@@ -41,6 +54,7 @@ void ProjectBuilder::setWithLogsExtra(bool flag) {
 void ProjectBuilder::build() {
 	const auto projectName { m_projectName };
 	const auto withSDL2ImageExtra { m_withSDL2ImageExtra };
+	const auto withVulkanExtra { m_withVulkanExtra };
 
 	if(projectName.empty()) {
 		return;
@@ -49,45 +63,61 @@ void ProjectBuilder::build() {
 	auto generateWorkspaceTask { stm::make_task([&] { 
 		Log() << "Generating workspace\n";
 
-		generators::generateWorkspace(projectName); 
+		generators::generateWorkspace(projectName, withVulkanExtra); 
 	}) };
 
 	auto generateCMakeFileTask { stm::make_task([&] {
 		Log() << "Generating listfiles\n";
 
 		{
-			std::stringstream sdl2ImageLibContent;
-
-			if(withSDL2ImageExtra) {
-				sdl2ImageLibContent << ROOT_LISTFILE_SDL2_IMAGE_FETCH_CONTENT_TEMPLATE;
-			}
-
-			ReplaceContent rc = {
-				{ "{SDL2_IMAGE_FETCH_CONTENT}", sdl2ImageLibContent.str() },
-				{ "{NAME}", projectName }
-			};
-
 			std::ofstream rootListfile("CMakeLists.txt");
-			rootListfile << replaceAll(ROOT_LISTFILE_TEMPLATE, rc);
+			if(!withVulkanExtra) {
+				std::stringstream sdl2ImageLibContent;
+
+				if(withSDL2ImageExtra) {
+					sdl2ImageLibContent << ROOT_LISTFILE_SDL2_IMAGE_FETCH_CONTENT_TEMPLATE;
+				}
+
+				ReplaceContent rc = {
+					{ "{SDL2_IMAGE_FETCH_CONTENT}", sdl2ImageLibContent.str() },
+					{ "{NAME}", projectName }
+				};
+
+				rootListfile << replaceAll(ROOT_LISTFILE_TEMPLATE, rc);
+			} else {
+				ReplaceContent rc = {
+					{ "{NAME}", projectName }
+				};
+
+				rootListfile << replaceAll(VULKAN_ROOT_LISTFILE_TEMPLATE, rc);
+			}
 			rootListfile.close();
 		}
 
 		{
-			std::stringstream sdl2ImageContent;
-			std::stringstream sdl2ImageSourceContent;
-			if(withSDL2ImageExtra) {
-				sdl2ImageContent << SRC_LISTFILE_SDL2_IMAGE_LIBRARY_TEMPLATE;
-				sdl2ImageSourceContent <<  SRC_LISTFILE_SDL2_IMAGE_CPPS_TEMPLATE;
-			}
-
-			ReplaceContent rc = {
-				{ "{SDL2_IMAGE_CONTENT}", sdl2ImageContent.str() },
-				{ "{SDL2_IMAGE_SOURCES}", sdl2ImageSourceContent.str() },
-				{ "{NAME}", projectName }
-			};
-
 			std::ofstream srcListfile("src/CMakeLists.txt");
-			srcListfile << replaceAll(SRC_LISTFILE_TEMPLATE, rc);
+			if(!withVulkanExtra) {
+				std::stringstream sdl2ImageContent;
+				std::stringstream sdl2ImageSourceContent;
+				if(withSDL2ImageExtra) {
+					sdl2ImageContent << SRC_LISTFILE_SDL2_IMAGE_LIBRARY_TEMPLATE;
+					sdl2ImageSourceContent <<  SRC_LISTFILE_SDL2_IMAGE_CPPS_TEMPLATE;
+				}
+
+				ReplaceContent rc = {
+					{ "{SDL2_IMAGE_CONTENT}", sdl2ImageContent.str() },
+					{ "{SDL2_IMAGE_SOURCES}", sdl2ImageSourceContent.str() },
+					{ "{NAME}", projectName }
+				};
+
+				srcListfile << replaceAll(SRC_LISTFILE_TEMPLATE, rc);
+			} else {
+				ReplaceContent rc = {
+					{ "{NAME}", projectName }
+				};
+
+				srcListfile << replaceAll(VULKAN_SRC_LISTFILE_TEMPLATE, rc);
+			}
 			srcListfile.close();
 		}
 	}, generateWorkspaceTask) };
@@ -191,27 +221,39 @@ void ProjectBuilder::build() {
 		}
 	}, generateWorkspaceTask) };
 	
-	auto generateISceneTask { stm::make_task([]{
+	auto generateISceneTask { stm::make_task([withVulkanExtra]{
 		Log() << "Generating IScene Class\n";
 
 		std::ofstream isceneHFile("include/be/IScene.h");
-		isceneHFile << ISCENE_H_TEMPLATE;
+		if(!withVulkanExtra) {
+			isceneHFile << ISCENE_H_TEMPLATE;
+		} else {
+			isceneHFile << VULKAN_ISCENE_H_TEMPLATE;
+		}
 		isceneHFile.close();
 
 	}, generateWorkspaceTask) };
 
-	auto generateMainSceneTask { stm::make_task([]{
+	auto generateMainSceneTask { stm::make_task([withVulkanExtra]{
 		Log() << "Generating MainScene Class\n";
 
 		{
 			std::ofstream mainSceneHFile("include/MainScene.h");
-			mainSceneHFile << MAINSCENE_H_TEMPLATE;
+			if(!withVulkanExtra) {
+				mainSceneHFile << MAINSCENE_H_TEMPLATE;
+			} else {
+				mainSceneHFile << VULKAN_MAINSCENE_H_TEMPLATE;
+			}
 			mainSceneHFile.close();
 		}
 
 		{
 			std::ofstream mainSceneCppFile("src/MainScene.cpp");
-			mainSceneCppFile << MAINSCENE_CPP_TEMPLATE;
+			if(!withVulkanExtra) {
+				mainSceneCppFile << MAINSCENE_CPP_TEMPLATE;
+			} else {
+				mainSceneCppFile << VULKAN_MAINSCENE_CPP_TEMPLATE;
+			}
 			mainSceneCppFile.close();
 		}
 
@@ -253,34 +295,38 @@ void ProjectBuilder::build() {
 	
 	auto generateGameTask { stm::make_task([&] {
 		Log() << "Generating Game Class\n";
-
-		std::stringstream textureManagerIncludeContent;
-		std::stringstream sdlImageIncludeContent;
-		std::stringstream imgInitContent;
-		std::stringstream textureManagerInitContent;
-		std::stringstream textureManagerClearContent;
-		std::stringstream imgQuitContent;
-
-		if(withSDL2ImageExtra) {
-			textureManagerIncludeContent << GAME_TEXTURE_MANAGER_INCLUDE_TEMPLATE;
-			sdlImageIncludeContent << GAME_SDL_IMAGE_INCLUDE_TEMPLATE;
-			imgInitContent << GAME_IMG_INIT_TEMPLATE;
-			textureManagerInitContent << GAME_TEXTURE_MANAGER_INIT_TEMPLATE;
-			textureManagerClearContent << GAME_TEXTURE_MANAGER_CLEAR_TEMPLATE;
-			imgQuitContent << GAME_IMG_QUIT_TEMPLATE;
-		}
-
-		ReplaceContent rc = {
-			{ "{TEXTURE_MANAGER_INCLUDE}", textureManagerIncludeContent.str() },
-			{ "{SDL_IMAGE_INCLUDE}", sdlImageIncludeContent.str() },
-			{ "{IMG_INIT}", imgInitContent.str() },
-			{ "{TEXTURE_MANAGER_INIT}", textureManagerInitContent.str() },
-			{ "{TEXTURE_MANAGER_CLEAR}", textureManagerClearContent.str() },
-			{ "{IMG_QUIT}", imgQuitContent.str() }
-		};
-
+		
 		std::ofstream GameHFile("include/be/Game.h");
-		GameHFile << replaceAll(GAME_H_TEMPLATE, rc);
+		if(!withVulkanExtra) {
+			std::stringstream textureManagerIncludeContent;
+			std::stringstream sdlImageIncludeContent;
+			std::stringstream imgInitContent;
+			std::stringstream textureManagerInitContent;
+			std::stringstream textureManagerClearContent;
+			std::stringstream imgQuitContent;
+
+			if(withSDL2ImageExtra) {
+				textureManagerIncludeContent << GAME_TEXTURE_MANAGER_INCLUDE_TEMPLATE;
+				sdlImageIncludeContent << GAME_SDL_IMAGE_INCLUDE_TEMPLATE;
+				imgInitContent << GAME_IMG_INIT_TEMPLATE;
+				textureManagerInitContent << GAME_TEXTURE_MANAGER_INIT_TEMPLATE;
+				textureManagerClearContent << GAME_TEXTURE_MANAGER_CLEAR_TEMPLATE;
+				imgQuitContent << GAME_IMG_QUIT_TEMPLATE;
+			}
+
+			ReplaceContent rc = {
+				{ "{TEXTURE_MANAGER_INCLUDE}", textureManagerIncludeContent.str() },
+				{ "{SDL_IMAGE_INCLUDE}", sdlImageIncludeContent.str() },
+				{ "{IMG_INIT}", imgInitContent.str() },
+				{ "{TEXTURE_MANAGER_INIT}", textureManagerInitContent.str() },
+				{ "{TEXTURE_MANAGER_CLEAR}", textureManagerClearContent.str() },
+				{ "{IMG_QUIT}", imgQuitContent.str() }
+			};
+
+			GameHFile << replaceAll(GAME_H_TEMPLATE, rc);
+		} else {
+			GameHFile << VULKAN_GAME_H_TEMPLATE;
+		}
 		GameHFile.close();
 	}, generateWorkspaceTask) };
 	
@@ -300,11 +346,47 @@ void ProjectBuilder::build() {
 		}
 	}, generateWorkspaceTask) };
 	
+	auto generateVulkanInstance { stm::make_task([withVulkanExtra, projectName] {
+		if(withVulkanExtra) {
+			{
+				std::ofstream instanceCppFile("src/be/vulkan/Instance.cpp");
+				instanceCppFile << replaceAll(VULKAN_INSTANCE_CPP_TEMPLATE, { { "{PROJECT_NAME}", projectName } });
+				instanceCppFile.close();
+			}
+			
+			{
+				std::ofstream instanceHFile("include/be/vulkan/Instance.h");
+				instanceHFile << VULKAN_INSTANCE_H_TEMPLATE;
+				instanceHFile.close();
+			}
+		}
+	}, generateWorkspaceTask) };
+	
+	auto generateVulkanDebug { stm::make_task([withVulkanExtra] {
+		if(withVulkanExtra) {
+			{
+				std::ofstream debugCppFile("src/be/vulkan/Debug.cpp");
+				debugCppFile << VULKAN_DEBUG_CPP_TEMPLATE;
+				debugCppFile.close();
+			}
+			
+			{
+				std::ofstream debugHFile("include/be/vulkan/Debug.h");
+				debugHFile << VULKAN_DEBUG_H_TEMPLATE;
+				debugHFile.close();
+			}
+		}
+	}, generateWorkspaceTask) };
+
 	auto generateMainFileTask { stm::make_task([&] {
 		Log() << "Generating main.cpp file\n";
 
 		std::ofstream mainCppFile("src/main.cpp");
-		mainCppFile << replaceAll(MAIN_CPP_TEMPLATE, { { "{NAME}", projectName } });
+		if(!withVulkanExtra) {
+			mainCppFile << replaceAll(MAIN_CPP_TEMPLATE, { { "{NAME}", projectName } });
+		} else {
+			mainCppFile << replaceAll(VULKAN_MAIN_CPP_TEMPLATE, { { "{NAME}", projectName } });
+		}
 		mainCppFile.close();
 	}, generateWorkspaceTask) };
 	
@@ -323,6 +405,8 @@ void ProjectBuilder::build() {
 	generateGameTask->result();
 	generateProjectNameFileTask->result();
 	generateMainFileTask->result();
+	generateVulkanInstance->result();
+	generateVulkanDebug->result();
 
 	if(m_withLogsExtra) {
 		Log() << "\n\tcd " << projectName << " && cmake -B build/ && ln -s build/compile_commands.json . && cmake --build build/\n";

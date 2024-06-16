@@ -12,6 +12,7 @@ int main(int argc, char *argv[])
 
 	parser.addAction({ "--name", "-n" }, [&builder] (std::string projectName) { builder.setProjectName(projectName); });
 	parser.addAction({ "--help", "-h" }, []{ gbg::utils::writeHelp(); });
+	parser.addAction({ "--with-vulkan" }, [&builder]{ builder.setWithVulkanExtra(true); });
 	parser.addAction({ "--with-SDL2-image" }, [&builder]{ builder.setWithSDL2ImageExtra(true); });
 	parser.addAction({ "--no-logs" }, [&builder]{ builder.setWithLogsExtra(false); });
 

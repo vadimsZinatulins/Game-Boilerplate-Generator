@@ -11,6 +11,7 @@ public:
 
 	void setProjectName(std::string projectName);
 
+	void setWithVulkanExtra(bool flag);
 	void setWithSDL2ImageExtra(bool flag);
 	void setWithLogsExtra(bool flag);
 
@@ -18,6 +19,7 @@ public:
 private:
 	std::string m_projectName { "" };
 
+	bool m_withVulkanExtra { false };
 	bool m_withSDL2ImageExtra { false };
 	bool m_withLogsExtra { true };
 };

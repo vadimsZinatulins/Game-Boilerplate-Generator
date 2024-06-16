@@ -4,6 +4,6 @@
 
 namespace gbg::generators {
 
-void generateWorkspace(const std::string &projectName);
+void generateWorkspace(const std::string &projectName, bool withVulkan);
 
 }
