@@ -56,7 +56,7 @@ target_sources(${PROJECT_NAME}
 target_sources(${PROJECT_NAME}
 	PRIVATE
         be/vulkan/Instance.cpp
-        be/vulkan/Debug.cpp
+        be/vulkan/DebugMessenger.cpp
 )
 
 # Game core source files

@@ -7,7 +7,7 @@ const auto VULKAN_GAME_H_TEMPLATE { R"(#pragma once
 #include "be/MouseManager.h"
 #include "be/SceneManager.h"
 #include "be/vulkan/Instance.h"
-#include "be/vulkan/Debug.h"
+#include "be/vulkan/DebugMessenger.h"
 
 #include "config.h"
 
@@ -36,7 +36,7 @@ private:
 		bool enableDebug { true };
 		m_vulkanInstance = std::make_shared<vulkan::Instance>(m_window, enableDebug);
 		if(enableDebug) {
-			m_vulakDebug = std::make_shared<vulkan::Debug>(m_vulkanInstance);
+			m_vulakDebug = std::make_shared<vulkan::DebugMessenger>(m_vulkanInstance);
 		}
 
 		static_cast<T*>(this)->initialize();
@@ -103,7 +103,7 @@ private:
 	SDL_Window *m_window { nullptr };
 
 	vulkan::Instance::Ptr m_vulkanInstance { nullptr };
-	vulkan::Debug::Ptr m_vulakDebug { nullptr };
+	vulkan::DebugMessenger::Ptr m_vulakDebug { nullptr };
 };
 
 } // namespace be

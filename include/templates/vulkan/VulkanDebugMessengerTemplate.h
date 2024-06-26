@@ -9,13 +9,13 @@ const auto VULKAN_DEBUG_H_TEMPLATE { R"(#pragma once
 
 namespace be::vulkan {
 
-class Debug {
+class DebugMessenger {
 public:
-    using Ptr = std::shared_ptr<Debug>;
+    using Ptr = std::shared_ptr<DebugMessenger>;
 
     // Constructor/Destructor
-    Debug(Instance::Ptr instance);
-    ~Debug();
+    DebugMessenger(Instance::Ptr instance);
+    ~DebugMessenger();
 
 private:
 	template<typename T>
@@ -24,16 +24,16 @@ private:
 	friend class Instance;
 
     // Copy Constructor
-    Debug(const Debug &other) = delete;
+    DebugMessenger(const DebugMessenger &other) = delete;
 
     // Move Constructor
-    Debug(Debug &&other) = delete;
+    DebugMessenger(DebugMessenger &&other) = delete;
     
     // Copy Assignment
-    Debug &operator=(const Debug &other) = delete;
+    DebugMessenger &operator=(const DebugMessenger &other) = delete;
     
     // Move Assignment
-    Debug &operator=(Debug &&other) = delete;
+    DebugMessenger &operator=(DebugMessenger &&other) = delete;
 
     static void populateDebugCreateInfo(VkDebugUtilsMessengerCreateInfoEXT &pDebugInfo);
 
@@ -44,7 +44,7 @@ private:
 }
 )" };
 
-const auto VULKAN_DEBUG_CPP_TEMPLATE { R"(#include "be/vulkan/Debug.h"
+const auto VULKAN_DEBUG_CPP_TEMPLATE { R"(#include "be/vulkan/DebugMessenger.h"
 
 #include <vulkan/vk_enum_string_helper.h>
 #include <string>
@@ -96,7 +96,7 @@ void destroyDebugUtulsMessengerEXT(
     }
 }
 
-void Debug::populateDebugCreateInfo(VkDebugUtilsMessengerCreateInfoEXT &debugInfo) {
+void DebugMessenger::populateDebugCreateInfo(VkDebugUtilsMessengerCreateInfoEXT &debugInfo) {
     debugInfo = {};
 
     debugInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
@@ -110,7 +110,7 @@ void Debug::populateDebugCreateInfo(VkDebugUtilsMessengerCreateInfoEXT &debugInf
     debugInfo.pUserData = nullptr;
 }
 
-Debug::Debug(Instance::Ptr instance) : m_instance(instance) {
+DebugMessenger::DebugMessenger(Instance::Ptr instance) : m_instance(instance) {
     VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo{};
     populateDebugCreateInfo(debugCreateInfo);
 
@@ -119,7 +119,7 @@ Debug::Debug(Instance::Ptr instance) : m_instance(instance) {
     }
 }
 
-Debug::~Debug() {
+DebugMessenger::~DebugMessenger() {
     if(m_debugMessenger) {
         destroyDebugUtulsMessengerEXT(*m_instance, m_debugMessenger, nullptr);
 

@@ -41,7 +41,7 @@ private:
 )" };
 
 const auto VULKAN_INSTANCE_CPP_TEMPLATE { R"(#include "be/vulkan/Instance.h"
-#include "be/vulkan/Debug.h"
+#include "be/vulkan/DebugMessenger.h"
 
 #include <SDL_vulkan.h>
 #include <vector>
@@ -179,7 +179,7 @@ Instance::Instance(SDL_Window *window, bool enableDebug) {
         validationLayers.push_back("VK_LAYER_KHRONOS_validation");
 
         // Populate Debug creation information if debug is enabled
-        Debug::populateDebugCreateInfo(debugCreateInfo);
+        DebugMessenger::populateDebugCreateInfo(debugCreateInfo);
     }
     
     // Make sure all extensions are supported

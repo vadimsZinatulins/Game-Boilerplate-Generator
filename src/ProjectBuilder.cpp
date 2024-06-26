@@ -21,7 +21,7 @@
 
 // Vulkan templates
 #include "templates/vulkan/VulkanInstanceTemplate.h"
-#include "templates/vulkan/VulkanDebugTempalte.h"
+#include "templates/vulkan/VulkanDebugMessengerTemplate.h"
 #include "templates/vulkan/VulkanGameTemplate.h"
 #include "templates/vulkan/VulkanISceneTemplate.h"
 #include "templates/vulkan/VulkanMainSceneTemplate.h"
@@ -365,13 +365,13 @@ void ProjectBuilder::build() {
 	auto generateVulkanDebug { stm::make_task([withVulkanExtra] {
 		if(withVulkanExtra) {
 			{
-				std::ofstream debugCppFile("src/be/vulkan/Debug.cpp");
+				std::ofstream debugCppFile("src/be/vulkan/DebugMessenger.cpp");
 				debugCppFile << VULKAN_DEBUG_CPP_TEMPLATE;
 				debugCppFile.close();
 			}
 			
 			{
-				std::ofstream debugHFile("include/be/vulkan/Debug.h");
+				std::ofstream debugHFile("include/be/vulkan/DebugMessenger.h");
 				debugHFile << VULKAN_DEBUG_H_TEMPLATE;
 				debugHFile.close();
 			}
