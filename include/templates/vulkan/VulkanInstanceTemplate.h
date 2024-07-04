@@ -2,7 +2,7 @@
 
 const auto VULKAN_INSTANCE_H_TEMPLATE { R"(#pragma once
 
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <vulkan/vulkan.h>
 #include <memory>
 
@@ -43,7 +43,7 @@ private:
 const auto VULKAN_INSTANCE_CPP_TEMPLATE { R"(#include "be/vulkan/Instance.h"
 #include "be/vulkan/DebugMessenger.h"
 
-#include <SDL_vulkan.h>
+#include <SDL3/SDL_vulkan.h>
 #include <vector>
 #include <stdexcept>
 #include <vulkan/vk_enum_string_helper.h>
@@ -56,6 +56,13 @@ namespace be::vulkan {
 
 namespace local_helpers {
     
+std::vector<const char*> getInstanceExtensions() {
+    uint32_t sdlExtensionCount { 0 };
+    auto instanceExtensions { SDL_Vulkan_GetInstanceExtensions(&sdlExtensionCount) };
+
+    return std::vector<const char*>(instanceExtensions, instanceExtensions + sdlExtensionCount);
+}
+
 void checkExtensionsSupport(const std::vector<const char*> &checkExtensions) {
     // Get the extensions properties count
     uint32_t extensionCount { 0 };
@@ -157,13 +164,8 @@ Instance::Instance(SDL_Window *window, bool enableDebug) {
     // Vulkan information
     appInfo.apiVersion = VK_API_VERSION_1_1;
 
-    // Get the extensions count
-    uint32_t sdlExtensionCount { 0 };
-    SDL_Vulkan_GetInstanceExtensions(window, &sdlExtensionCount, nullptr);
-
     // Get the extensions
-    std::vector<const char*> instanceExtensions(sdlExtensionCount);
-    SDL_Vulkan_GetInstanceExtensions(window, &sdlExtensionCount, instanceExtensions.data());
+    auto instanceExtensions { local_helpers::getInstanceExtensions() };
 
     // List of validation layers to use
     std::vector<const char*> validationLayers;

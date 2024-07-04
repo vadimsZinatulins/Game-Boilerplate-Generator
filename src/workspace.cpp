@@ -1,6 +1,7 @@
 #include "workspace.h"
 
 #include <filesystem>
+#include <vector>
 
 namespace gbg::generators {
 

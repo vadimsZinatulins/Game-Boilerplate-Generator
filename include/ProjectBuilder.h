@@ -12,7 +12,6 @@ public:
 	void setProjectName(std::string projectName);
 
 	void setWithVulkanExtra(bool flag);
-	void setWithSDL2ImageExtra(bool flag);
 	void setWithLogsExtra(bool flag);
 
 	void build();

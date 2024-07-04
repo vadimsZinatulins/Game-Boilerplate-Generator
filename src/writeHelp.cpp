@@ -15,7 +15,6 @@ void writeHelp() {
 	help << "\t    --no-logs\t\tDon't print logs\n";
 	help << "\t-h, --help\t\tDisplay help\n";
 	help << "\t    --with-vulkan\tGenerates SDL2 project with Vulkan boilerplate setup\n";
-	help << "\t    --with-SDL2-image\tInclude SDL2_Image in the project (requires that SDL2_image is installed) if --with-vulkan parameter is not being used\n";
 
 	Log() << help.str();
 }

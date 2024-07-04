@@ -16,7 +16,7 @@ public:
 
 auto MAINSCENE_CPP_TEMPLATE { R"(#include "MainScene.h"
 
-#include <SDL.h>
+#include <SDL3/SDL.h>
 
 void MainScene::initialize() {
 	

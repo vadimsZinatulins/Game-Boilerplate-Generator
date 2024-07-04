@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.29)
 
 # Game Boilerplate Generator
 project(gbgen VERSION 3.6.1)

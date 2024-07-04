@@ -15,7 +15,6 @@
 #include "templates/ISceneTemplate.h"
 #include "templates/MainSceneTemplate.h"
 #include "templates/SceneManagerTemplate.h"
-#include "templates/TextureManagerTemplate.h"
 #include "templates/MainTemplate.h"
 #include "templates/GameTemplate.h"
 
@@ -43,17 +42,12 @@ void ProjectBuilder::setWithVulkanExtra(bool flag) {
 	m_withVulkanExtra = flag;
 }
 
-void ProjectBuilder::setWithSDL2ImageExtra(bool flag) {
-	m_withSDL2ImageExtra = flag;
-}
-
 void ProjectBuilder::setWithLogsExtra(bool flag) {
 	m_withLogsExtra = flag;
 }
 
 void ProjectBuilder::build() {
 	const auto projectName { m_projectName };
-	const auto withSDL2ImageExtra { m_withSDL2ImageExtra };
 	const auto withVulkanExtra { m_withVulkanExtra };
 
 	if(projectName.empty()) {
@@ -74,10 +68,6 @@ void ProjectBuilder::build() {
 			if(!withVulkanExtra) {
 				std::stringstream sdl2ImageLibContent;
 
-				if(withSDL2ImageExtra) {
-					sdl2ImageLibContent << ROOT_LISTFILE_SDL2_IMAGE_FETCH_CONTENT_TEMPLATE;
-				}
-
 				ReplaceContent rc = {
 					{ "{SDL2_IMAGE_FETCH_CONTENT}", sdl2ImageLibContent.str() },
 					{ "{NAME}", projectName }
@@ -97,16 +87,7 @@ void ProjectBuilder::build() {
 		{
 			std::ofstream srcListfile("src/CMakeLists.txt");
 			if(!withVulkanExtra) {
-				std::stringstream sdl2ImageContent;
-				std::stringstream sdl2ImageSourceContent;
-				if(withSDL2ImageExtra) {
-					sdl2ImageContent << SRC_LISTFILE_SDL2_IMAGE_LIBRARY_TEMPLATE;
-					sdl2ImageSourceContent <<  SRC_LISTFILE_SDL2_IMAGE_CPPS_TEMPLATE;
-				}
-
 				ReplaceContent rc = {
-					{ "{SDL2_IMAGE_CONTENT}", sdl2ImageContent.str() },
-					{ "{SDL2_IMAGE_SOURCES}", sdl2ImageSourceContent.str() },
 					{ "{NAME}", projectName }
 				};
 
@@ -125,14 +106,7 @@ void ProjectBuilder::build() {
 	auto generateConfigTask { stm::make_task([&] {
 		Log() << "Generating config.h.in file\n";
 
-		std::stringstream sdl2ImageContent;
-
-		if(withSDL2ImageExtra) {
-			sdl2ImageContent << CONFIG_H_IN_SDL2_IMAGE_CONTENT_TEMPLATE;
-		}
-
 		ReplaceContent rc =  { 
-			{ "{SDL_IMAGE_CONTENT}", sdl2ImageContent.str() }, 
 			{ "{NAME}", projectName } 
 		};
 
@@ -275,55 +249,12 @@ void ProjectBuilder::build() {
 		}
 	}, generateWorkspaceTask) };
 	
-	auto generateTextureManagerTask { stm::make_task([&] {
-		if(withSDL2ImageExtra) {
-			Log() << "Generating TextureManager Class\n";
-
-			{
-				std::ofstream textureManagerHFile("include/be/TextureManager.h");
-				textureManagerHFile << TEXTUREMANAGER_H_TEMPLATE;
-				textureManagerHFile.close();
-			}
-			
-			{
-				std::ofstream textureManagerCppFile("src/be/TextureManager.cpp");
-				textureManagerCppFile << TEXTUREMANAGER_CPP_TEMPLATE;
-				textureManagerCppFile.close();
-			}
-		}
-	}, generateWorkspaceTask) };
-	
 	auto generateGameTask { stm::make_task([&] {
 		Log() << "Generating Game Class\n";
 		
 		std::ofstream GameHFile("include/be/Game.h");
 		if(!withVulkanExtra) {
-			std::stringstream textureManagerIncludeContent;
-			std::stringstream sdlImageIncludeContent;
-			std::stringstream imgInitContent;
-			std::stringstream textureManagerInitContent;
-			std::stringstream textureManagerClearContent;
-			std::stringstream imgQuitContent;
-
-			if(withSDL2ImageExtra) {
-				textureManagerIncludeContent << GAME_TEXTURE_MANAGER_INCLUDE_TEMPLATE;
-				sdlImageIncludeContent << GAME_SDL_IMAGE_INCLUDE_TEMPLATE;
-				imgInitContent << GAME_IMG_INIT_TEMPLATE;
-				textureManagerInitContent << GAME_TEXTURE_MANAGER_INIT_TEMPLATE;
-				textureManagerClearContent << GAME_TEXTURE_MANAGER_CLEAR_TEMPLATE;
-				imgQuitContent << GAME_IMG_QUIT_TEMPLATE;
-			}
-
-			ReplaceContent rc = {
-				{ "{TEXTURE_MANAGER_INCLUDE}", textureManagerIncludeContent.str() },
-				{ "{SDL_IMAGE_INCLUDE}", sdlImageIncludeContent.str() },
-				{ "{IMG_INIT}", imgInitContent.str() },
-				{ "{TEXTURE_MANAGER_INIT}", textureManagerInitContent.str() },
-				{ "{TEXTURE_MANAGER_CLEAR}", textureManagerClearContent.str() },
-				{ "{IMG_QUIT}", imgQuitContent.str() }
-			};
-
-			GameHFile << replaceAll(GAME_H_TEMPLATE, rc);
+			GameHFile << GAME_H_TEMPLATE;
 		} else {
 			GameHFile << VULKAN_GAME_H_TEMPLATE;
 		}
@@ -401,7 +332,6 @@ void ProjectBuilder::build() {
 	generateISceneTask->result();
 	generateMainSceneTask->result();
 	generateSceneManagerTask->result();
-	generateTextureManagerTask->result();
 	generateGameTask->result();
 	generateProjectNameFileTask->result();
 	generateMainFileTask->result();

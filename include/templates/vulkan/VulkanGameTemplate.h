@@ -11,7 +11,7 @@ const auto VULKAN_GAME_H_TEMPLATE { R"(#pragma once
 
 #include "config.h"
 
-#include <SDL.h>
+#include <SDL3/SDL.h>
 
 namespace be {
 
@@ -31,7 +31,7 @@ private:
 	void init() {
 		SDL_Init(SDL_INIT_VIDEO);
 		
-		m_window = SDL_CreateWindow(SCREEN_TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_VULKAN);
+		m_window = SDL_CreateWindow(SCREEN_TITLE, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_VULKAN);
 		
 		bool enableDebug { true };
 		m_vulkanInstance = std::make_shared<vulkan::Instance>(m_window, enableDebug);
@@ -59,22 +59,22 @@ private:
 			
 			while(SDL_PollEvent(&e)) {
 				switch(e.type) {
-				case SDL_QUIT:
+				case SDL_EVENT_QUIT:
 					scenes.popAllScenes();
 					break;				
-				case SDL_KEYDOWN:
-					keys.keyPressed(e.key.keysym.sym);
+				case SDL_EVENT_KEY_DOWN:
+					keys.keyPressed(e.key.key);
 					break;				
-				case SDL_KEYUP:
-					keys.keyReleased(e.key.keysym.sym);
+				case SDL_EVENT_KEY_UP:
+					keys.keyReleased(e.key.key);
 					break;				
-				case SDL_MOUSEBUTTONDOWN:
+				case SDL_EVENT_MOUSE_BUTTON_DOWN:
 					mouse.buttonPressed(static_cast<MouseButton>(e.button.button));
 					break;				
-				case SDL_MOUSEBUTTONUP:
+				case SDL_EVENT_MOUSE_BUTTON_UP:
 					mouse.buttonReleased(static_cast<MouseButton>(e.button.button));
 					break;				
-				case SDL_MOUSEMOTION:
+				case SDL_EVENT_MOUSE_MOTION:
 					mouse.mouseMoved(e.motion.x, e.motion.y, e.motion.xrel, e.motion.yrel);
 					break;				
 				}				

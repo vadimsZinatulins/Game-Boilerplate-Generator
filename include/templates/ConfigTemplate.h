@@ -17,7 +17,6 @@ const auto CONFIG_H_IN_TEMPLATE { R"(#pragma once
 
 // Maximum frame rate
 #define FRAME_CAP 60
-{SDL_IMAGE_CONTENT}
 )" };
 
 auto CONFIG_H_IN_SDL2_IMAGE_CONTENT_TEMPLATE { R"(

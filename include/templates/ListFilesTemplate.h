@@ -15,18 +15,18 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS True)
 
 include(FetchContent)
 
-# Do not install SDL2
-set(SDL2_DISABLE_INSTALL CACHE BOOL On FORCE)
-# Build only SDL2 Static Lib
-set(SDL_SHARED_ENABLED_BY_DEFAULT CACHE BOOL Off FORCE)
-message(STATUS "Fetching and configuring SDL2")
+# Fetch SDL3
+set(SDL_STATIC TRUE CACHE BOOL "Build a SDL static library")
 FetchContent_Declare(
-	SDL2
+	SDL
 	GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
-	GIT_TAG release-2.28.2  # Change this freely
+	GIT_TAG main  # Replace this with a particular git tag or git hash
+	GIT_SHALLOW TRUE
+	GIT_PROGRESS TRUE
 )
-
-FetchContent_MakeAvailable(SDL2){SDL2_IMAGE_FETCH_CONTENT}
+message(STATUS "Using SDL3 via FetchContent")
+FetchContent_MakeAvailable(SDL)
+set_property(DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/_deps/sdl-src" PROPERTY EXCLUDE_FROM_ALL TRUE)
 
 # Project configuration file
 configure_file(config/config.h.in "${PROJECT_SOURCE_DIR}/include/config.h")
@@ -48,7 +48,7 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(SDL2_image))" };
 
-auto SRC_LISTFILE_TEMPLATE { R"(# Create the executable from following cpp files
+auto SRC_LISTFILE_TEMPLATE { R"(# Create the executable
 if(WIN32)
 	add_executable(${PROJECT_NAME} WIN32)
 else()
@@ -63,7 +63,7 @@ target_sources(${PROJECT_NAME}
 		be/Time.cpp
 		be/Cronometer.cpp
 		be/Random.cpp
-		be/SceneManager.cpp{SDL2_IMAGE_SOURCES}
+		be/SceneManager.cpp
 )
 
 # Game core source files
@@ -79,14 +79,5 @@ target_include_directories(${PROJECT_NAME} PRIVATE "${PROJECT_SOURCE_DIR}/includ
 # Libraries to link to the project
 target_link_libraries(${PROJECT_NAME}
 	PUBLIC
-		SDL2::SDL2-static
-		SDL2::SDL2main{SDL2_IMAGE_CONTENT}
+		SDL3::SDL3-static
 ))" };
-
-auto SRC_LISTFILE_SDL2_IMAGE_CPPS_TEMPLATE { R"(
-		be/TextureManager.cpp)" 
-};
-
-auto SRC_LISTFILE_SDL2_IMAGE_LIBRARY_TEMPLATE { R"(
-		SDL2_image::SDL2_image-static)" 
-};

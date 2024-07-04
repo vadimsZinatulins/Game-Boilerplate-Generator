@@ -5,11 +5,11 @@ auto GAME_H_TEMPLATE { R"(#pragma once
 #include "be/Time.h"
 #include "be/KeyManager.h"
 #include "be/MouseManager.h"
-#include "be/SceneManager.h"{TEXTURE_MANAGER_INCLUDE}
+#include "be/SceneManager.h"
 
 #include "config.h"
 
-#include <SDL.h>{SDL_IMAGE_INCLUDE}
+#include <SDL3/SDL.h>
 
 namespace be {
 
@@ -27,10 +27,10 @@ public:
 	
 private:
 	void init() {
-		SDL_Init(SDL_INIT_VIDEO);{IMG_INIT}
+		SDL_Init(SDL_INIT_VIDEO);
 		
-		m_window = SDL_CreateWindow(SCREEN_TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-		m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED);{TEXTURE_MANAGER_INIT}
+		m_window = SDL_CreateWindow(SCREEN_TITLE, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
+		m_renderer = SDL_CreateRenderer(m_window, nullptr);
 		
 		SDL_SetRenderDrawColor(m_renderer, 0x00f, 0x00f, 0x00f, 0xff);
 		
@@ -54,22 +54,22 @@ private:
 			
 			while(SDL_PollEvent(&e)) {
 				switch(e.type) {
-				case SDL_QUIT:
+				case SDL_EVENT_QUIT:
 					scenes.popAllScenes();
 					break;				
-				case SDL_KEYDOWN:
-					keys.keyPressed(e.key.keysym.sym);
+				case SDL_EVENT_KEY_DOWN:
+					keys.keyPressed(e.key.key);
 					break;				
-				case SDL_KEYUP:
-					keys.keyReleased(e.key.keysym.sym);
+				case SDL_EVENT_KEY_UP:
+					keys.keyReleased(e.key.key);
 					break;				
-				case SDL_MOUSEBUTTONDOWN:
+				case SDL_EVENT_MOUSE_BUTTON_DOWN:
 					mouse.buttonPressed(static_cast<MouseButton>(e.button.button));
 					break;				
-				case SDL_MOUSEBUTTONUP:
+				case SDL_EVENT_MOUSE_BUTTON_UP:
 					mouse.buttonReleased(static_cast<MouseButton>(e.button.button));
 					break;				
-				case SDL_MOUSEMOTION:
+				case SDL_EVENT_MOUSE_MOTION:
 					mouse.mouseMoved(e.motion.x, e.motion.y, e.motion.xrel, e.motion.yrel);
 					break;				
 				}				
@@ -80,7 +80,7 @@ private:
 			SDL_RenderClear(m_renderer);
 			scene->render(m_renderer);
 			SDL_RenderPresent(m_renderer);
-		}{TEXTURE_MANAGER_CLEAR}
+		}
 	}
 	
 	void close() {
@@ -96,7 +96,7 @@ private:
 			m_window = nullptr;
 		}
 		
-        {IMG_QUIT}SDL_Quit();
+		SDL_Quit();
 	}
 	
 	SDL_Window *m_window { nullptr };
@@ -105,27 +105,3 @@ private:
 
 } // namespace be
 )" };
-
-auto GAME_TEXTURE_MANAGER_INCLUDE_TEMPLATE { R"(
-#include "be/TextureManager.h")" 
-};
-
-auto GAME_SDL_IMAGE_INCLUDE_TEMPLATE { R"(
-#include <SDL_image.h>)" 
-};
-
-auto GAME_IMG_INIT_TEMPLATE { R"(
-        IMG_Init(IMAGE_INIT);)" 
-};
-
-auto GAME_TEXTURE_MANAGER_INIT_TEMPLATE { R"(
-		TextureManager::getInstance().init(m_renderer);)" 
-};
-
-auto GAME_TEXTURE_MANAGER_CLEAR_TEMPLATE { R"(
-		TextureManager::getInstance().clear();)" 
-};
-
-auto GAME_IMG_QUIT_TEMPLATE { R"(IMG_Quit();
-        )" 
-};

@@ -30,7 +30,7 @@ private:
 
 const auto CRONOMETER_CPP_TEMPLATE { R"(#include "be/Cronometer.h"
 
-#include <SDL.h>
+#include <SDL3/SDL.h>
 
 namespace be {
 

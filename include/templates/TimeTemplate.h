@@ -26,7 +26,7 @@ private:
 auto TIMER_CPP_TEMPLATE { R"(#include "be/Time.h" 
 #include "config.h" 
 
-#include <SDL.h>
+#include <SDL3/SDL.h>
 
 namespace be {
 
