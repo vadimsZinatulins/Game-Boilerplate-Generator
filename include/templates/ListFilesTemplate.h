@@ -49,11 +49,7 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(SDL2_image))" };
 
 auto SRC_LISTFILE_TEMPLATE { R"(# Create the executable
-if(WIN32)
-	add_executable(${PROJECT_NAME} WIN32)
-else()
-	add_executable(${PROJECT_NAME})
-endif()
+add_executable(${PROJECT_NAME})
 
 # Basic Engine source files
 target_sources(${PROJECT_NAME}
