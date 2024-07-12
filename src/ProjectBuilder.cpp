@@ -26,6 +26,7 @@
 #include "templates/vulkan/VulkanMainSceneTemplate.h"
 #include "templates/vulkan/VulkanMainTemplate.h"
 #include "templates/vulkan/VulkanListFilesTemplate.h"
+#include "templates/vulkan/VulkanPhysicalDeviceTemplate.h"
 
 #include <SimpleTaskManager/make_task.h>
 #include <iostream>
@@ -305,6 +306,22 @@ void ProjectBuilder::build() {
 				std::ofstream debugHFile("include/be/vulkan/DebugMessenger.h");
 				debugHFile << VULKAN_DEBUG_H_TEMPLATE;
 				debugHFile.close();
+			}
+		}
+	}, generateWorkspaceTask) };
+	
+	auto generateVulkanPhysicalDevice { stm::make_task([withVulkanExtra] {
+		if(withVulkanExtra) {
+			{
+				std::ofstream physicalDeviceCppFile("src/be/vulkan/PhysicalDevice.cpp");
+				physicalDeviceCppFile << VULKAN_PHYSICAL_DEVICE_CPP_TEMPLATE;
+				physicalDeviceCppFile.close();
+			}
+			
+			{
+				std::ofstream physicalDeviceHFile("include/be/vulkan/PhysicalDevice.h");
+				physicalDeviceHFile << VULKAN_PHYSICAL_DEVICE_H_TEMPLATE;
+				physicalDeviceHFile.close();
 			}
 		}
 	}, generateWorkspaceTask) };
