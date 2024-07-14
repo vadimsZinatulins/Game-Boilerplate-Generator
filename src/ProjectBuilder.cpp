@@ -3,6 +3,7 @@
 #include "Logger.h"
 
 #include "utils/replaceAll.h"
+#include "vulkan/VulkanProjectBuilder.h"
 
 #include "templates/ProjectClassTemplate.h"
 #include "templates/CronometerTemplate.h"
@@ -19,14 +20,11 @@
 #include "templates/GameTemplate.h"
 
 // Vulkan templates
-#include "templates/vulkan/VulkanInstanceTemplate.h"
-#include "templates/vulkan/VulkanDebugMessengerTemplate.h"
+#include "templates/vulkan/VulkanMainTemplate.h"
+#include "templates/vulkan/VulkanListFilesTemplate.h"
 #include "templates/vulkan/VulkanGameTemplate.h"
 #include "templates/vulkan/VulkanISceneTemplate.h"
 #include "templates/vulkan/VulkanMainSceneTemplate.h"
-#include "templates/vulkan/VulkanMainTemplate.h"
-#include "templates/vulkan/VulkanListFilesTemplate.h"
-#include "templates/vulkan/VulkanPhysicalDeviceTemplate.h"
 
 #include <SimpleTaskManager/make_task.h>
 #include <iostream>
@@ -277,54 +275,6 @@ void ProjectBuilder::build() {
 			projectClassCppFile.close();
 		}
 	}, generateWorkspaceTask) };
-	
-	auto generateVulkanInstance { stm::make_task([withVulkanExtra, projectName] {
-		if(withVulkanExtra) {
-			{
-				std::ofstream instanceCppFile("src/be/vulkan/Instance.cpp");
-				instanceCppFile << replaceAll(VULKAN_INSTANCE_CPP_TEMPLATE, { { "{PROJECT_NAME}", projectName } });
-				instanceCppFile.close();
-			}
-			
-			{
-				std::ofstream instanceHFile("include/be/vulkan/Instance.h");
-				instanceHFile << VULKAN_INSTANCE_H_TEMPLATE;
-				instanceHFile.close();
-			}
-		}
-	}, generateWorkspaceTask) };
-	
-	auto generateVulkanDebug { stm::make_task([withVulkanExtra] {
-		if(withVulkanExtra) {
-			{
-				std::ofstream debugCppFile("src/be/vulkan/DebugMessenger.cpp");
-				debugCppFile << VULKAN_DEBUG_CPP_TEMPLATE;
-				debugCppFile.close();
-			}
-			
-			{
-				std::ofstream debugHFile("include/be/vulkan/DebugMessenger.h");
-				debugHFile << VULKAN_DEBUG_H_TEMPLATE;
-				debugHFile.close();
-			}
-		}
-	}, generateWorkspaceTask) };
-	
-	auto generateVulkanPhysicalDevice { stm::make_task([withVulkanExtra] {
-		if(withVulkanExtra) {
-			{
-				std::ofstream physicalDeviceCppFile("src/be/vulkan/PhysicalDevice.cpp");
-				physicalDeviceCppFile << VULKAN_PHYSICAL_DEVICE_CPP_TEMPLATE;
-				physicalDeviceCppFile.close();
-			}
-			
-			{
-				std::ofstream physicalDeviceHFile("include/be/vulkan/PhysicalDevice.h");
-				physicalDeviceHFile << VULKAN_PHYSICAL_DEVICE_H_TEMPLATE;
-				physicalDeviceHFile.close();
-			}
-		}
-	}, generateWorkspaceTask) };
 
 	auto generateMainFileTask { stm::make_task([&] {
 		Log() << "Generating main.cpp file\n";
@@ -352,8 +302,10 @@ void ProjectBuilder::build() {
 	generateGameTask->result();
 	generateProjectNameFileTask->result();
 	generateMainFileTask->result();
-	generateVulkanInstance->result();
-	generateVulkanDebug->result();
+
+	if(withVulkanExtra) {
+		buildVulkanProject(generateWorkspaceTask, projectName);
+	}
 
 	if(m_withLogsExtra) {
 		Log() << "\n\tcd " << projectName << " && cmake -B build/ && ln -s build/compile_commands.json . && cmake --build build/\n";

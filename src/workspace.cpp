@@ -15,7 +15,12 @@ void generateWorkspace(const std::string &projectName, bool withVulkan) {
 	std::vector<const char*> directories { "src", "src/be", "config", "include", "include/be" };
 	if(withVulkan) {
 		directories.push_back("include/be/vulkan");
+		directories.push_back("include/be/vulkan/device_picker");
 		directories.push_back("src/be/vulkan");
+		directories.push_back("src/be/vulkan/device_picker");
+		directories.push_back("resources");
+		directories.push_back("resources/shaders");
+		directories.push_back("shaders");
 	}
 
 	// Create the following directories

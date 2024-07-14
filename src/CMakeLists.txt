@@ -19,6 +19,13 @@ target_sources(
 			utils/replaceAll.cpp
 )
 
+# Vulkan sources
+target_sources(
+	gbgen
+		PRIVATE
+			vulkan/VulkanProjectBuilder.cpp
+)
+
 target_include_directories(gbgen PRIVATE "${PROJECT_SOURCE_DIR}/include")
 
 target_link_libraries(gbgen STM::SimpleTaskManager)
