@@ -3,7 +3,6 @@
 #include "Logger.h"
 
 #include "utils/replaceAll.h"
-#include "vulkan/VulkanProjectBuilder.h"
 
 #include "templates/ProjectClassTemplate.h"
 #include "templates/CronometerTemplate.h"
@@ -19,12 +18,7 @@
 #include "templates/MainTemplate.h"
 #include "templates/GameTemplate.h"
 
-// Vulkan templates
-#include "templates/vulkan/VulkanMainTemplate.h"
-#include "templates/vulkan/VulkanListFilesTemplate.h"
-#include "templates/vulkan/VulkanGameTemplate.h"
-#include "templates/vulkan/VulkanISceneTemplate.h"
-#include "templates/vulkan/VulkanMainSceneTemplate.h"
+#include "math/MathExtensionBuilder.h"
 
 #include <SimpleTaskManager/make_task.h>
 #include <iostream>
@@ -37,8 +31,12 @@ void ProjectBuilder::setProjectName(std::string projectName) {
 	m_projectName = projectName;
 }
 
-void ProjectBuilder::setWithVulkanExtra(bool flag) {
-	m_withVulkanExtra = flag;
+void ProjectBuilder::setWithMathExtra(bool flag) {
+	m_withMathExtra = flag;
+}
+
+void ProjectBuilder::setWithSdlImageExtra(bool flag) {
+	m_withSdlImageExtra = flag;
 }
 
 void ProjectBuilder::setWithLogsExtra(bool flag) {
@@ -47,7 +45,8 @@ void ProjectBuilder::setWithLogsExtra(bool flag) {
 
 void ProjectBuilder::build() {
 	const auto projectName { m_projectName };
-	const auto withVulkanExtra { m_withVulkanExtra };
+	const auto withMathExtra { m_withMathExtra };
+	const auto withSdlImageExtra { m_withSdlImageExtra };
 
 	if(projectName.empty()) {
 		return;
@@ -56,7 +55,7 @@ void ProjectBuilder::build() {
 	auto generateWorkspaceTask { stm::make_task([&] { 
 		Log() << "Generating workspace\n";
 
-		generators::generateWorkspace(projectName, withVulkanExtra); 
+		generators::generateWorkspace(projectName, withMathExtra); 
 	}) };
 
 	auto generateCMakeFileTask { stm::make_task([&] {
@@ -64,40 +63,54 @@ void ProjectBuilder::build() {
 
 		{
 			std::ofstream rootListfile("CMakeLists.txt");
-			if(!withVulkanExtra) {
-				std::stringstream sdl2ImageLibContent;
+			std::stringstream sdl3ImageLibContent;
 
-				ReplaceContent rc = {
-					{ "{SDL2_IMAGE_FETCH_CONTENT}", sdl2ImageLibContent.str() },
-					{ "{NAME}", projectName }
-				};
-
-				rootListfile << replaceAll(ROOT_LISTFILE_TEMPLATE, rc);
-			} else {
-				ReplaceContent rc = {
-					{ "{NAME}", projectName }
-				};
-
-				rootListfile << replaceAll(VULKAN_ROOT_LISTFILE_TEMPLATE, rc);
+			if(withSdlImageExtra) {
+				sdl3ImageLibContent << ROOT_LISTFILE_SDL3_IMAGE_FETCH_CONTENT_TEMPLATE;
 			}
+
+			ReplaceContent rc = {
+				{ "{SDL3_IMAGE_FETCH_CONTENT}", sdl3ImageLibContent.str() },
+				{ "{NAME}", projectName }
+			};
+
+			rootListfile << replaceAll(ROOT_LISTFILE_TEMPLATE, rc);
 			rootListfile.close();
 		}
 
 		{
 			std::ofstream srcListfile("src/CMakeLists.txt");
-			if(!withVulkanExtra) {
-				ReplaceContent rc = {
-					{ "{NAME}", projectName }
-				};
+			std::vector<std::string> libraries = {
+				"SDL3::SDL3-static"
+			};
 
-				srcListfile << replaceAll(SRC_LISTFILE_TEMPLATE, rc);
-			} else {
-				ReplaceContent rc = {
-					{ "{NAME}", projectName }
-				};
-
-				srcListfile << replaceAll(VULKAN_SRC_LISTFILE_TEMPLATE, rc);
+			if(withSdlImageExtra) {
+				libraries.push_back("SDL3_image::SDL3_image");
 			}
+
+			std::stringstream librariesContent;
+			for(const auto &lib : libraries) {
+				librariesContent << "\t\t" << lib << "\n";
+			}
+
+			std::stringstream mathFilesContent;
+
+			if(withMathExtra) {
+				mathFilesContent << "\n\n# Math extension files\n";
+				mathFilesContent << "\t\tbe/math/Vec2.cpp\n";
+				mathFilesContent << "\t\tbe/math/Vec3.cpp\n";
+				mathFilesContent << "\t\tbe/math/Vec4.cpp\n";
+				mathFilesContent << "\t\tbe/math/Mat2.cpp\n";
+				mathFilesContent << "\t\tbe/math/Mat3.cpp";
+			}
+
+			ReplaceContent rc = {
+				{ "{NAME}", projectName },
+				{ "{MATH_FILES}", mathFilesContent.str() },
+				{ "{LIBRARIES}", librariesContent.str() }
+			};
+
+			srcListfile << replaceAll(SRC_LISTFILE_TEMPLATE, rc);
 			srcListfile.close();
 		}
 	}, generateWorkspaceTask) };
@@ -194,39 +207,27 @@ void ProjectBuilder::build() {
 		}
 	}, generateWorkspaceTask) };
 	
-	auto generateISceneTask { stm::make_task([withVulkanExtra]{
+	auto generateISceneTask { stm::make_task([]{
 		Log() << "Generating IScene Class\n";
 
 		std::ofstream isceneHFile("include/be/IScene.h");
-		if(!withVulkanExtra) {
-			isceneHFile << ISCENE_H_TEMPLATE;
-		} else {
-			isceneHFile << VULKAN_ISCENE_H_TEMPLATE;
-		}
+		isceneHFile << ISCENE_H_TEMPLATE;
 		isceneHFile.close();
 
 	}, generateWorkspaceTask) };
 
-	auto generateMainSceneTask { stm::make_task([withVulkanExtra]{
+	auto generateMainSceneTask { stm::make_task([]{
 		Log() << "Generating MainScene Class\n";
 
 		{
 			std::ofstream mainSceneHFile("include/MainScene.h");
-			if(!withVulkanExtra) {
-				mainSceneHFile << MAINSCENE_H_TEMPLATE;
-			} else {
-				mainSceneHFile << VULKAN_MAINSCENE_H_TEMPLATE;
-			}
+			mainSceneHFile << MAINSCENE_H_TEMPLATE;
 			mainSceneHFile.close();
 		}
 
 		{
 			std::ofstream mainSceneCppFile("src/MainScene.cpp");
-			if(!withVulkanExtra) {
-				mainSceneCppFile << MAINSCENE_CPP_TEMPLATE;
-			} else {
-				mainSceneCppFile << VULKAN_MAINSCENE_CPP_TEMPLATE;
-			}
+			mainSceneCppFile << MAINSCENE_CPP_TEMPLATE;
 			mainSceneCppFile.close();
 		}
 
@@ -252,11 +253,7 @@ void ProjectBuilder::build() {
 		Log() << "Generating Game Class\n";
 		
 		std::ofstream GameHFile("include/be/Game.h");
-		if(!withVulkanExtra) {
-			GameHFile << GAME_H_TEMPLATE;
-		} else {
-			GameHFile << VULKAN_GAME_H_TEMPLATE;
-		}
+		GameHFile << GAME_H_TEMPLATE;
 		GameHFile.close();
 	}, generateWorkspaceTask) };
 	
@@ -280,15 +277,10 @@ void ProjectBuilder::build() {
 		Log() << "Generating main.cpp file\n";
 
 		std::ofstream mainCppFile("src/main.cpp");
-		if(!withVulkanExtra) {
-			mainCppFile << replaceAll(MAIN_CPP_TEMPLATE, { { "{NAME}", projectName } });
-		} else {
-			mainCppFile << replaceAll(VULKAN_MAIN_CPP_TEMPLATE, { { "{NAME}", projectName } });
-		}
+		mainCppFile << replaceAll(MAIN_CPP_TEMPLATE, { { "{NAME}", projectName } });
 		mainCppFile.close();
 	}, generateWorkspaceTask) };
 	
-
 	generateCMakeFileTask->result();
 	generateConfigTask->result();
 	generateKeyManagerTask->result();
@@ -303,8 +295,8 @@ void ProjectBuilder::build() {
 	generateProjectNameFileTask->result();
 	generateMainFileTask->result();
 
-	if(withVulkanExtra) {
-		buildVulkanProject(generateWorkspaceTask, projectName);
+	if(withMathExtra) {
+		buildMathExtension(generateWorkspaceTask, projectName);
 	}
 
 	if(m_withLogsExtra) {

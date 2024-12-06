@@ -5,19 +5,23 @@
 #include "templates/math/Vec2.h"
 #include "templates/math/Vec3.h"
 #include "templates/math/Vec4.h"
+#include "templates/math/Mat2.h"
+#include "templates/math/Mat3.h"
 
 #include <iostream>
 #include <fstream>
 #include <sstream>
 
+#include <SimpleTaskManager/make_task.h>
+
 namespace gbg {
 
-void buildVulkanProject(std::shared_ptr<stm::Task<void>> generateWorkspaceTask, const std::string &projectName) {
+void buildMathExtension(std::shared_ptr<stm::Task<void>> generateWorkspaceTask, const std::string &projectName) {
     auto generateCoreStruct { stm::make_task([] {
         Log() << "Generating Core Math file\n";
 
         std::ofstream coreHFile("include/be/math/core.h");
-        coreHFile << CORE_H_TEMPLATE;
+        coreHFile << CORE_H_IN_TEMPLATE;
         coreHFile.close();
     }, generateWorkspaceTask) };
 
@@ -69,10 +73,44 @@ void buildVulkanProject(std::shared_ptr<stm::Task<void>> generateWorkspaceTask, 
         }
     }, generateWorkspaceTask) };
 
+    auto generateMat2Class { stm::make_task([] {
+        Log() << "Generating Mat2 files\n";
+
+        {
+            std::ofstream mat2CppFile("src/be/math/Mat2.cpp");
+            mat2CppFile << MAT2_CPP_TEMPLATE;
+            mat2CppFile.close();
+        }
+        
+        {
+            std::ofstream mat2HFile("include/be/math/Mat2.h");
+            mat2HFile << MAT2_H_TEMPLATE;
+            mat2HFile.close();
+        }
+    }, generateWorkspaceTask) };
+
+    auto generateMat3Class { stm::make_task([] {
+        Log() << "Generating Mat3 files\n";
+
+        {
+            std::ofstream mat3CppFile("src/be/math/Mat3.cpp");
+            mat3CppFile << MAT3_CPP_TEMPLATE;
+            mat3CppFile.close();
+        }
+        
+        {
+            std::ofstream mat3HFile("include/be/math/Mat3.h");
+            mat3HFile << MAT3_H_TEMPLATE;
+            mat3HFile.close();
+        }
+    }, generateWorkspaceTask) };
+
     generateCoreStruct->result();
     generateVec2Struct->result();
     generateVec3Struct->result();
     generateVec4Struct->result();
+    generateMat2Class->result();
+    generateMat3Class->result();
 }
 
 }

@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.29)
 
 # Game Boilerplate Generator
-project(gbgen VERSION 3.6.1)
+project(gbgen VERSION 0.8)
 
 configure_file(config/config.h.in include/config.h)
 

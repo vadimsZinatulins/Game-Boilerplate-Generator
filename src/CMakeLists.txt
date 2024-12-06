@@ -19,11 +19,11 @@ target_sources(
 			utils/replaceAll.cpp
 )
 
-# Vulkan sources
+# Math sources
 target_sources(
 	gbgen
 		PRIVATE
-			vulkan/VulkanProjectBuilder.cpp
+			math/MathExtensionBuilder.cpp
 )
 
 target_include_directories(gbgen PRIVATE "${PROJECT_SOURCE_DIR}/include")

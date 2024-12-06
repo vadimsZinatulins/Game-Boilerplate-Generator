@@ -22,31 +22,32 @@ FetchContent_Declare(
 	GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
 	GIT_TAG main  # Replace this with a particular git tag or git hash
 	GIT_SHALLOW TRUE
-	GIT_PROGRESS TRUE
 )
 message(STATUS "Using SDL3 via FetchContent")
 FetchContent_MakeAvailable(SDL)
-set_property(DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/_deps/sdl-src" PROPERTY EXCLUDE_FROM_ALL TRUE)
+set_property(DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/_deps/sdl-src" PROPERTY EXCLUDE_FROM_ALL TRUE){SDL3_IMAGE_FETCH_CONTENT}
 
 # Project configuration file
 configure_file(config/config.h.in "${PROJECT_SOURCE_DIR}/include/config.h")
 
 add_subdirectory(src))" };
 
-auto ROOT_LISTFILE_SDL2_IMAGE_FETCH_CONTENT_TEMPLATE { R"(
-	
-# Do not install SDL2-image
-set(SDL2IMAGE_INSTALL CACHE BOOL Off FORCE)
-# Build only SDL2_image static lib
-set(BUILD_SHARED_LIBS CACHE BOOL Off FORCE)
-message(STATUS "Fetching and configuring SDL2_image")
-FetchContent_Declare(
-	SDL2_image
-	GIT_REPOSITORY https://github.com/libsdl-org/SDL_image.git
-	GIT_TAG release-2.6.3  # Change this freely
-)
+auto ROOT_LISTFILE_SDL3_IMAGE_FETCH_CONTENT_TEMPLATE { R"(
 
-FetchContent_MakeAvailable(SDL2_image))" };
+# Do not install SDL3-image
+set(SDL3IMAGE_INSTALL CACHE BOOL Off FORCE)
+# Build only SDL3_image static lib
+set(BUILD_SHARED_LIBS CACHE BOOL Off FORCE)
+message(STATUS "Fetching and configuring SDL3_image")
+FetchContent_Declare(
+	SDL3_image
+	GIT_REPOSITORY https://github.com/libsdl-org/SDL_image.git
+	GIT_TAG main # SDL3_image is only available in the main branch
+	GIT_SHALLOW TRUE
+)
+set_property(DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/_deps/sdl3_image-src" PROPERTY EXCLUDE_FROM_ALL TRUE)
+
+FetchContent_MakeAvailable(SDL3_image))" };
 
 auto SRC_LISTFILE_TEMPLATE { R"(# Create the executable
 add_executable(${PROJECT_NAME})
@@ -59,7 +60,7 @@ target_sources(${PROJECT_NAME}
 		be/Time.cpp
 		be/Cronometer.cpp
 		be/Random.cpp
-		be/SceneManager.cpp
+		be/SceneManager.cpp{MATH_FILES}
 )
 
 # Game core source files
@@ -75,5 +76,5 @@ target_include_directories(${PROJECT_NAME} PRIVATE "${PROJECT_SOURCE_DIR}/includ
 # Libraries to link to the project
 target_link_libraries(${PROJECT_NAME}
 	PUBLIC
-		SDL3::SDL3-static
-))" };
+{LIBRARIES})
+)" };

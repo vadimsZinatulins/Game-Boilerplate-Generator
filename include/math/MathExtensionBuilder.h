@@ -1,7 +1,11 @@
 #pragma once
 
+#include <memory>
+#include <SimpleTaskManager/Task.h>
+#include <string>
+
 namespace gbg {
 
-void buildVulkanProject(std::shared_ptr<stm::Task<void>> generateWorkspaceTask, const std::string &projectName);
+void buildMathExtension(std::shared_ptr<stm::Task<void>> generateWorkspaceTask, const std::string &projectName);
 
 }
