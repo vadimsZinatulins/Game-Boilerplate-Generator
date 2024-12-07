@@ -31,6 +31,8 @@ public:
     Mat3 makeRotationY(real angle);
     Mat3 makeRotationZ(real angle);
     Mat3 makeRotation(real angle, const Vec3 &axis);
+    Mat3 makeUniformScaling(real scale);
+    Mat3 makeScale(const Vec3 &direction, real scale);
 private:
     real m_values[3][3];
 };
@@ -148,6 +150,30 @@ Mat3 Mat3::makeRotation(real angle, const Vec3 &axis) {
         t * x * x + c, t * x * y - s * z, t * x * z + s * y,
         t * x * y + s * z, t * y * y + c, t * y * z - s * x,
         t * x * z - s * y, t * y * z + s * x, t * z * z + c
+    );
+}
+
+Mat3 Mat3::makeUniformScaling(real scale) {
+    return Mat3(
+        scale, 0.0f, 0.0f,
+        0.0f, scale, 0.0f,
+        0.0f, 0.0f, scale
+    );
+}
+
+Mat3 Mat3::makeScale(const Vec3 &direction, real scale) {
+    real km1 = 1.0f - scale;
+    real xx = direction.x * direction.x;
+    real yy = direction.y * direction.y;
+    real zz = direction.z * direction.z;
+    real xy = direction.x * direction.y;
+    real xz = direction.x * direction.z;
+    real yz = direction.y * direction.z;
+
+    return Mat3(
+        1 + km1 * xx, km1 * xy, km1 * xz,
+        km1 * xy, 1 + km1 * yy, km1 * yz,
+        km1 * xz, km1 * yz, 1 + km1 * zz
     );
 }
 

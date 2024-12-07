@@ -36,7 +36,7 @@ private:
 		
 		static_cast<T*>(this)->initialize();
 		
-		SceneManager::getInstance().updateState();
+		SceneManager::getInstance().updateState({ m_renderer });
 	}
 	
 	void loop() {
@@ -44,6 +44,8 @@ private:
 		auto &mouse = MouseManager::getInstance();
 		auto &scenes = SceneManager::getInstance();
 		
+		const auto initParams = IScene::InitializationParams { m_renderer };
+
 		SDL_Event e;
 		
 		while(IScene *scene = scenes.getActiveScene()) {
@@ -80,6 +82,8 @@ private:
 			SDL_RenderClear(m_renderer);
 			scene->render(m_renderer);
 			SDL_RenderPresent(m_renderer);
+
+			scenes->updateState(initParams);
 		}
 	}
 	

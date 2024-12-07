@@ -33,7 +33,7 @@ private:
 	SceneManager() = default;
 	~SceneManager() = default;
 	
-	void updateState();
+	void updateState(const IScene::InitializationParams &params);
 	
 	IScene *getActiveScene() const;
 	
@@ -74,14 +74,14 @@ IScene *SceneManager::getActiveScene() const {
 	return nullptr;
 }
 
-void SceneManager::updateState() {
+void SceneManager::updateState(const IScene::InitializationParams &params) {
 	for(IScene *scene : m_scenesToAdd) {
-		scene->initialize();
+		scene->initialize(params);
 		m_scenes.push(scene);
 	}
 	
 	for(IScene *scene : m_scenesToFree) {
-		scene->shutdown();
+		scene->shutdown(params);
 		delete scene;
 	}
 	

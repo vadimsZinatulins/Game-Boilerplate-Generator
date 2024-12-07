@@ -27,6 +27,8 @@ public:
     Vec2 operator*(const Vec2 &vec) const;
 
     Mat2 makeRotation(real angle);
+    Mat2 makeUniformScaling(real scale);
+    Mat2 makeScale(const Vec2 &direction, real scale);
 private:
     real m_values[2][2];
 };
@@ -95,6 +97,25 @@ Mat2 Mat2::makeRotation(real angle) {
     return Mat2(
         c, -s,
         s, c
+    );
+}
+
+Mat2 Mat2::makeUniformScaling(real scale) {
+    return Mat2(
+        scale, 0.0f,
+        0.0f, scale
+    );
+}
+
+Mat2 Mat2::makeScale(const Vec2 &direction, real scale) {
+    real km1 = 1.0f - scale;
+    real xx = direction.x * direction.x;
+    real yy = direction.y * direction.y;
+    real xy = direction.x * direction.y;
+
+    return Mat2(
+        1 + km1 * xx, km1 * xy,
+        km1 * xy, 1 + km1 * yy
     );
 }
 

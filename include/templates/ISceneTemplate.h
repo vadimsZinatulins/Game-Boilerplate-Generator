@@ -8,11 +8,15 @@ namespace be {
 
 class IScene {
 public:
+	struct InitializationParams {
+		SDL_Renderer *renderer;
+	};
+
 	IScene() = default;
 	virtual ~IScene() = default;
 	
-	virtual void initialize() = 0;
-	virtual void shutdown() = 0;
+	virtual void initialize(const InitializationParams &params) = 0;
+	virtual void shutdown(const InitializationParams &params) = 0;
 	
 	virtual void update() = 0;
 	virtual void render(SDL_Renderer *renderer) = 0;

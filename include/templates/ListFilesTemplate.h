@@ -45,7 +45,6 @@ FetchContent_Declare(
 	GIT_TAG main # SDL3_image is only available in the main branch
 	GIT_SHALLOW TRUE
 )
-set_property(DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/_deps/sdl3_image-src" PROPERTY EXCLUDE_FROM_ALL TRUE)
 
 FetchContent_MakeAvailable(SDL3_image))" };
 
