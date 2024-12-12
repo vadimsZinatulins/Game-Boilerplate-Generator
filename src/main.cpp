@@ -1,26 +1,63 @@
 #include "utils/ArgsParser.h"
-#include "writeHelp.h"
 #include "ProjectBuilder.h"
+#include "Logger.h"
 
 #include <SimpleTaskManager/Scheduler.h>
+#include <iostream>
 
-int main(int argc, char *argv[])
-{
-	gbg::utils::ArgsParser parser(argc, argv);
+using namespace gbg;
 
+int main(int argc, char *argv[]) {
 	gbg::ProjectBuilder builder;
 
-	parser.addAction({ "--name", "-n" }, [&builder] (std::string projectName) { builder.setProjectName(projectName); });
-	parser.addAction({ "--help", "-h" }, []{ gbg::utils::writeHelp(); });
-	parser.addAction({ "--with-sdl-image" }, [&builder]{ builder.setWithSdlImageExtra(true); });
-	parser.addAction({ "--with-math" }, [&builder]{ builder.setWithMathExtra(true); });
-	parser.addAction({ "--no-logs" }, [&builder]{ builder.setWithLogsExtra(false); });
+	gbg::utils::ArgsParser parser;
 
-	parser.parse();
+	parser
+		.arg("--name")
+		.aliases({ "-n" })
+		.description("Set the project name")
+		.valueAction([&builder] (std::string projectName) { builder.setProjectName(projectName); })
+		.required()
+		.build();
 
-	stm::Scheduler::getInstance().initialize();
-	builder.build();
-	stm::Scheduler::getInstance().terminate();
+	parser
+		.arg("--help")
+		.aliases({ "-h" })
+		.description("Display help")
+		.action([&parser]{ std::cout << parser.getHelpText() << std::endl; })
+		.earlyExit()
+		.build();
+
+	parser
+		.arg("--with-sdl-image")
+		.description("Enable SDL_image extra")
+		.action([&builder]{ builder.setWithSdlImageExtra(true); })
+		.build();
+
+	parser
+		.arg("--with-math")
+		.description("Enable math extra")
+		.action([&builder]{ builder.setWithMathExtra(true); })
+		.build();
+
+	parser
+		.arg("--verbose")
+		.aliases({ "-v" })
+		.description("Enable verbose logging")
+		.action([]{ gbg::Logger::getInstance().setVerbose(true); })
+		.build();
+
+	try {
+		// If no early exit after parsing, build the project
+		if (parser.parse(argc, argv)) {
+			stm::Scheduler::getInstance().initialize();
+			builder.build();
+			stm::Scheduler::getInstance().terminate();
+		}
+	} catch(const std::runtime_error& e) {
+		Log().log("Error: " + std::string(e.what()), LogType::Error);
+		return 1;
+	}
 
 	return 0;
 }

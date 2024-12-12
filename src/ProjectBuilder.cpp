@@ -39,10 +39,6 @@ void ProjectBuilder::setWithSdlImageExtra(bool flag) {
 	m_withSdlImageExtra = flag;
 }
 
-void ProjectBuilder::setWithLogsExtra(bool flag) {
-	m_withLogsExtra = flag;
-}
-
 void ProjectBuilder::build() {
 	const auto projectName { m_projectName };
 	const auto withMathExtra { m_withMathExtra };
@@ -53,13 +49,12 @@ void ProjectBuilder::build() {
 	}
 
 	auto generateWorkspaceTask { stm::make_task([&] { 
-		Log() << "Generating workspace\n";
-
+		Log().log("Generating workspace", LogType::Verbose);
 		generators::generateWorkspace(projectName, withMathExtra); 
 	}) };
 
 	auto generateCMakeFileTask { stm::make_task([&] {
-		Log() << "Generating listfiles\n";
+		Log().log("Generating listfiles", LogType::Verbose);
 
 		{
 			std::ofstream rootListfile("CMakeLists.txt");
@@ -116,7 +111,7 @@ void ProjectBuilder::build() {
 	}, generateWorkspaceTask) };
 
 	auto generateConfigTask { stm::make_task([&] {
-		Log() << "Generating config.h.in file\n";
+		Log().log("Generating config.h.in file", LogType::Verbose);
 
 		ReplaceContent rc =  { 
 			{ "{NAME}", projectName } 
@@ -128,7 +123,7 @@ void ProjectBuilder::build() {
 	}, generateWorkspaceTask) };
 
 	auto generateKeyManagerTask { stm::make_task([] {
-		Log() << "Generating KeyManager Class\n";
+		Log().log("Generating KeyManager Class", LogType::Verbose);
 
 		{
 			std::ofstream keyManagerHFile("include/be/KeyManager.h");
@@ -144,7 +139,7 @@ void ProjectBuilder::build() {
 	}, generateWorkspaceTask) };
 	
 	auto generateMouseManagerTask { stm::make_task([] {
-		Log() << "Generating MouseManager Class\n";
+		Log().log("Generating MouseManager Class", LogType::Verbose);
 
 		{
 			std::ofstream mouseManagerHFile("include/be/MouseManager.h");
@@ -160,7 +155,7 @@ void ProjectBuilder::build() {
 	}, generateWorkspaceTask) };
 	
 	auto generateTimeClassTask { stm::make_task([] {
-		Log() << "Generating Time Class\n";
+		Log().log("Generating Time Class", LogType::Verbose);
 
 		{
 			std::ofstream timerHFile("include/be/Time.h");
@@ -176,7 +171,7 @@ void ProjectBuilder::build() {
 	}, generateWorkspaceTask) };
 	
 	auto generateCronometerTask { stm::make_task([] {
-		Log() << "Generating Cronometer Class\n";
+		Log().log("Generating Cronometer Class", LogType::Verbose);
 
 		{
 			std::ofstream cronometerHFile("include/be/Cronometer.h");
@@ -192,7 +187,7 @@ void ProjectBuilder::build() {
 	}, generateWorkspaceTask) };
 	
 	auto generateRandomTask { stm::make_task([] {
-		Log() << "Generating Random Class\n";
+		Log().log("Generating Random Class", LogType::Verbose);
 
 		{
 			std::ofstream randomHFile("include/be/Random.h");
@@ -208,7 +203,7 @@ void ProjectBuilder::build() {
 	}, generateWorkspaceTask) };
 	
 	auto generateISceneTask { stm::make_task([]{
-		Log() << "Generating IScene Class\n";
+		Log().log("Generating IScene Class", LogType::Verbose);
 
 		std::ofstream isceneHFile("include/be/IScene.h");
 		isceneHFile << ISCENE_H_TEMPLATE;
@@ -217,7 +212,7 @@ void ProjectBuilder::build() {
 	}, generateWorkspaceTask) };
 
 	auto generateMainSceneTask { stm::make_task([]{
-		Log() << "Generating MainScene Class\n";
+		Log().log("Generating MainScene Class", LogType::Verbose);
 
 		{
 			std::ofstream mainSceneHFile("include/MainScene.h");
@@ -234,7 +229,7 @@ void ProjectBuilder::build() {
 	}, generateWorkspaceTask) };
 
 	auto generateSceneManagerTask { stm::make_task([] {
-		Log() << "Generating SceneManager Class\n";
+		Log().log("Generating SceneManager Class", LogType::Verbose);
 
 		{
 			std::ofstream sceneManagerHFile("include/be/SceneManager.h");
@@ -250,7 +245,7 @@ void ProjectBuilder::build() {
 	}, generateWorkspaceTask) };
 	
 	auto generateGameTask { stm::make_task([&] {
-		Log() << "Generating Game Class\n";
+		Log().log("Generating Game Class", LogType::Verbose);
 		
 		std::ofstream GameHFile("include/be/Game.h");
 		GameHFile << GAME_H_TEMPLATE;
@@ -258,7 +253,7 @@ void ProjectBuilder::build() {
 	}, generateWorkspaceTask) };
 	
 	auto generateProjectNameFileTask { stm::make_task([&] {
-		Log() << "Generating " + projectName + " Class\n";
+		Log().log("Generating " + projectName + " Class", LogType::Verbose);
 
 		{
 			std::ofstream projectClassHFile("include/" + projectName + ".h");
@@ -274,7 +269,7 @@ void ProjectBuilder::build() {
 	}, generateWorkspaceTask) };
 
 	auto generateMainFileTask { stm::make_task([&] {
-		Log() << "Generating main.cpp file\n";
+		Log().log("Generating main.cpp file", LogType::Verbose);
 
 		std::ofstream mainCppFile("src/main.cpp");
 		mainCppFile << replaceAll(MAIN_CPP_TEMPLATE, { { "{NAME}", projectName } });
@@ -299,9 +294,8 @@ void ProjectBuilder::build() {
 		buildMathExtension(generateWorkspaceTask, projectName);
 	}
 
-	if(m_withLogsExtra) {
-		Log() << "\n\tcd " << projectName << " && cmake -B build/ && ln -s build/compile_commands.json . && cmake --build build/\n";
-	}
+	Log().log("Project generated successfully");
+	Log().log("Use the following command to build the project: cd " + projectName + " && cmake -B build/ && cmake --build build/");
 }
 
 }

@@ -18,7 +18,7 @@ namespace gbg {
 
 void buildMathExtension(std::shared_ptr<stm::Task<void>> generateWorkspaceTask, const std::string &projectName) {
     auto generateCoreStruct { stm::make_task([] {
-        Log() << "Generating Core Math file\n";
+        Log().log("Generating Core Math file", LogType::Verbose);
 
         std::ofstream coreHFile("include/be/math/core.h");
         coreHFile << CORE_H_IN_TEMPLATE;
@@ -26,7 +26,7 @@ void buildMathExtension(std::shared_ptr<stm::Task<void>> generateWorkspaceTask, 
     }, generateWorkspaceTask) };
 
     auto generateVec2Struct { stm::make_task([] {
-        Log() << "Generating Vec2 files\n";
+        Log().log("Generating Vec2 files", LogType::Verbose);
 
         {
             std::ofstream vec2CppFile("src/be/math/Vec2.cpp");
@@ -42,7 +42,7 @@ void buildMathExtension(std::shared_ptr<stm::Task<void>> generateWorkspaceTask, 
     }, generateWorkspaceTask) };
 
     auto generateVec3Struct { stm::make_task([] {
-        Log() << "Generating Vec3 files\n";
+        Log().log("Generating Vec3 files", LogType::Verbose);
 
         {
             std::ofstream vec3CppFile("src/be/math/Vec3.cpp");
@@ -58,7 +58,7 @@ void buildMathExtension(std::shared_ptr<stm::Task<void>> generateWorkspaceTask, 
     }, generateWorkspaceTask) };
 
     auto generateVec4Struct { stm::make_task([] {
-        Log() << "Generating Vec4 files\n";
+        Log().log("Generating Vec4 files", LogType::Verbose);
 
         {
             std::ofstream vec4CppFile("src/be/math/Vec4.cpp");
@@ -74,7 +74,7 @@ void buildMathExtension(std::shared_ptr<stm::Task<void>> generateWorkspaceTask, 
     }, generateWorkspaceTask) };
 
     auto generateMat2Class { stm::make_task([] {
-        Log() << "Generating Mat2 files\n";
+        Log().log("Generating Mat2 files", LogType::Verbose);
 
         {
             std::ofstream mat2CppFile("src/be/math/Mat2.cpp");
@@ -90,7 +90,7 @@ void buildMathExtension(std::shared_ptr<stm::Task<void>> generateWorkspaceTask, 
     }, generateWorkspaceTask) };
 
     auto generateMat3Class { stm::make_task([] {
-        Log() << "Generating Mat3 files\n";
+        Log().log("Generating Mat3 files", LogType::Verbose);
 
         {
             std::ofstream mat3CppFile("src/be/math/Mat3.cpp");

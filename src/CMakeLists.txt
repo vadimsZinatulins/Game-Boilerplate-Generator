@@ -1,33 +1,44 @@
+# Create an executable named 'gbgen'
 add_executable(gbgen)
 
-# Core sources
+# Add main source files
 target_sources(
-	gbgen
-		PRIVATE 
-			ArgsParser.cpp 
-			writeHelp.cpp 
-			ProjectBuilder.cpp 
-			workspace.cpp
-			main.cpp
+    gbgen
+        PRIVATE 
+            ProjectBuilder.cpp 
+            workspace.cpp
+            main.cpp
 )
 
-# Utility sources
+# Add utility source files
 target_sources(
-	gbgen
-		PRIVATE 
-			utils/StringTrim.cpp
-			utils/replaceAll.cpp
+    gbgen
+        PRIVATE 
+            utils/StringTrim.cpp
+            utils/replaceAll.cpp
+            utils/ArgsParser.cpp
 )
 
-# Math sources
+# Add math-related source files
 target_sources(
-	gbgen
-		PRIVATE
-			math/MathExtensionBuilder.cpp
+    gbgen
+        PRIVATE
+            math/MathExtensionBuilder.cpp
 )
 
+# Tell the compiler where to find header files
 target_include_directories(gbgen PRIVATE "${PROJECT_SOURCE_DIR}/include")
 
+# Link against the SimpleTaskManager library
 target_link_libraries(gbgen STM::SimpleTaskManager)
 
-install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
+# Set installation paths based on GNU standards and platform
+include(GNUInstallDirs)
+
+# Install the executable
+install(
+    TARGETS ${PROJECT_NAME}
+    RUNTIME
+        DESTINATION ${CMAKE_INSTALL_BINDIR}
+        COMPONENT runtime
+)

@@ -1,40 +1,63 @@
 # Game Boilerplate Generator
 
-Simple application that generates a [SDL3](https://wiki.libsdl.org/SDL3/FrontPage) project.
+Simple application that generates a [SDL3](https://wiki.libsdl.org/SDL3/FrontPage) project with a basic game engine structure.
 
-This application generates a project in C++ that is ready to use SDL3. Among these files is a very simplistic game engine (named __Basic Engine__ or __be__ for short) that handles the initilization, input, time, scenes and the shutdown.
+## Features
+- Generates a complete C++ project using SDL3
+- Includes a lightweight game engine (Basic Engine or __be__) that handles:
+  - Initialization and shutdown
+  - Input management
+  - Time management 
+  - Scene management
+- Optional components:
+  - SDL3_image support
+  - Basic 3D math library
+  - Configurable logging
 
-The generated project is a [CMake](https://cmake.org/cmake/help/latest/) project. This project will fetch SDL3, which means that no SDL3 is required to be pre-installed.
+The generated project uses [CMake](https://cmake.org/cmake/help/latest/) and automatically fetches SDL3 dependencies, so no pre-installed SDL3 is required.
 
-⚠️ Fetching __SDL3__ takes some time. Please be patient 🙂
+⚠️ Note: Initial SDL3 fetching may take some time during first build.
 
-After the project generation it is ready to build, compile and run.
+### Why Generate Files Instead of Using a Library?
 
-### Why not to create a library?
-
-Generating all the source files gives more flexibily to adapt the engine as opposed to consume a library. This way it is possible to modify the engine.
+Generating source files provides more flexibility than consuming a library. This approach allows developers to easily modify and adapt the engine code to their specific needs.
 
 ## Requirements
 Make sure you have the following tools installed:
 - C++ Compiler
-- CMake
+- CMake (3.29 or higher)
 - Git
 
-## Build
+## Build and Install
 
 ```bash
+# Configure
 cmake -B build
+
+# Build
 cmake --build build/
-# This is optional to make the application callable from anywhere, but this requires a Release build in Windows!
+
+# Install (several options):
+# 1. System-wide installation (requires root/admin)
 sudo cmake --install build/
+
+# 2. Custom installation path
+cmake --install build/ --prefix /custom/path
+
+# 3. Install only runtime component
+cmake --install build/ --component runtime
 ```
 
 ## Usage
 
 ```bash
-path/to/build/gbgen -n MyGame
-# You can also generate a project that is ready to use Vulkan
-path/to/build/gbgen -n MyGame --with-vulkan
+# Basic project
+gbgen -n MyGame
+
+# Additional options:
+gbgen -n MyGame --with-sdl-image  # Include SDL3_image support
+gbgen -n MyGame --with-math       # Include basic 3D math library
+gbgen -n MyGame --no-logs         # Disable logging
 
 # Use --help for more information
 ```
