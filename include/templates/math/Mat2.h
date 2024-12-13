@@ -26,15 +26,17 @@ public:
     Mat2 operator*(const Mat2 &other) const;
     Vec2 operator*(const Vec2 &vec) const;
 
-    Mat2 makeRotation(real angle);
-    Mat2 makeUniformScaling(real scale);
-    Mat2 makeScale(const Vec2 &direction, real scale);
+    real determinant() const;
 
-    Mat2 makeOrthoProjX();
-    Mat2 makeOrthoProjY();
-    Mat2 makeOrthoProj(const Vec2 &direction);
+    static Mat2 makeRotation(real angle);
+    static Mat2 makeUniformScaling(real scale);
+    static Mat2 makeScale(const Vec2 &direction, real scale);
 
-    Mat2 makeReflection(const Vec2 &direction);
+    static Mat2 makeOrthoProjX();
+    static Mat2 makeOrthoProjY();
+    static Mat2 makeOrthoProj(const Vec2 &direction);
+
+    static Mat2 makeReflection(const Vec2 &direction);
 private:
     real m_values[2][2];
 };
@@ -94,6 +96,10 @@ Vec2 Mat2::operator*(const Vec2 &vec) const {
         m_values[0][0] * vec.x + m_values[0][1] * vec.y,
         m_values[1][0] * vec.x + m_values[1][1] * vec.y
     );
+}
+
+real Mat2::determinant() const {
+    return m_values[0][0] * m_values[1][1] - m_values[0][1] * m_values[1][0];
 }
 
 Mat2 Mat2::makeRotation(real angle) {

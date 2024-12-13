@@ -27,19 +27,21 @@ public:
     Mat3 operator*(const Mat3 &other) const;
     Vec3 operator*(const Vec3 &vec) const;
 
-    Mat3 makeRotationX(real angle);
-    Mat3 makeRotationY(real angle);
-    Mat3 makeRotationZ(real angle);
-    Mat3 makeRotation(real angle, const Vec3 &axis);
-    Mat3 makeUniformScaling(real scale);
-    Mat3 makeScale(const Vec3 &direction, real scale);
+    real determinant() const;
 
-    Mat3 makeOrthoProjXY();
-    Mat3 makeOrthoProjXZ();
-    Mat3 makeOrthoProjYZ();
-    Mat3 makeOrthoProj(const Vec3 &direction);
+    static Mat3 makeRotationX(real angle);
+    static Mat3 makeRotationY(real angle);
+    static Mat3 makeRotationZ(real angle);
+    static Mat3 makeRotation(real angle, const Vec3 &axis);
+    static Mat3 makeUniformScaling(real scale);
+    static Mat3 makeScale(const Vec3 &direction, real scale);
 
-    Mat3 makeReflection(const Vec3 &direction);
+    static Mat3 makeOrthoProjXY();
+    static Mat3 makeOrthoProjXZ();
+    static Mat3 makeOrthoProjYZ();
+    static Mat3 makeOrthoProj(const Vec3 &direction);
+
+    static Mat3 makeReflection(const Vec3 &direction);
 private:
     real m_values[3][3];
 };
@@ -109,6 +111,14 @@ Vec3 Mat3::operator*(const Vec3 &vec) const {
         m_values[1][0] * vec.x + m_values[1][1] * vec.y + m_values[1][2] * vec.z,
         m_values[2][0] * vec.x + m_values[2][1] * vec.y + m_values[2][2] * vec.z
     );
+}
+
+real Mat3::determinant() const {
+    real m00 = m_values[0][0] * (m_values[1][1] * m_values[2][2] - m_values[1][2] * m_values[2][1]);
+    real m01 = m_values[0][1] * (m_values[1][2] * m_values[2][0] - m_values[1][0] * m_values[2][2]);
+    real m02 = m_values[0][2] * (m_values[1][0] * m_values[2][1] - m_values[1][1] * m_values[2][0]);
+
+    return m00 + m01 + m02;
 }
 
 Mat3 Mat3::makeRotationX(real angle) {
