@@ -29,6 +29,12 @@ public:
     Mat2 makeRotation(real angle);
     Mat2 makeUniformScaling(real scale);
     Mat2 makeScale(const Vec2 &direction, real scale);
+
+    Mat2 makeOrthoProjX();
+    Mat2 makeOrthoProjY();
+    Mat2 makeOrthoProj(const Vec2 &direction);
+
+    Mat2 makeReflection(const Vec2 &direction);
 private:
     real m_values[2][2];
 };
@@ -116,6 +122,40 @@ Mat2 Mat2::makeScale(const Vec2 &direction, real scale) {
     return Mat2(
         1 + km1 * xx, km1 * xy,
         km1 * xy, 1 + km1 * yy
+    );
+}
+
+Mat2 Mat2::makeOrthoProjX() {
+    return Mat2(
+        1.0f, 0.0f,
+        0.0f, 0.0f
+    );
+}
+
+Mat2 Mat2::makeOrthoProjY() {
+    return Mat2(
+        0.0f, 0.0f,
+        1.0f, 0.0f
+    );
+}
+
+Mat2 Mat2::makeOrthoProj(const Vec2 &direction) {
+    real x = direction.x;
+    real y = direction.y;
+
+    return Mat2(
+        1 - x * x, -x * y,
+        -x * y, 1 - y * y
+    );
+}
+
+Mat2 Mat2::makeReflection(const Vec2 &direction) {
+    real x = direction.x;
+    real y = direction.y;
+
+    return Mat2(
+        1 - 2 * x * x, -2 * x * y,
+        -2 * x * y, 1 - 2 * y * y
     );
 }
 

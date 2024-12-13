@@ -83,7 +83,7 @@ private:
 			scene->render(m_renderer);
 			SDL_RenderPresent(m_renderer);
 
-			scenes->updateState(initParams);
+			scenes.updateState(initParams);
 		}
 	}
 	

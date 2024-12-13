@@ -33,6 +33,13 @@ public:
     Mat3 makeRotation(real angle, const Vec3 &axis);
     Mat3 makeUniformScaling(real scale);
     Mat3 makeScale(const Vec3 &direction, real scale);
+
+    Mat3 makeOrthoProjXY();
+    Mat3 makeOrthoProjXZ();
+    Mat3 makeOrthoProjYZ();
+    Mat3 makeOrthoProj(const Vec3 &direction);
+
+    Mat3 makeReflection(const Vec3 &direction);
 private:
     real m_values[3][3];
 };
@@ -174,6 +181,54 @@ Mat3 Mat3::makeScale(const Vec3 &direction, real scale) {
         1 + km1 * xx, km1 * xy, km1 * xz,
         km1 * xy, 1 + km1 * yy, km1 * yz,
         km1 * xz, km1 * yz, 1 + km1 * zz
+    );
+}
+
+Mat3 Mat3::makeOrthoProjXY() {
+    return Mat3(
+        1.0f, 0.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,
+        0.0f, 0.0f, 0.0f
+    );
+}
+
+Mat3 Mat3::makeOrthoProjXZ() {
+    return Mat3(
+        1.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 1.0f
+    );
+}
+
+Mat3 Mat3::makeOrthoProjYZ() {
+    return Mat3(
+        0.0f, 0.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,
+        0.0f, 0.0f, 1.0f
+    );
+}
+
+Mat3 Mat3::makeOrthoProj(const Vec3 &direction) {
+    real x = direction.x;
+    real y = direction.y;
+    real z = direction.z;
+
+    return Mat3(
+        1 - x * x, -x * y, -x * z,
+        -x * y, 1 - y * y, -y * z,
+        -x * z, -y * z, 1 - z * z
+    );
+}
+
+Mat3 Mat3::makeReflection(const Vec3 &direction) {
+    real x = direction.x;
+    real y = direction.y;
+    real z = direction.z;
+
+    return Mat3(
+        1 - 2 * x * x, -2 * x * y, -2 * x * z,
+        -2 * x * y, 1 - 2 * y * y, -2 * y * z,
+        -2 * x * z, -2 * y * z, 1 - 2 * z * z
     );
 }
 
